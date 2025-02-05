@@ -1,0 +1,74 @@
+/* Centrar el contenedor de login */
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Contenedor del borde y la caja */
+  .boxWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Borde degradado */
+/* Borde degradado en la izquierda y abajo */
+.borderGradient {
+    position: absolute;
+    left: -8px;
+    bottom: -8px;
+    width: calc(100% + 8px); /* Para que cubra bien la parte inferior */
+    height: calc(100% + 8px); /* Para que cubra la izquierda */
+    border-radius: 15px; /* Para mantener la forma */
+    background: linear-gradient(to bottom left, #00c9a7, #0084ff, #d400ff);
+    clip-path: polygon(0% 100%, 0% 0%, 100% 100%); /* Corta la parte de arriba y la derecha */
+    z-index: -1;
+  }
+  
+  
+  /* Caja de Login */
+  .loginBox {
+    position: relative;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Input */
+  .inputField {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Botón de acceso */
+  .loginButton {
+    width: 100%;
+    padding: 10px;
+    background-color: #0084ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .loginButton:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Enlaces */
+  .register a {
+    color: #0084ff;
+    text-decoration: none;
+  }
+  
+  .register a:hover {
+    text-decoration: underline;
+  }  

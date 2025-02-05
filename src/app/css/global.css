@@ -1,0 +1,21 @@
+/* Hace que el body ocupe toda la pantalla */
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Empuja el contenido para que el footer quede abajo */
+main {
+    flex: 1;
+}
+
+/* Asegura que el footer siempre esté visible */
+footer {
+    width: 100%;
+    margin-top: auto;
+    background-color: #212529; /* Fondo oscuro */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}

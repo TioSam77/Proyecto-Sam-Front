@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import Login from "./componets/Login";
 
-export default function page() {
+export default function Page() {
   return (
-    <div>
-      <h1 className='bg-azul'> Hola mundo</h1>
-    </div>
-  )
+    <section>
+      <Login />
+    </section>
+  );
 }
