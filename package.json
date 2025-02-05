@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "Monorepo-Interactivo",
   "private": true,
   "scripts": {
     "build": "turbo build",
