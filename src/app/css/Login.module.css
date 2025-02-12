@@ -16,19 +16,17 @@
   }
   
   /* Borde degradado */
-/* Borde degradado en la izquierda y abajo */
-.borderGradient {
+  .borderGradient {
     position: absolute;
     left: -8px;
-    bottom: -8px;
-    width: calc(100% + 8px); /* Para que cubra bien la parte inferior */
-    height: calc(100% + 8px); /* Para que cubra la izquierda */
-    border-radius: 15px; /* Para mantener la forma */
-    background: linear-gradient(to bottom left, #00c9a7, #0084ff, #d400ff);
-    clip-path: polygon(0% 100%, 0% 0%, 100% 100%); /* Corta la parte de arriba y la derecha */
+    top: -8px;
+    width: calc(100% + 16px); /* Asegura que cubra toda la caja */
+    height: calc(100% + 16px); /* Cubre también la parte superior */
+    border-radius: 15px; /* Mantiene la forma */
+    background: linear-gradient(to bottom right, #FFC107, #FF00FF, #0084FF, #00C9A7); /* Amarillo, rosa, azul y turquesa */
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); /* Ahora cubre todo */
     z-index: -1;
-  }
-  
+}
   
   /* Caja de Login */
   .loginBox {
@@ -64,11 +62,36 @@
   }
   
   /* Enlaces */
-  .register a {
-    color: #0084ff;
-    text-decoration: none;
+  .register {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
   }
   
-  .register a:hover {
+  .registerLink {
+    color: #0084ff;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px; /* Espaciado entre el texto y el link */
+  }
+  
+  .registerLink:hover {
     text-decoration: underline;
-  }  
+  }
+  /* Margen y estilo para el link de recuperar contraseña */
+.forgotPassword {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.recoverLink {
+  color: #0084ff;
+  font-weight: bold;
+  text-decoration: none;
+  margin-left: 5px; /* Espaciado entre el texto y el link */
+}
+
+.recoverLink:hover {
+  text-decoration: underline;
+}
