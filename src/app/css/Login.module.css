@@ -1,84 +1,93 @@
 /* Centrar el contenedor de login */
 .loginContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  
-  /* Contenedor del borde y la caja */
-  .boxWrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Borde degradado */
-  .borderGradient {
-    position: absolute;
-    left: -8px;
-    top: -8px;
-    width: calc(100% + 16px); /* Asegura que cubra toda la caja */
-    height: calc(100% + 16px); /* Cubre también la parte superior */
-    border-radius: 15px; /* Mantiene la forma */
-    background: linear-gradient(to bottom right, #FFC107, #FF00FF, #0084FF, #00C9A7); /* Amarillo, rosa, azul y turquesa */
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); /* Ahora cubre todo */
-    z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  padding: 10px;
+  margin: 10px;
 }
-  
-  /* Caja de Login */
-  .loginBox {
-    position: relative;
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Input */
-  .inputField {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  /* Botón de acceso */
-  .loginButton {
-    width: 100%;
-    padding: 10px;
-    background-color: #0084ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .loginButton:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Enlaces */
-  .register {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #333;
-  }
-  
-  .registerLink {
-    color: #0084ff;
-    font-weight: bold;
-    text-decoration: none;
-    margin-left: 5px; /* Espaciado entre el texto y el link */
-  }
-  
-  .registerLink:hover {
-    text-decoration: underline;
-  }
-  /* Margen y estilo para el link de recuperar contraseña */
+
+/* Contenedor del borde y la caja */
+.boxWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Borde degradado */
+.borderGradient {
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  width: calc(100% + 16px);
+  /* Asegura que cubra toda la caja */
+  height: calc(100% + 16px);
+  /* Cubre también la parte superior */
+  border-radius: 15px;
+  /* Mantiene la forma */
+  background: linear-gradient(to bottom right, #FFC107, #FF00FF, #0084FF, #00C9A7);
+  /* Amarillo, rosa, azul y turquesa */
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  /* Ahora cubre todo */
+  z-index: -1;
+}
+
+/* Caja de Login */
+.loginBox {
+  position: relative;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input */
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Botón de acceso */
+.blueButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #0084ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.blueButton:hover {
+  background-color: #0056b3;
+}
+
+/* Enlaces */
+.register {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.registerLink {
+  color: #0084ff;
+  font-weight: bold;
+  text-decoration: none;
+  margin-left: 5px;
+  /* Espaciado entre el texto y el link */
+}
+
+.registerLink:hover {
+  text-decoration: underline;
+}
+
+/* Margen y estilo para el link de recuperar contraseña */
 .forgotPassword {
   margin-top: 10px;
   font-size: 14px;
@@ -89,9 +98,71 @@
   color: #0084ff;
   font-weight: bold;
   text-decoration: none;
-  margin-left: 5px; /* Espaciado entre el texto y el link */
+  margin-left: 5px;
+  /* Espaciado entre el texto y el link */
 }
 
 .recoverLink:hover {
   text-decoration: underline;
+}
+
+.form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countrySelector {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.registerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.PhoneInputSelect {
+  position: absolute;
+  margin: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.countryCode {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.phoneInput {
+  flex: 1;
+  padding: 0;
+  font-size: 18px;
+  border: 1px solid #ffffff;
+  color: #393c40;
+}
+
+.flagIcon {
+  width: 20px;
+  height: 15px;
+  margin-right: 10px;
+}
+
+.separator{
+  margin: 10px 0;
 }

@@ -33,21 +33,21 @@ const Login = () => {
           </ul>
 
           {/* Inputs dinámicos según el usuario seleccionado */}
-          <input 
-            type="text" 
-            placeholder={userType === "Alumno" ? "Número de cuenta" : userType === "Profesor" ? "RFC" : "Usuario"} 
-            className={styles.inputField} 
+          <input
+            type="text"
+            placeholder={userType === "Alumno" ? "Número de cuenta" : userType === "Profesor" ? "RFC" : "Usuario"}
+            className={styles.inputField}
           />
           <input type="password" placeholder="Contraseña" className={styles.inputField} />
 
-          <button className={styles.loginButton}>Acceder</button>
+          <button className={styles.blueButton}>Acceder</button>
           <p className={styles.forgotPassword}>
-            ¿Perdiste tu contraseña?{" "}
-            <a href="/recuperar" className={styles.recoverLink}>Recuperar</a>
+            ¿Perdiste tu contraseña?
+            <a href="/Recuperar" className={styles.recoverLink}>Recuperar</a>
           </p>
           <p className={styles.register}>
-            ¿No tienes cuenta?{" "}
-            <a href="/registro" className={styles.registerLink}>Regístrate</a>
+            ¿No tienes cuenta?
+            <a href="/Registro" className={styles.registerLink}>Regístrate</a>
           </p>
         </div>
       </div>

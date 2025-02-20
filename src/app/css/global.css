@@ -1,20 +1,25 @@
 /* Hace que el body ocupe toda la pantalla */
-html, body {
-    height: 100%;
+html,
+body {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* Empuja el contenido para que el footer quede abajo */
 main {
+    display: flex;
     flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Asegura que el footer siempre esté visible */
 footer {
     width: 100%;
     margin-top: auto;
-    background-color: #212529; /* Fondo oscuro */
+    background-color: #212529;
+    /* Fondo oscuro */
     color: white;
     text-align: center;
     padding: 10px 0;
@@ -22,9 +27,15 @@ footer {
 
 /* Switch general */
 .nav-pills {
-    --bs-nav-link-color: var(--bs-white); 
-    --bs-nav-pills-link-active-color: var(--bs-primary); 
+    --bs-nav-link-color: var(--bs-white);
+    --bs-nav-pills-link-active-color: var(--bs-primary);
     --bs-nav-pills-link-active-bg: var(--bs-white);
-    margin-bottom: 15px; /* Ajusta según lo necesario */
-  }
-  
+    margin-bottom: 15px;
+    /* Ajusta según lo necesario */
+}
+
+@media(max-height:600px) {
+    main {
+        margin-top: 10vh;
+    }
+}
