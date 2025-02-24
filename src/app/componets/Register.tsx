@@ -25,10 +25,11 @@ const Register = () => {
 
     return (
         <section className={styles.loginContainer}>
-            <form className={styles.form}>
-                <div className={styles.borderGradient}></div> {/* Borde degradado */}
-                <div className={styles.loginBox}>
 
+            <form className={styles.boxWrapper}>
+                <div className={styles.borderGradient}></div> {/* Borde degradado */}
+                
+                <div className={styles.loginBox}>
                     <h2>Crear Cuenta</h2>
 
                     <div className={styles.separator}>
@@ -50,8 +51,8 @@ const Register = () => {
                     </div>
 
                     <div className={styles.separator}>
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Tu Nombre"
+                        <label>Nombres</label>
+                        <input type="text" placeholder="Tus Nombres"
                             className={styles.inputField} />
                     </div>
 
@@ -107,7 +108,7 @@ const Register = () => {
 
                     <p className={styles.register}>
                         ¿Ya tienes cuenta?
-                        <a href="/Logearte" className={styles.registerLink}>Logearte</a>
+                        <a href="/Login" className={styles.registerLink}>Logearte</a>
                     </p>
                 </div>
             </form>

@@ -6,7 +6,7 @@
   justify-content: center;
   max-width: 90vw;
   padding: 10px;
-  margin: 10px;
+  margin-top: 100px;
 }
 
 /* Contenedor del borde y la caja */
@@ -15,6 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: inherit;
 }
 
 /* Borde degradado */
@@ -28,7 +29,7 @@
   /* Cubre también la parte superior */
   border-radius: 15px;
   /* Mantiene la forma */
-  background: linear-gradient(to bottom right, #FFC107, #FF00FF, #0084FF, #00C9A7);
+  background: linear-gradient(to bottom right, #E8E8E8, #2e83c4, #2e83c4, #1f204e);
   /* Amarillo, rosa, azul y turquesa */
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   /* Ahora cubre todo */
@@ -41,7 +42,6 @@
   background: white;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Input */
@@ -104,13 +104,6 @@
 
 .recoverLink:hover {
   text-decoration: underline;
-}
-
-.form {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .countrySelector {

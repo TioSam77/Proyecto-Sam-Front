@@ -11,18 +11,21 @@ main {
     display: flex;
     flex: 1;
     justify-content: center;
-    align-items: center;
 }
 
 /* Asegura que el footer siempre esté visible */
 footer {
     width: 100%;
     margin-top: auto;
-    background-color: #212529;
-    /* Fondo oscuro */
-    color: white;
+    background-color: hsl(var(--muted)) !important;
     text-align: center;
     padding: 10px 0;
+}
+
+.logo {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 /* Switch general */
@@ -31,7 +34,41 @@ footer {
     --bs-nav-pills-link-active-color: var(--bs-primary);
     --bs-nav-pills-link-active-bg: var(--bs-white);
     margin-bottom: 15px;
-    /* Ajusta según lo necesario */
+}
+
+.fondImage {
+    width: 100%;
+    height: 90%;
+    z-index: -1;
+    position: absolute;
+    background-image: url("https://images.unsplash.com/photo-1573496267526-08a69e46a409?ixlib=rb-4.0.3&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center center;
+    opacity: 0.15;
+}
+
+table {
+    text-align: center;
+    border-collapse: collapse;
+    border: hidden;
+    color: white;
+    border-collapse: collapse;
+    width: max-content;
+    min-width: 900px;
+}
+
+table th{
+    background-color: #4545f7;
+}
+
+table td{
+    background-color: #8385ef;
+}
+
+table th,
+table td {
+    border: 2px solid rgb(0, 0, 0);
+    padding: 8px 16px;
 }
 
 @media(max-height:600px) {

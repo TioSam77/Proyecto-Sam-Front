@@ -6,10 +6,10 @@ const Header = () => {
     <nav className="navbar bg-body-tertiary fixed-top">
       <div className="container-fluid d-flex justify-content-between align-items-center">
         {/* Logo */}
-        <a className="navbar-brand d-flex align-items-center" href="/">
-          <img src="/logo.png" alt="Logo" height="50" className="me-2" />
+        <a className="navbar-brand d-flex align-items-center " href="/">
+          <img src="/logo.jpg" alt="Interactivo Logo" height="40" className="me-2" />
+          <h3 className="logo">Interactivo</h3>
         </a>
-
         {/* Botón de Offcanvas */}
         <button
           className="navbar-toggler"
@@ -46,10 +46,10 @@ const Header = () => {
                 <a className="nav-link active" href="/">Inicio</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/login">Acceder</a>
+                <a className="nav-link" href="/Login">Acceder</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/registro">Registrarse</a>
+                <a className="nav-link" href="/Registro">Registrarse</a>
               </li>
             </ul>
           </div>
