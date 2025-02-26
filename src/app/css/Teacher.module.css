@@ -1,0 +1,46 @@
+
+.information h3{
+    flex-direction: row;
+    z-index: 1;
+}
+
+.curse{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.curse div{
+    padding: 20px;
+    border: 3px solid #9eb8cd;
+    border-radius: 8px;
+    background-color: #b5d4ec;
+    min-width: 300px;
+}
+
+.box{
+    position: relative;
+    padding: 20px;
+    gap: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.simplebox{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.simplebox div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    border:3px solid #cfcfcf ;
+    border-radius: 8px;
+    padding: 20px;
+}

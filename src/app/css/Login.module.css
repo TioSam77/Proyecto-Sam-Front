@@ -21,15 +21,15 @@
 /* Borde degradado */
 .borderGradient {
   position: absolute;
-  left: -8px;
-  top: -8px;
-  width: calc(100% + 16px);
+  left: -7px;
+  top: -7px;
+  width: calc(100% + 14px);
   /* Asegura que cubra toda la caja */
-  height: calc(100% + 16px);
+  height: calc(100% + 14px);
   /* Cubre también la parte superior */
-  border-radius: 15px;
+  border-radius: 8px;
   /* Mantiene la forma */
-  background: linear-gradient(to bottom right, #E8E8E8, #2e83c4, #2e83c4, #1f204e);
+  background: linear-gradient(to bottom right, #E8E8E8, #2e83c4, #2e83c4, #30567c);
   /* Amarillo, rosa, azul y turquesa */
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   /* Ahora cubre todo */
@@ -158,4 +158,11 @@
 
 .separator{
   margin: 10px 0;
+}
+
+.welcomeText{
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  margin: 10px;
 }

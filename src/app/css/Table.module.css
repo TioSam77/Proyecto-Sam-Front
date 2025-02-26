@@ -5,7 +5,7 @@
     justify-content: center;
     max-width: 90vw;
     padding: 10px;
-    margin-top: 100px;
+    margin-top: 10px;
 }
 
 
@@ -15,12 +15,14 @@
     border-radius: 8px;
     overflow-x: auto;
     max-width: 100%;
+    scrollbar-color: rgb(255, 87, 87) rgba(0, 0, 255, 0);
+    scrollbar-width: thin;
 }
 
 .fixedCol {
     position: sticky;
     left: -1px;
     z-index: 1;
-    background: #7377d0;
-    border: 2px solid black;
+    background: #30567c;
+    border: 2px solid black !important;
 }

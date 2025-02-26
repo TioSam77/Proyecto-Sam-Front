@@ -58,11 +58,11 @@ table {
 }
 
 table th{
-    background-color: #4545f7;
+    background-color: #2e83c4;
 }
 
 table td{
-    background-color: #8385ef;
+    background-color: #5792bf;
 }
 
 table th,
@@ -70,7 +70,6 @@ table td {
     border: 2px solid rgb(0, 0, 0);
     padding: 8px 16px;
 }
-
 @media(max-height:600px) {
     main {
         margin-top: 10vh;

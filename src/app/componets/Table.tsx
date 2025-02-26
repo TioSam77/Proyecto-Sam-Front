@@ -1,12 +1,17 @@
 import styles from "../css/Login.module.css";
 import tables from "../css/Table.module.css"
 
-const Table = () => {
+interface TableProps {
+    title: string;
+    apiUrl: string;
+}
+
+const Table = (props:TableProps) => {
 
     return (
         <section className={tables.TableContainer}>
 
-            <h3 className={styles.welcomeText}>Asistencia Estudiantes</h3>
+            <h3 className={styles.welcomeText}>{props.title}</h3>
             <div className={styles.boxWrapper}>
 
                 <div className={styles.borderGradient}></div> {/* Borde degradado */}
