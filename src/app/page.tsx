@@ -4,6 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Table from "./componets/Table";
 import InfoCurse from "./componets/InfoCurse";
 import StudentJustification from "./componets/studentJustification";
+import CustomCalendar from "./componets/Calendar";
 
 import style from "./css/Teacher.module.css"
 
@@ -20,9 +21,14 @@ export default function Page() {
           <h4>A = Absent</h4>
         </div>
 
-        <div></div>
+        <div>
+          <h4 className={style.red}> = dia de clases</h4>
+          <h4 className={style.green}> = dia feriado</h4>
+        </div>
 
       </section>
+      <CustomCalendar />
+
 
       <Table title="Asistencia de Estudiantes" apiUrl="" />
 

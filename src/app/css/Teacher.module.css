@@ -30,9 +30,11 @@
 
 .simplebox{
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     margin-top: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .simplebox div{
