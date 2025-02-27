@@ -46,11 +46,14 @@
 }
 
 /* Estilos para días especiales */
-.special-day {
-    background: red !important;
+.notClase-day {
+    background: rgb(227, 11, 11) !important;
     color: white !important;
 }
-
+.clase-day {
+    background: rgb(8, 116, 19) !important;
+    color: white !important;
+}
 .calendar{
     display: flex;
     justify-content: center;

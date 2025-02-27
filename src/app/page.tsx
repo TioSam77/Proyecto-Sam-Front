@@ -10,24 +10,23 @@ import style from "./css/Teacher.module.css"
 
 export default function Page() {
   return (
-    <section>
-      <InfoCurse />
+    <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
+      <section className={style.infoHead}>
+        <CustomCalendar />
+        <div className={style.simplebox}>
+          <div>
+            <h4 className={style.green}>= dia de clases</h4>
+            <h4 className={style.red}>= dia feriado</h4>
+          </div>
 
-      <section className={style.simplebox}>
-        <div>
-          <h4>P = Present</h4>
-          <h4>PL = Present/Late</h4>
-          <h4>N = Absent with notification</h4>
-          <h4>A = Absent</h4>
+          <div>
+            <h4>P = Present</h4>
+            <h4>PL = Present/Late</h4>
+            <h4>N = Absent with notification</h4>
+            <h4>A = Absent</h4>
+          </div>
         </div>
-
-        <div>
-          <h4 className={style.red}> = dia de clases</h4>
-          <h4 className={style.green}> = dia feriado</h4>
-        </div>
-
       </section>
-      <CustomCalendar />
 
 
       <Table title="Asistencia de Estudiantes" apiUrl="" />

@@ -40,7 +40,7 @@ footer {
     width: 100%;
     height: 90%;
     z-index: -1;
-    position: absolute;
+    position: fixed;
     background-image: url("https://images.unsplash.com/photo-1573496267526-08a69e46a409?ixlib=rb-4.0.3&auto=format&fit=crop");
     background-size: cover;
     background-position: center center;
