@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Table from "./componets/Table";
-import InfoCurse from "./componets/InfoProfesor";
 import StudentJustification from "./componets/studentJustification";
 import CustomCalendar from "./componets/Calendar";
 
@@ -20,10 +19,11 @@ export default function Page() {
           </div>
 
           <div>
-            <h4>P = Present</h4>
-            <h4>PL = Present/Late</h4>
-            <h4>N = Absent with notification</h4>
-            <h4>A = Absent</h4>
+            <h4
+              style={{ backgroundColor: "lightgreen", borderRadius:"6px", padding:"3px" }}>P = Present</h4>
+            <h4 style={{ backgroundColor: "lightblue", borderRadius:"6px", padding:"3px" }}>PL = Present/Late</h4>
+            <h4 style={{ backgroundColor: "#CBC3E3", borderRadius:"6px", padding:"3px" }}>N = Absent with notification</h4>
+            <h4 style={{ backgroundColor: "lightcoral", borderRadius:"6px", padding:"3px" }}>A = Absent</h4>
           </div>
         </div>
       </section>

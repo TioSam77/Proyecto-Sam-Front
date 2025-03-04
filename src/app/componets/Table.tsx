@@ -8,11 +8,13 @@ interface TableProps {
     apiUrl: string;
 }
 
+type Attendance = "P" | "PL" | "N" | "A" | null;
+
 interface AttendanceRecord {
     id: number;
     name: string;
     attendance: {
-        [date: string]: string | null; // "P", "PL", "N", "A" o null
+        [date: string]: Attendance;
     };
 }
 
@@ -20,25 +22,29 @@ interface ConfirmedDates {
     [date: string]: boolean;
 }
 
-const attendanceOptions = ["P", "PL", "N", "A", null];
+const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
 const initialData: AttendanceRecord[] = [
     { id: 67, name: "Paola", attendance: { "9-jul": "P", "16-jul": "PL", "23-jul": null } },
     { id: 170, name: "Amelia", attendance: { "9-jul": "P", "16-jul": "N", "23-jul": null } },
     { id: 182, name: "Carolina", attendance: { "9-jul": "P", "16-jul": "P", "23-jul": null } },
+
 ];
 
 const initialConfirmedDates: ConfirmedDates = {
     "9-jul": true,
     "16-jul": false,
     "23-jul": false,
+    "24-jul": false,
+
 };
+
 
 const Table = (props: TableProps) => {
     const [data, setData] = useState(initialData);
     const [confirmedDates, setConfirmedDates] = useState(initialConfirmedDates);
 
-    const handleSelectionChange = (id: number, date: string, value: string) => {
+    const handleSelectionChange = (id: number, date: string, value: Attendance) => {
         if (confirmedDates[date]) return;
 
         setData((prevData) =>
@@ -79,7 +85,7 @@ const Table = (props: TableProps) => {
                                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                                     <button
                                                         className={styles.blueButton}
-                                                        style={{ border: "1px solid black", maxWidth: "80%", display: "block" }}
+                                                        style={{ border: "1px solid black", display: "block" }}
                                                         onClick={() => confirmColumn(date)}
                                                     >
                                                         Confirmar
@@ -109,7 +115,7 @@ const Table = (props: TableProps) => {
                                             >
                                                 <select
                                                     value={row.attendance[date] ?? ""}
-                                                    onChange={(e) => handleSelectionChange(row.id, date, e.target.value)}
+                                                    onChange={(e) => handleSelectionChange(row.id, date, e.target.value as Attendance)}
                                                     disabled={confirmedDates[date]}
                                                     style={{ cursor: confirmedDates[date] ? "default" : "pointer"}}
                                                 >
