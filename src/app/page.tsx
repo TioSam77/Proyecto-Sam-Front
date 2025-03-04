@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Table from "./componets/Table";
-import InfoCurse from "./componets/InfoCurse";
+import InfoCurse from "./componets/InfoProfesor";
 import StudentJustification from "./componets/studentJustification";
 import CustomCalendar from "./componets/Calendar";
 
@@ -30,6 +30,8 @@ export default function Page() {
 
 
       <Table title="Asistencia de Estudiantes" apiUrl="" />
+
+      <Table title="Calificacion del Curso" apiUrl="" />
 
       <Table title="Resumen de Asistencia" apiUrl="" />
 

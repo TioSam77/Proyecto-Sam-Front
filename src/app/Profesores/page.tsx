@@ -1,8 +1,8 @@
-import InfoCurse from "../componets/InfoCurse";
+import InfoProfesor from "../componets/InfoProfesor";
 
 
 export default function Page(){
     return(
-        <InfoCurse />
+        <InfoProfesor />
     )
 }
