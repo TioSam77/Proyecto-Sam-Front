@@ -30,6 +30,7 @@
 
 .simplebox{
     display: flex;
+    justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
 }
@@ -43,6 +44,8 @@
     border:3px solid #cfcfcf ;
     border-radius: 8px;
     padding: 20px;
+    min-width: 30%;
+    max-width: 90vw;
 }
         
 .infoHead{

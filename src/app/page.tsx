@@ -28,13 +28,11 @@ export default function Page() {
         </div>
       </section>
 
-
       <Table title="Asistencia de Estudiantes" apiUrl="" />
 
       <Table title="Calificacion del Curso" apiUrl="" />
 
       <StudentJustification />
-      <Table title="Horario de Clases" apiUrl="" />
 
     </section>
   );
