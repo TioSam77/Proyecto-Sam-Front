@@ -33,8 +33,6 @@ export default function Page() {
 
       <Table title="Calificacion del Curso" apiUrl="" />
 
-      <Table title="Resumen de Asistencia" apiUrl="" />
-
       <StudentJustification />
       <Table title="Horario de Clases" apiUrl="" />
 

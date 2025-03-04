@@ -38,24 +38,21 @@ const Table = (props: TableProps) => {
     const [data, setData] = useState(initialData);
     const [confirmedDates, setConfirmedDates] = useState(initialConfirmedDates);
 
-    const handleCellClick = (id: number, date: string) => {
-        if (confirmedDates[date]) return; // Evita cambios si el día está confirmado
+    const handleSelectionChange = (id: number, date: string, value: string) => {
+        if (confirmedDates[date]) return;
 
         setData((prevData) =>
-            prevData.map((row) => {
-                if (row.id !== id) return row;
-
-                const currentIndex = attendanceOptions.indexOf(row.attendance[date]);
-                const nextIndex = (currentIndex + 1) % attendanceOptions.length;
-                
-                return {
-                    ...row,
-                    attendance: {
-                        ...row.attendance,
-                        [date]: attendanceOptions[nextIndex],
-                    },
-                };
-            })
+            prevData.map((row) =>
+                row.id === id
+                    ? {
+                          ...row,
+                          attendance: {
+                              ...row.attendance,
+                              [date]: value,
+                          },
+                      }
+                    : row
+            )
         );
     };
 
@@ -101,17 +98,27 @@ const Table = (props: TableProps) => {
                                         {Object.keys(row.attendance).map((date) => (
                                             <td
                                                 key={date}
-                                                onClick={() => handleCellClick(row.id, date)}
                                                 style={{
-                                                    cursor: confirmedDates[date] ? "default" : "pointer",
+                                                    textAlign: "center",
                                                     backgroundColor:
                                                         row.attendance[date] === "P" ? "lightgreen" :
                                                         row.attendance[date] === "PL" ? "lightblue" :
-                                                        row.attendance[date] === "N" ? "lightcoral" :
-                                                        row.attendance[date] === "A" ? "gray" : "white",
+                                                        row.attendance[date] === "N" ? "#CBC3E3" :
+                                                        row.attendance[date] === "A" ? "lightcoral" : "white",
                                                 }}
                                             >
-                                                {row.attendance[date] ?? "-"}
+                                                <select
+                                                    value={row.attendance[date] ?? ""}
+                                                    onChange={(e) => handleSelectionChange(row.id, date, e.target.value)}
+                                                    disabled={confirmedDates[date]}
+                                                    style={{ cursor: confirmedDates[date] ? "default" : "pointer"}}
+                                                >
+                                                    {attendanceOptions.map((option) => (
+                                                        <option key={option} value={option ?? ""}>
+                                                            {option ?? "-"}
+                                                        </option>
+                                                    ))}
+                                                </select>
                                             </td>
                                         ))}
                                     </tr>
