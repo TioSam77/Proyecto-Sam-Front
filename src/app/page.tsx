@@ -4,8 +4,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Table from "./componets/Table";
 import StudentJustification from "./componets/studentJustification";
 import CustomCalendar from "./componets/Calendar";
+import NotificationTable from "./componets/NotificationTable"; // 🔹 Importamos el nuevo componente
 
-import style from "./css/Teacher.module.css"
+import style from "./css/Teacher.module.css";
 
 export default function Page() {
   return (
@@ -33,6 +34,9 @@ export default function Page() {
       <Table title="Calificacion del Curso" apiUrl="" />
 
       <StudentJustification />
+
+      {/* 🔹 Agregamos la tabla de notificaciones aquí */}
+      <NotificationTable />
 
     </section>
   );
