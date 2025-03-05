@@ -2,15 +2,18 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Table from "./componets/Table";
-import StudentJustification from "./componets/studentJustification";
 import CustomCalendar from "./componets/Calendar";
 import NotificationTable from "./componets/NotificationTable"; // 🔹 Importamos el nuevo componente
 
 import style from "./css/Teacher.module.css";
+import CourseGroup from "./componets/CourseGroup";
 
 export default function Page() {
   return (
-    <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
+    <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' ,marginTop:"80px"}}>
+
+      <CourseGroup/>
+      
       <section className={style.infoHead}>
         <CustomCalendar />
         <div className={style.simplebox}>
@@ -32,9 +35,6 @@ export default function Page() {
       <Table title="Asistencia de Estudiantes" apiUrl="" />
 
       <Table title="Calificacion del Curso" apiUrl="" />
-
-      <StudentJustification />
-
       {/* 🔹 Agregamos la tabla de notificaciones aquí */}
       <NotificationTable />
 

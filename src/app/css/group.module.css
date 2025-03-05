@@ -1,0 +1,23 @@
+.sectionGroup {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.group {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    position: relative;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 15px;
+    min-width: 17rem;
+}
+
+@media(max-width:600px) {
+    .group {
+        flex: auto;
+    }
+}
