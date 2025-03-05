@@ -5,8 +5,9 @@ import Table from "./componets/Table";
 import InfoCurse from "./componets/InfoCurse";
 import StudentJustification from "./componets/studentJustification";
 import CustomCalendar from "./componets/Calendar";
+import NotificationTable from "./componets/NotificationTable"; // 🔹 Importamos el nuevo componente
 
-import style from "./css/Teacher.module.css"
+import style from "./css/Teacher.module.css";
 
 export default function Page() {
   return (
@@ -28,13 +29,13 @@ export default function Page() {
         </div>
       </section>
 
-
       <Table title="Asistencia de Estudiantes" apiUrl="" />
-
       <Table title="Resumen de Asistencia" apiUrl="" />
-
       <StudentJustification />
       <Table title="Horario de Clases" apiUrl="" />
+
+      {/* 🔹 Agregamos la tabla de notificaciones aquí */}
+      <NotificationTable />
 
     </section>
   );
