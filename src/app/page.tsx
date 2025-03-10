@@ -7,13 +7,16 @@ import NotificationTable from "./componets/NotificationTable"; // 🔹 Importamo
 
 import style from "./css/Teacher.module.css";
 import CourseGroup from "./componets/CourseGroup";
+import FormProfesor from "./componets/FormProfesor";
 
 export default function Page() {
   return (
-    <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' ,marginTop:"80px"}}>
+    <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center', marginTop: "80px" }}>
 
-      <CourseGroup/>
-      
+      <FormProfesor />
+
+      <CourseGroup />
+
       <section className={style.infoHead}>
         <CustomCalendar />
         <div className={style.simplebox}>
@@ -24,10 +27,10 @@ export default function Page() {
 
           <div>
             <h4
-              style={{ backgroundColor: "lightgreen", borderRadius:"6px", padding:"3px" }}>P = Present</h4>
-            <h4 style={{ backgroundColor: "lightblue", borderRadius:"6px", padding:"3px" }}>PL = Present/Late</h4>
-            <h4 style={{ backgroundColor: "#CBC3E3", borderRadius:"6px", padding:"3px" }}>N = Absent with notification</h4>
-            <h4 style={{ backgroundColor: "lightcoral", borderRadius:"6px", padding:"3px" }}>A = Absent</h4>
+              style={{ backgroundColor: "lightgreen", borderRadius: "6px", padding: "3px" }}>P = Present</h4>
+            <h4 style={{ backgroundColor: "lightblue", borderRadius: "6px", padding: "3px" }}>PL = Present/Late</h4>
+            <h4 style={{ backgroundColor: "#CBC3E3", borderRadius: "6px", padding: "3px" }}>N = Absent with notification</h4>
+            <h4 style={{ backgroundColor: "lightcoral", borderRadius: "6px", padding: "3px" }}>A = Absent</h4>
           </div>
         </div>
       </section>
