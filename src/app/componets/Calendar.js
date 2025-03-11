@@ -4,8 +4,6 @@ import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
-
 import "../css/calendar.css"
 
 const notClaseDays = ["2025-03-05", "2025-03-10", "2025-03-15"];
@@ -21,7 +19,7 @@ export default function CustomCalendar() {
                 onChange={setDate}
                 value={date}
                 locale="es"
-                className="border p-2 rounded-lg shadow-md"
+                className="border p-2 shadow-md"
                 tileClassName={({ date }) => {
                     const dateString = format(date, "yyyy-MM-dd");
 

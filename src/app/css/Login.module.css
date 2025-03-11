@@ -27,7 +27,7 @@
   /* Asegura que cubra toda la caja */
   height: calc(100% + 14px);
   /* Cubre también la parte superior */
-  border-radius: 8px;
+  border-radius: 4px;
   /* Mantiene la forma */
   background: linear-gradient(to bottom right, #E8E8E8, #2e83c4, #2e83c4, #30567c);
   /* Amarillo, rosa, azul y turquesa */
@@ -42,7 +42,7 @@
   position: relative;
   background: white;
   padding: 30px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 /* Input */
@@ -51,7 +51,7 @@
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 /* Botón de acceso */
@@ -61,7 +61,7 @@
   background-color: #3399FF;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -75,7 +75,7 @@
   background-color: #FF3333;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 

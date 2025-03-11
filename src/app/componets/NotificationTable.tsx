@@ -52,8 +52,8 @@ const NotificationTable = () => {
             </tr>
           </thead>
           <tbody>
-            {notificationsList.map((notif) => (
-              <tr key={notif.id}>
+            {notificationsList.map((notif,index) => (
+              <tr key={notif.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
                 <td>{notif.title}</td>
                 <td>{notif.startDate}</td>
                 <td>{notif.endDate}</td>
