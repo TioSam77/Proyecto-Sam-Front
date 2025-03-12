@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 60vw;
+    max-width: 80vw;
 }
 
 .row-even {
@@ -39,8 +39,12 @@
 }
 
 .classCell {
-    background-color: #add8e6;
+    color:white;
+    background-color: #00a2d8;
     font-weight: bold;
     vertical-align: middle;
     border-radius: 8px;
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 150px;
 }

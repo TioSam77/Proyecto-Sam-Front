@@ -29,14 +29,12 @@ const initialData: AttendanceRecord[] = [
     { id: 123, name: "Jorge", attendance: { "9-jul": "N", "16-jul": "P", "23-jul": null } },
     { id: 56, name: "Erick", attendance: { "9-jul": "PL", "16-jul": "P", "23-jul": null } },
     { id: 567, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
-
-
 ];
 
 const initialConfirmedDates: ConfirmedDates = {
     "9-jul": true,
     "16-jul": false,
-    "23-jul": false,
+    "23-jul": true,
     "24-jul": false,
     "25-jul": false,
     "26-jul": false,
@@ -47,9 +45,7 @@ const initialConfirmedDates: ConfirmedDates = {
     "31-jul": false,
     "32-jul": false,
     "33-ago": false,
-
 };
-
 
 const Table = (props: TableProps) => {
     const [data, setData] = useState(initialData);
@@ -106,8 +102,10 @@ const Table = (props: TableProps) => {
                         {data.map((row, index) => (
                             <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
                                 <td>{row.id}</td>
-                                <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>{row.name}</td>
-                                {Object.keys(row.attendance).map((date) => (
+                                <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
+                                    {row.name}
+                                </td>
+                                {Object.keys(initialConfirmedDates).map((date) => (
                                     <td key={date}>
                                         <select
                                             value={row.attendance[date] ?? ""}
@@ -116,9 +114,9 @@ const Table = (props: TableProps) => {
                                             style={{
                                                 backgroundColor:
                                                     row.attendance[date] === "P" ? "lightgreen" :
-                                                        row.attendance[date] === "PL" ? "lightblue" :
-                                                            row.attendance[date] === "N" ? "#CBC3E3" :
-                                                                row.attendance[date] === "A" ? "lightcoral" : "",
+                                                    row.attendance[date] === "PL" ? "lightblue" :
+                                                    row.attendance[date] === "N" ? "#CBC3E3" :
+                                                    row.attendance[date] === "A" ? "lightcoral" : "",
                                                 cursor: confirmedDates[date] ? "default" : "pointer"
                                             }}
                                         >

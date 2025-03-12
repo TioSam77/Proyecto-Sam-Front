@@ -3,21 +3,22 @@ import { useEffect, useRef } from "react";
 import tables from "../css/Table.module.css";
 
 const TableHorario = () => {
-  const tableRef = useRef(null);
+  const tableRef = useRef<HTMLTableElement | null>(null);
 
   const horario = [
-    { horaInicio: "7:00", horaFin: "9:00", dia: "2025-03-12", clase: "Matemáticas" },
-    { horaInicio: "7:00", horaFin: "9:00", dia: "2025-03-10", clase: "Ingles" },
+    { horaInicio: "7:00", horaFin: "9:00", dia: "2025-03-12", clase: "Matemáticas aplicadas y computacion" },
+    { horaInicio: "7:00", horaFin: "9:00", dia: "2025-03-10", clase: "Ingles avanzado casi experto y nativo c2 c3 23o" },
     { horaInicio: "9:00", horaFin: "10:00", dia: "2025-03-11", clase: "Proba" },
     { horaInicio: "9:00", horaFin: "11:00", dia: "2025-03-12", clase: "Historia" },
     { horaInicio: "11:00", horaFin: "13:00", dia: "2025-03-13", clase: "Física" },
     { horaInicio: "15:00", horaFin: "17:00", dia: "2025-03-14", clase: "Química" },
     { horaInicio: "18:00", horaFin: "21:00", dia: "2025-03-15", clase: "Arte" },
+    { horaInicio: "12:00", horaFin: "13:00", dia: "2025-03-11", clase: "procesos" },
   ];
 
   const horas = Array.from({ length: 15 }, (_, i) => `${7 + i}:00`);
   
-  const diasMes = Array.from({ length: 20 }, (_, i) => `2025-03-${(i + 1).toString().padStart(2, '0')}`);
+  const diasMes = Array.from({ length: 22 }, (_, i) => `2025-03-${(i + 1).toString().padStart(2, '0')}`);
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -25,7 +26,7 @@ const TableHorario = () => {
     if (tableRef.current && todayIndex !== -1) {
       const tableHeaders = tableRef.current.querySelectorAll("thead th");
       if (tableHeaders[todayIndex + 1]) {
-        tableHeaders[todayIndex + 7].scrollIntoView({ behavior: "smooth", block: "center" });
+        tableHeaders[todayIndex + 1].scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
   }, []);

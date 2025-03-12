@@ -35,7 +35,7 @@ export default function RootLayout({
         <Header />
         <main className="container ">
           <div className="fondImage"></div>
-          {children}
+          <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center',alignItems:"center", justifyContent: 'center', marginTop: "80px", maxWidth:"100vw" }}>{children}</section>
         </main>
         <Footer />
         <BootstrapClient />
