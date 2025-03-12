@@ -27,8 +27,8 @@ const initialData: AttendanceRecord[] = [
     { id: 170, name: "Amelia", attendance: { "9-jul": "P", "16-jul": "N", "23-jul": null } },
     { id: 182, name: "Carolina", attendance: { "9-jul": "P", "16-jul": "P", "23-jul": null } },
     { id: 123, name: "Jorge", attendance: { "9-jul": "N", "16-jul": "P", "23-jul": null } },
-    { id: 56, name: "Erick", attendance: { "9-jul": "P", "16-jul": "P", "23-jul": null } },
-    { id: 567, name: "David", attendance: { "9-jul": "P", "16-jul": "P", "23-jul": null } },
+    { id: 56, name: "Erick", attendance: { "9-jul": "PL", "16-jul": "P", "23-jul": null } },
+    { id: 567, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
 
 
 ];
@@ -37,6 +37,17 @@ const initialConfirmedDates: ConfirmedDates = {
     "9-jul": true,
     "16-jul": false,
     "23-jul": false,
+    "24-jul": false,
+    "25-jul": false,
+    "26-jul": false,
+    "27-jul": false,
+    "28-jul": false,
+    "29-jul": false,
+    "30-jul": false,
+    "31-jul": false,
+    "32-jul": false,
+    "33-ago": false,
+
 };
 
 

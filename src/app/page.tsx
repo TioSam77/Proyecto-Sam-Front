@@ -19,7 +19,7 @@ export default function Page() {
 
       <CourseGroup />
 
-      <section style={{ background: "white", padding: "10px", margin: "10px", boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.2)" }}>
+      <section className="containerSection">
         <NotificationTable />
 
         <hr></hr>
@@ -35,15 +35,14 @@ export default function Page() {
         </section>
       </section>
 
-      <section style={{ background: "white", padding: "10px", margin: "10px", boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.2)" }}>
+      <section className="containerSection">
         <h1>Horario de clases</h1>
             <CustomCalendar />
+            <TableHorario/>
       </section>
 
 
-      <section style={{ background: "white", padding: "10px", margin: "10px", boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.2)" }}>
-        <Table apiUrl="" />
-        <TableHorario/>
+      <section className="containerSection">
       </section>
 
     </section>
