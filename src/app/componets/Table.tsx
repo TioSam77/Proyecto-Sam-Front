@@ -29,6 +29,16 @@ const initialData: AttendanceRecord[] = [
     { id: 123, name: "Jorge", attendance: { "9-jul": "N", "16-jul": "P", "23-jul": null } },
     { id: 56, name: "Erick", attendance: { "9-jul": "PL", "16-jul": "P", "23-jul": null } },
     { id: 567, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 356, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 234, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 5, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 7, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 787, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 53, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 52, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 54, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+    { id: 64, name: "David", attendance: { "9-jul": "A", "16-jul": "P", "23-jul": null } },
+
 ];
 
 const initialConfirmedDates: ConfirmedDates = {
@@ -78,9 +88,9 @@ const Table = (props: TableProps) => {
             <div className={tables.box}>
                 <table>
                     <thead>
-                        <tr>
+                        <tr className={tables.fixedRow}>
                             <th>Código</th>
-                            <th className={tables.fixedCol}>Nombre</th>
+                            <th className={tables.fixedColRow}>Nombre</th>
                             {Object.keys(initialConfirmedDates).map((date) => (
                                 <th key={date}>
                                     {date}

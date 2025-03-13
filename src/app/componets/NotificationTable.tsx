@@ -62,8 +62,9 @@ const NotificationTable = () => {
             ))}
           </tbody>
         </table>
-        <button className={notifications.addButton} onClick={() => setShowForm(!showForm)}>+</button>
       </div>
+      <button className={notifications.addButton} onClick={() => setShowForm(!showForm)}>+</button>
+
 
       {showForm && (
         <div className={notifications.formContainer}>

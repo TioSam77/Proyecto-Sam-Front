@@ -19,7 +19,7 @@ export default function CustomCalendar() {
                 onChange={setDate}
                 value={date}
                 locale="es"
-                className="border p-2 shadow-md"
+                className="shadow-md"
                 tileClassName={({ date }) => {
                     const dateString = format(date, "yyyy-MM-dd");
 

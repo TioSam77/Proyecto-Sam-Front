@@ -63,10 +63,11 @@ table th{
 
 table th,
 table td {
-    border-bottom: 2px solid #cfcfcf;
     padding: 8px 16px;
 }
-
+table tr{
+    border-bottom: 2px solid #cfcfcf;
+}
 select{
     text-align: center;
     height: 100%;
@@ -75,6 +76,10 @@ select{
     border: none;
     border-radius: 4px;
     appearance: none;
+}
+
+hr{
+    width: 90%;
 }
 
 .containerSection{
