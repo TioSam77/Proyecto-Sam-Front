@@ -2,7 +2,7 @@
 .react-calendar {
     width: 350px;
     max-width: 100%;
-    background: white;
+    background: none;
     border: none;
     border-radius: 4px;
     box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.1);
@@ -14,14 +14,12 @@
     justify-content: space-between;
     align-items: center;
     background: #4a90e2;
-    color: white;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     padding: 8px;
 }
 
-/* Botones de navegación */
-.react-calendar__navigation button {
+.react-calendar__navigation button{
     color: rgb(255, 255, 255);
     font-weight: bold;
 }

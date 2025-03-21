@@ -8,7 +8,7 @@ const NotificationTable = () => {
   const [notificationsList, setNotificationsList] = useState([
     { id: 1, title: "Examen parcial", startDate: "2025-03-10", endDate: "2025-03-12", message: "El examen será el 10 de marzo a las 9:00 AM." },
   ]);
-  
+
   const [newNotification, setNewNotification] = useState({
     title: "",
     startDate: "",
@@ -37,6 +37,12 @@ const NotificationTable = () => {
       setShowForm(false);
     }
   };
+  
+  const handleCloseNotification = () => {
+    setShowForm(false); // Suponiendo que `setShowForm` es el estado que controla la visibilidad del formulario
+    setNewNotification({ title: '', startDate: '', endDate: '', message: '' }); // Reiniciar los valores del formulario
+  };
+  
 
   return (
     <section className={tables.TableContainer}>
@@ -52,7 +58,7 @@ const NotificationTable = () => {
             </tr>
           </thead>
           <tbody>
-            {notificationsList.map((notif,index) => (
+            {notificationsList.map((notif, index) => (
               <tr key={notif.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
                 <td>{notif.title}</td>
                 <td>{notif.startDate}</td>
@@ -73,7 +79,18 @@ const NotificationTable = () => {
           <input type="date" name="endDate" value={newNotification.endDate} onChange={handleInputChange} />
           <textarea name="message" placeholder="Introduce el mensaje..." maxLength={charLimit} value={newNotification.message} onChange={handleInputChange} />
           <p className={charCount > charLimit ? notifications.errorText : notifications.charCount}>{charCount}/{charLimit} caracteres</p>
-          <button onClick={handleAddNotification}>Agregar</button>
+          <div>
+            <button
+              className={notifications.button}
+              onClick={handleCloseNotification}>
+              Cancelar
+            </button>
+            <button
+              className={notifications.button}
+              onClick={handleAddNotification}>
+              Guardar
+            </button>
+          </div>
         </div>
       )}
     </section>
