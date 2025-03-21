@@ -1,10 +1,9 @@
-
-.information h3{
+.information h3 {
     flex-direction: row;
     z-index: 1;
 }
 
-.curse{
+.curse {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -12,56 +11,60 @@
     gap: 20px;
 }
 
-.curse div{
+.curse div {
     padding: 20px;
     border: 3px solid #9eb8cd;
-    border-radius: 8px;
+    border-radius: 4px;
     background-color: #b5d4ec;
     min-width: 300px;
 }
 
-.box{
+.box {
     position: relative;
     padding: 20px;
     gap: 20px;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
-.simplebox{
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.simplebox div{
+.containerbox {
     flex: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    border:3px solid #cfcfcf ;
-    border-radius: 8px;
+    border: 2px solid #cfcfcf;
+    border-radius: 4px;
     padding: 20px;
     margin: 10px;
     min-width: 30%;
     max-width: 90vw;
 }
-        
-.infoHead{
+
+.simplebox {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 20px;
+    justify-content: space-around;
+    align-content: center;
+    border-radius: 4px;
+    width: 100%;
 }
 
-.red{
+.infoHead {
+    display: flex;
+    justify-content: center;
+    align-content: space-around;
+    flex-wrap: wrap;
+    overflow: hidden;
+    gap: 10px;
+}
+
+.red {
     position: relative;
     left: 10px;
 }
 
-.red::before{
+.red::before {
     position: absolute;
     left: -20px;
     bottom: 5px;
@@ -71,12 +74,12 @@
     background-color: red;
 }
 
-.green{
+.green {
     position: relative;
     left: 10px;
 }
 
-.green::before{
+.green::before {
     position: absolute;
     left: -20px;
     bottom: 5px;

@@ -1,0 +1,96 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    margin: 10px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dayContainer {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dayAvilable {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 4px;
+    gap: 10px;
+    width: 350px;
+    max-height: 300px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.selectDay{
+    height: auto;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #cfcfcf;
+}
+
+.containerSchedule{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    scrollbar-color: rgb(45, 88, 169) white;
+}
+
+.schedule {
+    display: flex;
+    gap: 5px;
+}
+
+.blueButton {
+    padding: 10px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #3399FF;
+    border: 2px solid #3377C2;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+
+}
+.blueButton:hover {
+    background-color: #3377C2;
+}
+.blueButton:disabled {
+    background-color: #3377C2;
+}
+.redButton {
+    flex: 1;
+    max-height: 50px;
+    padding: 10px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #FF3333;
+    border: 2px solid #CC4040;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+
+}
+.redButton:hover {
+    background-color: #CC4040;
+}
+.redButton:disabled {
+    background-color: #CC4040;
+}
+
+.input{
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #cfcfcf;
+}
