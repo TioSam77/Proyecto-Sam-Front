@@ -1,42 +1,31 @@
-"use client";
-
-import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // Para redirección
+import React, { Dispatch, SetStateAction } from "react";
 import styles from "../css/Login.module.css";
-import { Any } from "typeorm";
 
-
-// Definir el tipo correcto para evitar el error
 export const fakeUsers: Record<"Alumno" | "Profesor" | "Administrador", { username: string; password: string; redirect: string }> = {
   Alumno: { username: "20231234", password: "123456", redirect: "/alumno" },
   Profesor: { username: "RFC123", password: "profesor123", redirect: "/profesor" },
   Administrador: { username: "admin", password: "admin123", redirect: "/admin" },
 };
 
-const Login = () => {
-  const router = useRouter(); // Hook para redirección
-  const [userType, setUserType] = useState("Alumno");
-  const [credentials, setCredentials] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
+interface LoginProps {
+  userType: string;
+  setUserType: Dispatch<SetStateAction<string>>;
+  credentials: { username: string; password: string };
+  setCredentials: Dispatch<SetStateAction<{ username: string; password: string }>>;
+  error: string;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleLogin: () => void;
+}
 
-  // Manejo de inputs
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value });
-  };
-
-
-// Función de login simulada
-const handleLogin = () => {
-  const user = fakeUsers[userType as "Alumno" | "Profesor" | "Administrador"]; // Especificamos el tipo aquí
-
-  if (credentials.username === user.username && credentials.password === user.password) {
-    setError(""); // Limpiar errores
-    router.push(user.redirect); // Redirigir al usuario
-  } else {
-    setError("Usuario o contraseña incorrectos");
-  }
-};
-
+const Login: React.FC<LoginProps> = ({
+  userType,
+  setUserType,
+  credentials,
+  setCredentials,
+  error,
+  handleInputChange,
+  handleLogin
+}) => {
   return (
     <div className={styles.loginContainer}>
       <h1 className={styles.welcomeText}>Bienvenido a Interactivo</h1>
