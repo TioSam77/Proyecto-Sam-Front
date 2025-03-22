@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Para redirección
 import styles from "../css/Login.module.css";
-import { Any } from "typeorm";
+
 
 
 // Definir el tipo correcto para evitar el error
