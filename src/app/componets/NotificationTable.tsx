@@ -47,6 +47,30 @@ const NotificationTable = () => {
   return (
     <section className={tables.TableContainer}>
       <h3 className={styles.welcomeText}>Notificaciones</h3>
+      <div className={notifications.notificationTableContainer}>
+  <table className={notifications.notificationTable}>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Mensaje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {notificationsList.map((notif) => (
+        <tr key={notif.id}>
+          <td>{notif.title}</td>
+          <td>{notif.startDate}</td>
+          <td>{notif.endDate}</td>
+          <td>{notif.message}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <button className={notifications.addButton} onClick={() => setShowForm(!showForm)}>+</button>
+</div>
+
       <div className={tables.box}>
         <table>
           <thead>
