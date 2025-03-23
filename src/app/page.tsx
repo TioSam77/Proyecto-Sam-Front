@@ -9,7 +9,6 @@ import TableHorario from "./componets/TableHorario";
 export default function Page() {
   return (
     <>
-      <FormProfesor />
       <CourseGroup />
 
       <section className="containerSection">

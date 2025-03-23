@@ -2,9 +2,9 @@ import React, { Dispatch, SetStateAction } from "react";
 import styles from "../css/Login.module.css";
 
 export const fakeUsers: Record<"Alumno" | "Profesor" | "Administrador", { username: string; password: string; redirect: string }> = {
-  Alumno: { username: "20231234", password: "123456", redirect: "/alumno" },
-  Profesor: { username: "RFC123", password: "profesor123", redirect: "/profesor" },
-  Administrador: { username: "admin", password: "admin123", redirect: "/admin" },
+  Alumno: { username: "20231234", password: "123456", redirect: "/Alumno" },
+  Profesor: { username: "RFC123", password: "profesor123", redirect: "/Profesor" },
+  Administrador: { username: "admin", password: "admin123", redirect: "/Administrador" },
 };
 
 interface LoginProps {

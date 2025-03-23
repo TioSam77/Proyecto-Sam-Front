@@ -10,7 +10,9 @@ const Header = () => {
           <img src="/logo.jpg" alt="Interactivo Logo" height="40" className="me-2" />
           <h3 className="logo">Interactivo</h3>
         </a>
+        
         {/* Botón de Offcanvas */}
+        <button>mensaje</button>
         <button
           className="navbar-toggler"
           type="button"
@@ -52,7 +54,10 @@ const Header = () => {
                 <a className="nav-link" href="/Registro">Registrarse</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Profesores">Profesores</a>
+                <a className="nav-link" href="/Profesor">Profesor</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/Alumno">Alumno</a>
               </li>
             </ul>
           </div>
