@@ -46,7 +46,8 @@
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
-    scrollbar-color: rgb(45, 88, 169) white;
+    scrollbar-color: rgb(45, 88, 169) rgba(255, 255, 255, 0);
+    scrollbar-width: thin;
 }
 
 .schedule {

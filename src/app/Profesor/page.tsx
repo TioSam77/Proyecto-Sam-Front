@@ -4,11 +4,13 @@ import NotificationTable from "../componets/NotificationTable";
 import style from "../css/Teacher.module.css"
 import styles from "../css/Login.module.css"
 import Table from "../componets/Table";
+import CourseGroup from "../componets/CourseGroup";
 
 
 export default function Page(){
     return(
         <section className="containerSection">
+        <CourseGroup/>
         <NotificationTable />
 
         <hr></hr>

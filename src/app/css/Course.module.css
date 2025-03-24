@@ -1,0 +1,77 @@
+.subjects{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: 18.5rem;
+    height: 19rem;
+    border: 1px solid #cfcfcf;
+    border-radius: 4px;
+    text-align: left;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.header{
+    flex: 1;
+    position: relative;
+}
+
+.textHeader{
+    padding: 1rem;
+    position: relative;
+    color: white;
+
+}
+
+.image{
+    background-image: url(	https://gstatic.com/classroom/themes/img_bookclub.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+}
+
+.body{
+    flex: 1;
+    display: block;
+    padding: 1rem;
+}
+
+.footer{
+    flex: 1;
+    border-top: 1px solid #cfcfcf;
+    padding: 1rem;
+}
+
+.containerSubjects{
+    list-style: none;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+}
+
+.center{
+    width: 100%;
+    margin: 10px;
+}
+
+@media(max-width:500px){
+
+    .subjects{
+        background-color: white;
+        width: 100%;
+        height: 9rem;
+    }
+
+    .footer{
+        display: none;
+    }
+}

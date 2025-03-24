@@ -118,6 +118,7 @@ const Table = (props: TableProps) => {
                                 {Object.keys(initialConfirmedDates).map((date) => (
                                     <td key={date}>
                                         <select
+                                            className={tables.select}
                                             value={row.attendance[date] ?? ""}
                                             onChange={(e) => handleSelectionChange(row.id, date, e.target.value as Attendance)}
                                             disabled={confirmedDates[date]}
