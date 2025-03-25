@@ -7,6 +7,8 @@ import "@/app/css/global.css";
 import Header from "../app/componets/Header";
 import Footer from "../app/componets/Footer";
 import BootstrapClient from "./componets/bootstrap-client";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
