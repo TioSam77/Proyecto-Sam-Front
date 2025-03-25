@@ -4,6 +4,7 @@
     align-items: center;
     max-width: 90vw;
     max-height: 100vw;
+    gap: 10px;
 }
 
 .row-even {
@@ -65,4 +66,14 @@
 
 .select{
     padding: 0 2px;
+}
+
+.searchBox{
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: 0.3s;
 }

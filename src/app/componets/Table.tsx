@@ -60,20 +60,14 @@ const initialConfirmedDates: ConfirmedDates = {
 const Table = (props: TableProps) => {
     const [data, setData] = useState(initialData);
     const [confirmedDates, setConfirmedDates] = useState(initialConfirmedDates);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const handleSelectionChange = (id: number, date: string, value: Attendance) => {
         if (confirmedDates[date]) return;
-
         setData((prevData) =>
             prevData.map((row) =>
                 row.id === id
-                    ? {
-                        ...row,
-                        attendance: {
-                            ...row.attendance,
-                            [date]: value,
-                        },
-                    }
+                    ? { ...row, attendance: { ...row.attendance, [date]: value } }
                     : row
             )
         );
@@ -83,8 +77,17 @@ const Table = (props: TableProps) => {
         setConfirmedDates((prev) => ({ ...prev, [date]: true }));
     };
 
+    const filteredData = data.filter((row) => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
         <section className={tables.TableContainer}>
+            <input
+                type="text"
+                placeholder="Buscar usuario..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={tables.searchBox}
+            />
             <div className={tables.box}>
                 <table>
                     <thead>
@@ -109,7 +112,7 @@ const Table = (props: TableProps) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((row, index) => (
+                        {filteredData.map((row, index) => (
                             <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
                                 <td>{row.id}</td>
                                 <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
