@@ -3,8 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Footer = () => {
   return (
-    <footer className="text-center py-3">
-      <div className="container">
+    <footer className="text-center">
+      <div>
         <p className="mb-0">© 2025 Interactivo</p>
       </div>
     </footer>

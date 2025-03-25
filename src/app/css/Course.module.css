@@ -52,10 +52,9 @@
 
 .containerSubjects{
     list-style: none;
-    display: flex;
-    justify-content: start;
-    flex-wrap: wrap;
-    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(18.5rem,1fr));
+    justify-items: center;
     margin: 0;
     padding: 0;
     gap: 10px;
@@ -74,7 +73,7 @@
     border: 1px solid #cfcfcf;
 }
 
-@media(max-width:500px){
+@media(max-width:647px){
 
     .subjects{
         background-color: white;

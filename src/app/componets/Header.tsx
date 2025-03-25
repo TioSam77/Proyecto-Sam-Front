@@ -24,7 +24,7 @@ const Header = () => {
 
           {/* Botón de mensajes */}
           <button
-            className="btn btn-outline-primary"
+            className="btn "
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasMessages"
@@ -76,7 +76,7 @@ const Header = () => {
                   aria-expanded="false"
                   aria-controls="collapseOne"
                 >
-                  📌 Destacados (1)
+                  Destacados (1)
                 </button>
               </h2>
               <div
@@ -102,7 +102,7 @@ const Header = () => {
                   aria-expanded="false"
                   aria-controls="collapseTwo"
                 >
-                  👥 Grupo (0)
+                  Grupo (0)
                 </button>
               </h2>
               <div
@@ -128,7 +128,7 @@ const Header = () => {
                   aria-expanded="false"
                   aria-controls="collapseThree"
                 >
-                  🔒 Privado (2)
+                  Privado (2)
                 </button>
               </h2>
               <div
