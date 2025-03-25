@@ -1,7 +1,14 @@
+"use client";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Header = () => {
+  const handleLogout = () => {
+    // Aquí puedes limpiar el estado del usuario, eliminar el token, etc.
+    localStorage.removeItem("token"); // Ejemplo si usas JWT
+    window.location.href = "/Login"; // Redirige al usuario a la página de login
+  };
+
   return (
     <nav className="navbar bg-body-tertiary fixed-top">
       <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -10,19 +17,21 @@ const Header = () => {
           <img src="/logo.jpg" alt="Interactivo Logo" height="40" className="me-2" />
           <h3 className="logo">Interactivo</h3>
         </a>
-        
+
         {/* Botón de Offcanvas */}
-        <button>mensaje</button>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasNavbar"
-          aria-controls="offcanvasNavbar"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        <div>
+          <button>mensaje</button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+        </div>
 
         {/* Menú lateral */}
         <div
@@ -58,6 +67,11 @@ const Header = () => {
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="/Alumno">Alumno</a>
+              </li>
+              <li >
+                <button onClick={handleLogout}>
+                  Cerrar sesión
+                </button>
               </li>
             </ul>
           </div>
