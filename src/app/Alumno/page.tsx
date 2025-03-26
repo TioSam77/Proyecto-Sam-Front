@@ -1,7 +1,15 @@
-import CourseGroup from "../componets/MapCourse"
+"use client";
 
-export default function page() {
-    return (
-        <CourseGroup/>
-    )
+import HeaderAlumno from "../Profesor/HeaderProfesor";
+import CourseGroup from "../componets/MapCourse";
+
+export default function Page() {
+  return (
+    <>
+      <HeaderAlumno />
+      <div style={{ paddingTop: "80px" }}>
+        <CourseGroup />
+      </div>
+    </>
+  );
 }
