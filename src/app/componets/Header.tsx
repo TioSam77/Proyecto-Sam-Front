@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   return (
-    <>
+    <header>
       <nav className="navbar bg-body-tertiary fixed-top">
         <div className="container-fluid d-flex justify-content-between align-items-center">
           {/* Logo */}
@@ -22,28 +22,30 @@ const Header = () => {
             <h3 className="logo">Interactivo</h3>
           </a>
 
-          {/* Botón de mensajes */}
-          <button
-            className="btn "
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasMessages"
-            aria-controls="offcanvasMessages"
-          >
-            <i className="bi bi-chat-dots" style={{ fontSize: '1.5rem' }}></i>
-          </button>
+          <div>
+            {/* Botón de mensajes */}
+            <button
+              className="btn "
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasMessages"
+              aria-controls="offcanvasMessages"
+            >
+              <i className="bi bi-chat-dots" style={{ fontSize: '1.5rem' }}></i>
+            </button>
 
-          {/* Botón del menú lateral */}
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasNavbar"
-            aria-controls="offcanvasNavbar"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+            {/* Botón del menú lateral */}
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasNavbar"
+              aria-controls="offcanvasNavbar"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -187,7 +189,7 @@ const Header = () => {
           </ul>
         </div>
       </div>
-    </>
+    </header>
   );
 };
 

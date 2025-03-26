@@ -1,11 +1,11 @@
-import InfoProfesor from "../componets/InfoProfesor";
-import NotificationTable from "../componets/NotificationTable";
 
 import style from "../css/Teacher.module.css"
 import styles from "../css/Login.module.css"
 import Table from "../componets/Table";
 import CourseGroup from "../componets/MapCourse";
 import ViewGroup from "../componets/ViewGroup";
+import card from "../css/card.module.css";
+import course from "../css/Course.module.css"
 
 
 export default function Page() {
@@ -14,6 +14,21 @@ export default function Page() {
       <CourseGroup />
 
       <ViewGroup />
+
+      <section className={course.center}>
+        <div className={course.containerSubjects}>
+          <div className={card.card}>
+            <h3>Asistencia</h3>
+            <i className="bi bi-person-check"></i>
+          </div>
+
+          <div className={card.card}>
+            <h3>Calificaciones</h3>
+            <i className="bi bi-award-fill"></i>
+          </div>
+        </div>
+      </section>
+
 
       <h3 className={styles.welcomeText}>Asistencia de Estudiantes</h3>
       <section className={style.infoHead}>

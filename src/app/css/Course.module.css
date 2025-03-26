@@ -5,13 +5,17 @@
     background-color: white;
     width: 18.5rem;
     height: 19rem;
-    border: 1px solid #cfcfcf;
     border-radius: 4px;
     text-align: left;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+.subjects:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 
+}
 .header{
     flex: 1;
     position: relative;

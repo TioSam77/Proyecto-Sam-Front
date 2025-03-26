@@ -35,11 +35,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
+        <div className="fondImage"></div>
         <main className="container ">
-          <div className="fondImage"></div>
-          <section style={{ display: 'flex', flexDirection: 'column', alignContent: 'center',alignItems:"center", justifyContent: 'center', marginTop: "80px", maxWidth:"100vw" }}>{children}</section>
+          <section style={{ display: 'flex', flexDirection: 'column', alignItems: "center", width: "100%" }}>{children}</section>
+          <Footer />
         </main>
-        <Footer />
         <BootstrapClient />
       </body>
     </html>

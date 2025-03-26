@@ -9,9 +9,6 @@ import ViewGroup from "./componets/ViewGroup";
 export default function Page() {
   return (
     <>
-      <ViewGroup />
-      <CourseGroup />
-
       <section className="containerSection">
         <h1>Horario de clases</h1>
         <CustomCalendar />

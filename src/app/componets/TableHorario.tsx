@@ -13,7 +13,6 @@ const TableHorario = () => {
     { horaInicio: "9:00", horaFin: "11:00", dia: "2025-03-12", clase: "Historia" },
     { horaInicio: "11:00", horaFin: "13:00", dia: "2025-03-13", clase: "Física" },
     { horaInicio: "15:00", horaFin: "17:00", dia: "2025-03-14", clase: "Química" },
-    { horaInicio: "18:00", horaFin: "21:00", dia: "2025-03-15", clase: "Arte" },
     { horaInicio: "12:00", horaFin: "13:00", dia: "2025-03-12", clase: "procesos" },
   ];
 
