@@ -6,10 +6,13 @@ import CourseGroup from "../componets/MapCourse";
 import ViewGroup from "../componets/ViewGroup";
 import card from "../css/card.module.css";
 import course from "../css/Course.module.css"
+import HeaderProfesor from "./HeaderProfesor";
 
 
 export default function Page() {
   return (
+    <>
+    <HeaderProfesor />
     <section className="containerSection">
       <CourseGroup />
 
@@ -26,6 +29,11 @@ export default function Page() {
             <h3>Calificaciones</h3>
             <i className="bi bi-award-fill"></i>
           </div>
+
+          <div className={card.card}>
+            <h3>Temario</h3>
+            <i className="bi bi-journal-text"></i>
+          </div>
         </div>
       </section>
 
@@ -41,5 +49,6 @@ export default function Page() {
         <Table apiUrl="" />
       </section>
     </section>
+    </>
   )
 }
