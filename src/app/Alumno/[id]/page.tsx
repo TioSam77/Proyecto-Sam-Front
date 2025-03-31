@@ -1,7 +1,7 @@
 
 import ViewGroup from "@/app/componets/ViewGroup";
-import card from "../../css/card.module.css";
 import course from "../../css/Course.module.css"
+import LinkCard from "@/app/componets/LinkCard";
 
 export default function Page() {
   return (
@@ -10,20 +10,8 @@ export default function Page() {
 
       <section className={course.center}>
         <div className={course.containerSubjects}>
-          <div className={card.card}>
-            <h3>Asistencia</h3>
-            <i className="bi bi-person-check"></i>
-          </div>
-
-          <div className={card.card}>
-            <h3>Calificaciones</h3>
-            <i className="bi bi-award-fill"></i>
-          </div>
-
-          <div className={card.card}>
-            <h3>Temario</h3>
-            <i className="bi bi-journal-text"></i>
-          </div>
+          <LinkCard name="Asistencia" icon="bi bi-person-check" />
+          <LinkCard name="Calificaciones" icon="bi bi-award-fill" />
         </div>
       </section>
 

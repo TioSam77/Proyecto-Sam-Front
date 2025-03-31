@@ -78,6 +78,11 @@ const Header = () => {
                 <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Alumno
               </a>
             </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/Administrador">
+                <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Administrador
+              </a>
+            </li>
           </ul>
         </div>
       </div>

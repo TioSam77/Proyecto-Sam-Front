@@ -5,7 +5,7 @@ const ViewGroup = () => {
     <section className={styleCourse.viewHeader}>
         <div className={styleCourse.header}>
             <div className={styleCourse.image}></div>
-            <h1 className={styleCourse.textHeader}>Ingles</h1>
+            <h1 className={styleCourse.textHeader}>Inglés</h1>
         </div>
     </section>
     )

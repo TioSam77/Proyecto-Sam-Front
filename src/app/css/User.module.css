@@ -1,0 +1,46 @@
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.containerUsers {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.users {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.textHeader {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.body h5, .footer h5 {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.footer {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #007bff;
+    cursor: pointer;
+}

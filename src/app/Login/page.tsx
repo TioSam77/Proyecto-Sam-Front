@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {fakeUsers} from "../componets/Login"
-import Login from "../componets/Login"; // Mantiene el componente
+import Login from "../componets/Login";
 
 export default function Page() {
   const router = useRouter();
@@ -11,19 +11,17 @@ export default function Page() {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
 
-  // Manejo de inputs
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  // Función de login con redirección
   const handleLogin = () => {
-    const user = fakeUsers[userType as "Alumno" | "Profesor" | "Administrador"]; // Especificamos el tipo aquí
+    const user = fakeUsers[userType as "Alumno" | "Profesor" | "Administrador"];
     
     if (credentials.username === user.username && credentials.password === user.password) {
-      setError(""); // Limpia errores
-      localStorage.setItem("user", JSON.stringify(user)); // Guarda la sesión en localStorage
-      router.push(user.redirect); // Redirige al usuario
+      setError("");
+      localStorage.setItem("user", JSON.stringify(user));
+      router.push(user.redirect);
     } else {
       setError("Usuario o contraseña incorrectos");
     }

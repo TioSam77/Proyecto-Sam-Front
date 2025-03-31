@@ -1,15 +1,9 @@
-'use client'
+
 import style from "@/app/css/Teacher.module.css"
 import styles from "@/app/css/Login.module.css"
 import Table from "@/app/componets/Table"
-import { usePathname } from "next/navigation";
 
 export default function Page() {
-    const currentPath = usePathname();
-    const pathSegments = currentPath.split("/");
-    pathSegments.pop();
-    const basePath = pathSegments.join("/");
-
     return (
         <>
             <h3 className={styles.welcomeText}>Asistencia de Estudiantes</h3>
@@ -23,5 +17,5 @@ export default function Page() {
                 <Table apiUrl="" />
             </section>
         </>
-    )
+        )
 }

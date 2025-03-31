@@ -40,6 +40,7 @@ const HeaderProfesor = () => {
             <h3 className="logo">Interactivo</h3>
           </a>
 
+          <div>
           <button
             className="btn"
             type="button"
@@ -60,6 +61,7 @@ const HeaderProfesor = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+          </div>
         </div>
       </nav>
 
