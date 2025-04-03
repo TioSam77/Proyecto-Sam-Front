@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-const HeaderProfesor = () => {
+const HeaderAdmin = () => {
   const [mensajesGrupo, setMensajesGrupo] = useState<string[]>([
     "Estudien para el parcial de mañana",
     "Recuerden entregar la tarea de lógica"
@@ -172,8 +172,8 @@ const HeaderProfesor = () => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/Profesor">
-                <i className="bi bi-easel-fill me-2 text-dark"></i>Profesor
+              <a className="nav-link" href="/Administrador">
+                <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Administrador
               </a>
             </li>
           </ul>
@@ -183,4 +183,4 @@ const HeaderProfesor = () => {
   );
 };
 
-export default HeaderProfesor;
+export default HeaderAdmin;

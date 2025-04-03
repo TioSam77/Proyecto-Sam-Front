@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import tables from "../css/Table.module.css";
+import { initialData } from "../data/student";
 
 interface TableProps {
     apiUrl: string;
@@ -9,20 +10,13 @@ interface TableProps {
 interface StudentRecord {
     id: number;
     name: string;
-    grade: number| null;
+    grade: number | null;
 }
-
-const initialData: StudentRecord[] = [
-    { id: 67, name: "Paola", grade: 9 },
-    { id: 170, name: "Amelia", grade: 10 },
-    { id: 140, name: "Sam", grade: null },
-
-];
 
 const grades: (number | null)[] = [null, 5, 6, 7, 8, 9, 10];
 
 const TableQualification = (props: TableProps) => {
-    const [data, setData] = useState(initialData);
+    const [data, setData] = useState<StudentRecord[]>(initialData);
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleGradeChange = (id: number, value: number) => {
@@ -40,7 +34,7 @@ const TableQualification = (props: TableProps) => {
                 placeholder="Buscar estudiante..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={tables.searchBox}
+                className="searchBox"
             />
             <div className={tables.box}>
                 <table>

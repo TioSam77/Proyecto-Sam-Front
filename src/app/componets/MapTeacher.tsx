@@ -3,13 +3,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styleUser from "../css/User.module.css";
-import { initialData } from "../data/student";
+import { teacher } from "../data/teacher";
 
-const MapUser = () => {
+const MapTeacher = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const currentPath = usePathname();
 
-    const filteredUsers = initialData.filter(user =>
+    const filteredUsers = teacher.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -24,7 +24,7 @@ const MapUser = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <button className={styleUser.button}>Nuevo Alumno</button>
+                <button className={styleUser.button}>Nuevo Profesor</button>
             </div>
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
@@ -47,4 +47,4 @@ const MapUser = () => {
     );
 };
 
-export default MapUser;
+export default MapTeacher;

@@ -1,7 +1,7 @@
-import MapUser from "@/app/componets/MapUser";
+import MapTeacher from "@/app/componets/MapTeacher";
 
 export default function Page() {
     return (
-        <MapUser/>
+        <MapTeacher/>
     )
 }

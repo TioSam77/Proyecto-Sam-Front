@@ -2,14 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styleCourse from "../css/Course.module.css";
-
-
-const courses = [
-    { id: "1a2b3c", name: "Inglés" },
-    { id: "4d5e6f", name: "Matemáticas" },
-    { id: "7g8h9i", name: "Historia" },
-    { id: "0j1k2l", name: "Ciencias" }
-];
+import {courses} from "@/app/data/courses"
 
 const MapCourse = () => {
     const currentPath = usePathname();

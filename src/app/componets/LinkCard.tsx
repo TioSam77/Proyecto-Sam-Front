@@ -13,13 +13,16 @@ const LinkCard: React.FC<LinkCardProps> = ({ name, icon }) => {
     const pathSegments = currentPath.split("/");
     const lastSegment = pathSegments[pathSegments.length - 1];
     const basePath = pathSegments.slice(0, -1).join("/");
-    
-    const keywords = ["Asistencia", "Calificaciones", "Temario","Grupos","Alumnos","Profesores"];
+
+    const keywords = ["Asistencia", "Calificaciones", "Temario", "Grupos", "Alumnos", "Profesores"];
     const useBasePath = keywords.includes(lastSegment);
-    
+
     const formattedName = name.replace(/\s+/g, "-");
+    const isActive = lastSegment === formattedName;
     return (
-        <Link href={`${useBasePath ? basePath : currentPath}/${formattedName}`} className={card.card}>
+        <Link href={`${useBasePath ? basePath : currentPath}/${formattedName}`}
+            className={`${card.card} ${isActive ? card.active : ''}`}
+        >
             <h3>{name}</h3>
             <i className={icon}></i>
         </Link>

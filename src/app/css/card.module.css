@@ -20,6 +20,10 @@
     text-decoration: none;
 }
 
+.active{
+    background-color: #b4c2f3;
+}
+
 .card::before {
     content: "";
     position: absolute;
@@ -30,7 +34,6 @@
     background: linear-gradient(to right, #0547ff, #6698e9);
     border-radius: 4px 4px 0 0;
     transition: height 0.3s ease;
-    border-bottom: 1px solid #cfcfcf;
     z-index: 1;
 }
 
@@ -98,7 +101,7 @@
     .card:hover i {
         transform: scale(1.8);
         color: rgb(255, 255, 255);
-        margin: 18px 10px 0 0;
+        margin: 16px 10px 0 0;
     }
 
     .card:hover::before {

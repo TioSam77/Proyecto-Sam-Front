@@ -1,12 +1,12 @@
 import React from "react";
-import HeaderProfesor from "../Profesor/HeaderProfesor";
+import HeaderAlumno from "./HeaderAlumno";
 
 export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     return (
         <>
-            <HeaderProfesor />
+            <HeaderAlumno />
             {children}
         </>
     )
