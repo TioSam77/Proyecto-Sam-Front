@@ -30,7 +30,7 @@ const Register = () => {
                 <div className={styles.borderGradient}></div> {/* Borde degradado */}
                 
                 <div className={styles.loginBox}>
-                    <h2>Crear Cuenta</h2>
+                    <h2>Creacion de Cuenta de Alumno</h2>
 
                     <div className={styles.separator}>
                         <label>Correo Electronico</label>

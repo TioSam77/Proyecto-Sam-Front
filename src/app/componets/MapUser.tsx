@@ -16,7 +16,7 @@ const MapUser = () => {
     return (
         <section className={styleUser.center}>
 
-            <div style={{display:"flex", gap:"10px", width:"100%", justifyContent:"center"}}>
+            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
                     placeholder="Buscar usuario..."
@@ -24,7 +24,9 @@ const MapUser = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <button className={styleUser.button}>Nuevo Alumno</button>
+                <Link href={`${currentPath}/CrearAlumno`}>
+                    <button className={styleUser.button}>Nuevo Alumno</button>
+                </Link>
             </div>
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
