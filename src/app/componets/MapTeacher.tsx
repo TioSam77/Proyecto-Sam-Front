@@ -24,7 +24,9 @@ const MapTeacher = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <button className={styleUser.button}>Nuevo Profesor</button>
+                <Link href={`${currentPath}/Crear`}>
+                    <button className={styleUser.button}>Nuevo Profesor</button>
+                </Link>
             </div>
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
