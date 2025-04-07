@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 
 const ReturnButton = () => {
     const pathname = usePathname();
-    const segments = pathname.split("/").slice(0, -1); // Eliminamos el último segmento
-    const url = segments.join("/"); // Volvemos a unir los segmentos para formar la URL
+    const segments = pathname.split("/").slice(0, -1);
+    const url = segments.join("/");
 
     if (pathname === "/Administrador") {
-        return null; // No mostramos el botón si estamos en la ruta /Administrador
+        return null;
     }
 
     return (

@@ -2,6 +2,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(13rem,1fr));
     justify-items: center;
+    margin: 10px;
+    gap: 10px;
 }
 
 .card {
@@ -9,7 +11,6 @@
     background-color: white;
     width: 13rem;
     height: 13rem;
-    margin: 10px;
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
