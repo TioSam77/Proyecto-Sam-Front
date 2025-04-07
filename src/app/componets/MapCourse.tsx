@@ -26,11 +26,14 @@ const MapCourse = () => {
                     className="searchBox"
                 />
                 <Link href={`${currentPath}/Crear`}>
-                    <button className={styleUser.button}>Nuevo Grupo</button>
+                    <button className={styleUser.button}>Crear Grupo</button>
+                </Link>
+                <Link href={`${currentPath}/Crear`}>
+                    <button className={styleUser.button}>Unirte a una clase</button>
                 </Link>
             </div>
             <ol className={styleCourse.containerSubjects}>
-                {courses.map((course) => (
+                {filteredCourses.map((course) => (
                     <li key={course.id} className={styleCourse.subjects}>
                         <div className={styleCourse.header}>
                             <Link href={`${currentPath}/${course.id}`}>

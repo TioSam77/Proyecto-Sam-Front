@@ -2,31 +2,37 @@
 import LinkCard from "@/app/componets/LinkCard";
 import React from "react";
 import course from "@/app/css/Course.module.css"
+import card from "@/app/css/card.module.css"
 import HeaderAdmin from "./HeaderAdmin";
 import { usePathname } from "next/navigation";
+import ReturnButton from "../componets/ReturnButton";
 
 export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname();
 
-    if (pathname.match(/^\/Administrador\/(Alumnos|Grupos|Profesores)\/.+/)) {
+    const isAdminSubroute = pathname.match(/^\/Administrador\/(Alumnos|Grupos|Profesores)\/.+/);
+    const isRegistroRuta = pathname.startsWith("/Administrador/Profesores/Registro");
+
+    if (isAdminSubroute && !isRegistroRuta) {
         return (
             <section className="containerSection">
                 <HeaderAdmin />
                 {children}
             </section>
-        )
+        );
     }
 
     return (
         <section className="containerSection">
+            <ReturnButton />
             <HeaderAdmin />
             <section className={course.center}>
-                <div className={course.containerSubjects}>
-                    <LinkCard name="Alumnos" icon="bi bi-person-check" />
-                    <LinkCard name="Grupos" icon="bi bi-award-fill" />
-                    <LinkCard name="Profesores" icon="bi bi-journal-text" />
+                <div className={card.containerCard}>
+                    <LinkCard name="Alumnos" url="/Administrador/Alumnos" icon="bi bi-person-check" />
+                    <LinkCard name="Grupos" url="/Administrador/Grupos" icon="bi bi-award-fill" />
+                    <LinkCard name="Profesores" url="/Administrador/Profesores" icon="bi bi-journal-text" />
                 </div>
             </section>
             {children}

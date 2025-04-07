@@ -24,7 +24,7 @@ const MapTeacher = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <Link href={`${currentPath}/Crear`}>
+                <Link href={`${currentPath}/Registro`}>
                     <button className={styleUser.button}>Nuevo Profesor</button>
                 </Link>
             </div>

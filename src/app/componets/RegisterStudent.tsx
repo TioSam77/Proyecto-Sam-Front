@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "../css/Login.module.css";
 import countryList from "./countries.json";
 
-const Register = () => {
+const RegisterStudent = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
     const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -116,4 +116,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default RegisterStudent;

@@ -87,7 +87,8 @@ select{
 }
 
 hr{
-    width: 90%;
+    align-items: center;
+    width: 100%;
 }
 
 .containerSection{

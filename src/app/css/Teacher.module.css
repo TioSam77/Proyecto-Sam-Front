@@ -1,6 +1,11 @@
-.information h3 {
-    flex-direction: row;
-    z-index: 1;
+.teacherContainer{
+    width: 90%;
+    max-width: 700px;
+}
+
+.information p {
+    margin: 0.3rem 0;
+    color: #333;
 }
 
 .curse {
@@ -20,11 +25,13 @@
 }
 
 .box {
+    width: 100%;
     position: relative;
     padding: 20px;
     gap: 20px;
     background-color: white;
     border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .containerbox {
@@ -88,3 +95,9 @@
     height: 1rem;
     background-color: rgb(33, 150, 27);
 }
+
+.teacherName {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }

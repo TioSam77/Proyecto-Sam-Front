@@ -1,5 +1,5 @@
 import Register from "@/app/componets/RegisterStudent";
-import RegisterTeacher from "../componets/RegisterTeacher";
+import RegisterTeacher from "@/app/componets/RegisterTeacher";
 
 
 export default function Page() {
