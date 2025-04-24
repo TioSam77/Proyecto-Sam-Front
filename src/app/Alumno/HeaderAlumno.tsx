@@ -3,6 +3,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import Link from "next/link";
 
 const HeaderAlumno = () => {
   const handleLogout = () => {
@@ -126,14 +127,21 @@ const HeaderAlumno = () => {
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <a className="nav-link active" href="/">
+              <Link className="nav-link active" href="/">
                 <i className="bi bi-house-door-fill me-2 text-dark"></i>Inicio
-              </a>
+              </Link>
             </li>
+
             <li className="nav-item">
-              <a className="nav-link" href="/Alumno">
+              <Link className="nav-link" href="/Alumno">
                 <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Alumno
-              </a>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" href="/Alumno/Configuracion">
+              <i className="bi bi-gear-fill me-2 "></i>Configuracion
+              </Link>
             </li>
           </ul>
         </div>

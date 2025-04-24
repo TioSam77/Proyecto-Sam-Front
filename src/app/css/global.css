@@ -110,3 +110,13 @@ hr{
     outline: none;
     transition: 0.3s;
 }
+
+.containerLink{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #cfcfcf !important;
+    border-radius: 4px;
+    margin: 4px;
+    padding: 0px 6px !important;
+}

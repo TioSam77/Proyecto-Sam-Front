@@ -13,8 +13,12 @@ export default function RootLayout({
     const pathname = usePathname();
 
     const isAdminSubroute = pathname.match(/^\/Administrador\/(Alumnos|Grupos|Profesores)\/.+/);
-    const isRegistroRuta = pathname.startsWith("/Administrador/Profesores/Registro");
-
+    const isRegistroRuta = [
+        "/Administrador/Profesores/Registro",
+        "/Administrador/Grupos/Registro",
+        "/Administrador/Alumnos/Registro",
+      ].some(route => pathname.startsWith(route));
+    
     if (isAdminSubroute && !isRegistroRuta) {
         return (
             <section className="containerSection">

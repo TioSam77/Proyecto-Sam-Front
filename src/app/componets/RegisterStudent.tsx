@@ -99,7 +99,7 @@ const RegisterStudent = () => {
                 email: user.email,
                 nombres: name,
                 apellidos: surname,
-                telefono: `${countryCode}${phoneNumber}`,
+                telefono: `${countryCode} ${phoneNumber}`,
                 notaProfesor: teacherNote,
                 escuchoDe: heardFrom
             });
