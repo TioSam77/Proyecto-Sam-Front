@@ -206,12 +206,12 @@
 
 .errorBox {
   background-color: #ffe0e0;
-  color: #b10000;
+  color: #000000;
 }
 
 .alertBox {
   background-color: #e1ffe0;
-  color: #00b11d;
+  color: #000000;
 }
 
 @keyframes fadeOut {

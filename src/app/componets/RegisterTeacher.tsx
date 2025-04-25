@@ -1,12 +1,59 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../css/Login.module.css";
 import countryList from "./countries.json";
+import { auth } from "@/../firebase/clientApp";
+import { getDatabase, ref, set } from "firebase/database";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 const RegisterTeacher = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+
+    const [error, setError] = useState("");
+    const [alert, setAlert] = useState("");
+
+    const [loading, setLoading] = useState(false);
+
+
+    const [createUserWithEmailAndPassword, user, loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
+
+    useEffect(() => {
+        if (!firebaseError?.message) return;
+
+        const message = firebaseError.message;
+        const errorCode = message.match(/auth\/[a-zA-Z0-9-_]+/)?.[0];
+
+        switch (errorCode) {
+            case "auth/email-already-in-use":
+                setError("Ese correo ya está registrado. Intenta iniciar sesión.");
+                break;
+            case "auth/invalid-email":
+                setError("Ese correo es inválido.");
+                break;
+            case "auth/weak-password":
+                setError("La contraseña es muy débil. Usa al menos 6 caracteres.");
+                break;
+            case "auth/missing-password":
+                setError("La contraseña es obligatoria.");
+                break;
+            case "auth/operation-not-allowed":
+                setError("La creación de cuentas está deshabilitada temporalmente.");
+                break;
+            case "auth/too-many-requests":
+                setError("Demasiados intentos fallidos. Intenta de nuevo más tarde.");
+                break;
+            default:
+                setError("Ocurrió un error al registrar el usuario. Intenta nuevamente.");
+                break;
+        }
+    }, [firebaseError]);
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(e.target.value);
@@ -18,40 +65,115 @@ const RegisterTeacher = () => {
         setPhoneNumber(cleanedInput);
     };
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError("Las contraseñas no coinciden.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const usercredential = await createUserWithEmailAndPassword(email, password);
+            const user = usercredential?.user
+
+            if (!user) return;
+
+            const db = getDatabase();
+            await set(ref(db, `teacher/${user.uid}`), {
+                uid: user.uid,
+                email: user.email,
+                nombres: name,
+                apellidos: surname,
+                telefono: `${countryCode} ${phoneNumber}`,
+            });
+
+
+            setAlert("Alumno registrado exitosamente.");
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!error) return;
+        const timeout = setTimeout(() => setError(""), 4000);
+        return () => clearTimeout(timeout);
+    }, [error]);
+
+    useEffect(() => {
+        if (!alert) return;
+        const timeout = setTimeout(() => setAlert(""), 4000);
+        return () => clearTimeout(timeout);
+    }, [alert]);
+
     const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);
     const countryCode = selectedCountryData ? `+${selectedCountryData.phoneCode}` : "";
 
     return (
         <section className={styles.loginContainer}>
-            <form className={styles.boxWrapper}>
+            <form className={styles.boxWrapper} onSubmit={handleSubmit}>
                 <div className={styles.borderGradient}></div>
-                
+
                 <div className={styles.loginBox}>
                     <h2>Creación de Cuenta de Profesor(a)</h2>
 
                     <div className={styles.separator}>
                         <label>Correo Electrónico</label>
-                        <input type="email" placeholder="profe@gmail.com" className={styles.inputField} />
+                        <input
+                            type="email"
+                            placeholder="profe@gmail.com"
+                            className={styles.inputField}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
                     </div>
 
                     <div className={styles.separator}>
                         <label>Contraseña</label>
-                        <input type="password" placeholder="Contraseña" className={styles.inputField} />
+                        <input
+                            type="password"
+                            placeholder="Contraseña"
+                            className={styles.inputField}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
                     </div>
 
                     <div className={styles.separator}>
                         <label>Confirmar Contraseña</label>
-                        <input type="password" placeholder="Confirmar Contraseña" className={styles.inputField} />
+                        <input
+                            type="password"
+                            placeholder="Confirmar Contraseña"
+                            className={styles.inputField}
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                        />
                     </div>
 
                     <div className={styles.separator}>
                         <label>Nombres</label>
-                        <input type="text" placeholder="Nombres" className={styles.inputField} />
+                        <input
+                            type="text"
+                            placeholder="Nombres"
+                            className={styles.inputField}
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                        />
                     </div>
 
                     <div className={styles.separator}>
                         <label>Apellidos</label>
-                        <input type="text" placeholder="Apellidos" className={styles.inputField} />
+                        <input
+                            type="text"
+                            placeholder="Apellidos"
+                            className={styles.inputField}
+                            value={surname}
+                            onChange={e => setSurname(e.target.value)}
+                        />
                     </div>
 
                     <div className={styles.separator}>
@@ -104,6 +226,12 @@ const RegisterTeacher = () => {
                     </p>
                 </div>
             </form>
+
+            <div className={styles.messageContainer}>
+                {error && <div className={styles.errorBox}>{error}</div>}
+                {alert && <div className={styles.alertBox}>{alert}</div>}
+            </div>
+            
         </section>
     );
 };

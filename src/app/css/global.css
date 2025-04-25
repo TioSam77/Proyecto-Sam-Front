@@ -6,6 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #f0f0f0 !important;
+    z-index: -1;
 }
 
 /* Empuja el contenido para que el footer quede abajo */

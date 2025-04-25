@@ -94,7 +94,7 @@ const RegisterStudent = () => {
             if (!user) return;
 
             const db = getDatabase();
-            await set(ref(db, `students/${user.uid}`), {
+            await set(ref(db, `student/${user.uid}`), {
                 uid: user.uid,
                 email: user.email,
                 nombres: name,
