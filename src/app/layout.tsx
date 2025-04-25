@@ -4,7 +4,6 @@ import "@/app/sass/bootstrap.scss";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/app/css/global.css";
-import Header from "../app/componets/Header";
 import Footer from "../app/componets/Footer";
 import BootstrapClient from "./componets/bootstrap-client";
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -34,7 +33,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header />
         <div className="fondImage"></div>
         <main className="container ">
           <section style={{ display: 'flex', flexDirection: 'column', alignItems: "center", width: "100%" }}>{children}</section>

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import tables from "../css/Table.module.css";
 
 const TableHorario = () => {

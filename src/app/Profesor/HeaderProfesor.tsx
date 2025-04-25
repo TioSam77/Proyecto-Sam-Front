@@ -40,6 +40,7 @@ const HeaderProfesor = () => {
             <h3 className="logo">Interactivo</h3>
           </a>
 
+          <div>
           <button
             className="btn"
             type="button"
@@ -60,6 +61,7 @@ const HeaderProfesor = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+          </div>
         </div>
       </nav>
 
@@ -147,18 +149,32 @@ const HeaderProfesor = () => {
       </div>
 
       {/* NAVBAR lateral */}
-      <div className="offcanvas offcanvas-end" tabIndex={-1} id="offcanvasNavbar">
+      <div
+        className="offcanvas offcanvas-end"
+        tabIndex={-1}
+        id="offcanvasNavbar"
+        aria-labelledby="offcanvasNavbarLabel"
+      >
         <div className="offcanvas-header">
-          <h5>Menú</h5>
-          <button className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
         </div>
         <div className="offcanvas-body">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <a className="nav-link" href="/Profesor">Atrás</a>
+              <a className="nav-link active" href="/">
+                <i className="bi bi-house-door-fill me-2 text-dark"></i>Inicio
+              </a>
             </li>
             <li className="nav-item">
-              <button className="nav-link btn" onClick={handleLogout}>Cerrar sesión</button>
+              <a className="nav-link" href="/Profesor">
+                <i className="bi bi-easel-fill me-2 text-dark"></i>Profesor
+              </a>
             </li>
           </ul>
         </div>

@@ -1,0 +1,48 @@
+.button{
+    padding: 5px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(70, 153, 237);
+    border-radius:4px;
+    border: none;
+}
+
+.button:hover{
+    background-color: rgb(30, 132, 234);   
+}
+
+.input {
+    padding: 5px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #cfcfcf;
+    border-radius: 4px;
+}
+
+.select{
+    padding: 5px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #cfcfcf;
+    border-radius: 4px;
+}
+
+.containerDays{
+    background-color: white;
+    padding: 0;
+}
+
+.containerShedule{
+    display: grid;
+    grid-template-rows: repeat(auto-fit,50px,1fr);
+}
+
+.day{
+    display: flex;
+    flex-direction: column;
+}
+
+.headerDay{
+    background-color: #eaeaea;
+    width: 100%;
+}

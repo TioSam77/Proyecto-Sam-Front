@@ -1,57 +1,31 @@
 "use client"
 import { useState } from "react";
-import styles from "../css/Login.module.css";
 import teacherStyles from "../css/Teacher.module.css";
+import MapCourse from "./MapCourse";
 
-const InfoCurse = () => {
+const InfoProfesor = () => {
     const [showCourses, setShowCourses] = useState(false);
 
     return (
-        <section className={styles.loginContainer}>
+        <section className={teacherStyles.teacherContainer}>
             <div className={teacherStyles.box}>
-                <div className={styles.borderGradient}></div> {/* Borde degradado */}
                 <div className={teacherStyles.information}>
-                    <h4>Profesor: Sam</h4>
-                    <h4>Teléfono: 563475634</h4>
-                    <h4>Correo: ejemplosam@gmail.com</h4>
-                    <h4>Puesto: Profesor</h4>
-                    <h4>Estado: Activo</h4>
+                    <h2 className={teacherStyles.teacherName}>Sam</h2>
+                    <p><strong>Teléfono:</strong> 563475634</p>
+                    <p><strong>Correo:</strong>ejemplosam@gmail.com</p>
+                    <p><strong>Puesto:</strong>Profesor</p>
+                    <p><strong>Estado:</strong> Activo</p>
                 </div>
                 <hr></hr>
-                <h2 className={styles.welcomeText} onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>
+                <h3 onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>
                     Cursos asignados {showCourses ? "▲" : "▼"}
-                </h2>
+                </h3>
                 {showCourses && (
-                    <section className={teacherStyles.curse}>
-                        <div>
-                            <h5>Inicio del Curso: 7-may-22</h5>
-                            <h5>Nivel del Curso: 4A</h5>
-                            <h5>Cantidad de clases a la semana: 2</h5>
-                            <h5>Salón de clases: 301</h5>
-                            <hr></hr>
-                            <section>
-                                <h4>Horario</h4>
-                                <h5>9:00 a 11:00</h5>
-                                <h5>Lunes y Martes</h5>
-                            </section>
-                        </div>
-                        <div>
-                            <h5>Inicio del Curso: 7-may-22</h5>
-                            <h5>Nivel del Curso: 2A</h5>
-                            <h5>Cantidad de clases a la semana: 1</h5>
-                            <h5>Salón de clases: 302</h5>
-                            <hr></hr>
-                            <section>
-                                <h4>Horario</h4>
-                                <h5>9:00 a 11:00</h5>
-                                <h5>Martes</h5>
-                            </section>
-                        </div>
-                    </section>
+                    <MapCourse/>
                 )}
             </div>
         </section>
     );
 };
 
-export default InfoCurse;
+export default InfoProfesor;

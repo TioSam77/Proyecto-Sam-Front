@@ -56,7 +56,7 @@
 
 .classCell {
     color:white;
-    background-color: #00a2d8;
+    background-color: #2ac7fb;
     font-weight: bold;
     border-radius: 8px;
     word-wrap: break-word;
@@ -66,14 +66,4 @@
 
 .select{
     padding: 0 2px;
-}
-
-.searchBox{
-    padding: 10px;
-    width: 100%;
-    max-width: 300px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    outline: none;
-    transition: 0.3s;
 }
