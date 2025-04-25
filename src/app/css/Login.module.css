@@ -1,5 +1,6 @@
 /* Centrar el contenedor de login */
 .loginContainer {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -179,4 +180,42 @@
   font-size: 2rem;
   font-weight: bold;
   margin: 10px;
+}
+.messageContainer {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.errorBox, .alertBox {
+  min-width: 300px;
+  max-width: 90vw;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeOut 4s forwards;
+}
+
+.errorBox {
+  background-color: #ffe0e0;
+  color: #b10000;
+}
+
+.alertBox {
+  background-color: #e1ffe0;
+  color: #00b11d;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
 }

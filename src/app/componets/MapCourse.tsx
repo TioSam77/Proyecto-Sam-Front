@@ -25,12 +25,10 @@ const MapCourse = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <Link href={`${currentPath}/Crear`}>
-                    <button className={styleUser.button}>Crear Grupo</button>
+                <Link href={`${currentPath}/Registro`}>
+                    <button className={styleUser.button}>Nuevo Grupo</button>
                 </Link>
-                <Link href={`${currentPath}/Crear`}>
                     <button className={styleUser.button}>Unirte a una clase</button>
-                </Link>
             </div>
             <ol className={styleCourse.containerSubjects}>
                 {filteredCourses.map((course) => (

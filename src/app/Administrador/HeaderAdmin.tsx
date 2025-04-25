@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Link from "next/link";
 
 const HeaderAdmin = () => {
   const [mensajesGrupo, setMensajesGrupo] = useState<string[]>([
@@ -167,15 +168,44 @@ const HeaderAdmin = () => {
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <a className="nav-link active" href="/">
+              <Link className="nav-link active" href="/">
                 <i className="bi bi-house-door-fill me-2 text-dark"></i>Inicio
-              </a>
+              </Link>
             </li>
+
             <li className="nav-item">
-              <a className="nav-link" href="/Administrador">
+              <Link className="nav-link" href="/Administrador">
                 <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Administrador
-              </a>
+              </Link>
             </li>
+
+            <li className="nav-item containerLink">
+              <Link className="nav-link" href="/Administrador/Alumnos">
+                <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Alumnos
+              </Link>
+              <i className="bi bi-caret-down-fill"></i>
+            </li>
+
+            <li className="nav-item containerLink">
+              <Link className="nav-link " href="/Administrador/Grupos">
+                <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Grupos
+              </Link>
+              <i className="bi bi-caret-down-fill"></i>
+            </li>
+
+            <li className="nav-item containerLink">
+              <Link className="nav-link" href="/Administrador/Profesores">
+                <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Profesores
+              </Link>
+              <i className="bi bi-caret-down-fill"></i>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" href="/Administrador/Configuracion">
+              <i className="bi bi-gear-fill me-2 "></i>Configuracion
+              </Link>
+            </li>
+
           </ul>
         </div>
       </div>

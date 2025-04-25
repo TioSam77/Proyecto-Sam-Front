@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Link from "next/link";
 
 const HeaderProfesor = () => {
   const [mensajesGrupo, setMensajesGrupo] = useState<string[]>([
@@ -167,14 +168,21 @@ const HeaderProfesor = () => {
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <a className="nav-link active" href="/">
+              <Link className="nav-link active" href="/">
                 <i className="bi bi-house-door-fill me-2 text-dark"></i>Inicio
-              </a>
+              </Link>
             </li>
+
             <li className="nav-item">
-              <a className="nav-link" href="/Profesor">
+              <Link className="nav-link" href="/Profesor">
                 <i className="bi bi-easel-fill me-2 text-dark"></i>Profesor
-              </a>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" href="/Profesor/Configuracion">
+              <i className="bi bi-gear-fill me-2 "></i>Configuracion
+              </Link>
             </li>
           </ul>
         </div>

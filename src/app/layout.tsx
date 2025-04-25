@@ -33,7 +33,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div className="fondImage"></div>
         <main className="container ">
           <section style={{ display: 'flex', flexDirection: 'column', alignItems: "center", width: "100%" }}>{children}</section>
           <Footer />
