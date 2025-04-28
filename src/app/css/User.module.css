@@ -18,6 +18,10 @@
 }
 
 .users {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
     background-color: #f8f9fa;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -61,4 +65,9 @@
 
 .button:hover {
     background: rgb(30, 132, 234);
+}
+
+.containerButton{
+    display: flex;
+    justify-content: space-evenly;
 }

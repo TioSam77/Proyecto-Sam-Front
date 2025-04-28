@@ -1,4 +1,4 @@
-import MapCourse from "@/app/componets/MapCourse";
+import MapCourse from "@/app/componets/course/MapCourse";
 
 export default function Page() {
     return (

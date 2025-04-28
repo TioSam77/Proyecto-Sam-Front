@@ -2,21 +2,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import styleUser from "../css/User.module.css";
-import { initialData } from "../data/student";
+import styleUser from "@/app/css/User.module.css";
+import { teacher } from "@/app/data/teacher";
 
-const MapUser = () => {
+const MapTeacher = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const currentPath = usePathname();
 
-    const filteredUsers = initialData.filter(user =>
+    const filteredUsers = teacher.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <section className={styleUser.center}>
 
-            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
+            <div style={{display:"flex", gap:"10px", width:"100%", justifyContent:"center"}}>
                 <input
                     type="text"
                     placeholder="Buscar usuario..."
@@ -25,7 +25,7 @@ const MapUser = () => {
                     className="searchBox"
                 />
                 <Link href={`${currentPath}/Registro`}>
-                    <button className={styleUser.button}>Nuevo Alumno</button>
+                    <button className={styleUser.button}>Nuevo Profesor</button>
                 </Link>
             </div>
             <ol className={styleUser.containerUsers}>
@@ -42,6 +42,11 @@ const MapUser = () => {
                         <div className={styleUser.footer}>
                             <h5>Más detalles</h5>
                         </div>
+
+                        <div className={styleUser.containerButton}>
+                            <button className="bluebutton">Editar</button>
+                            <button className="redbutton">Eliminar</button>
+                        </div>
                     </li>
                 ))}
             </ol>
@@ -49,4 +54,4 @@ const MapUser = () => {
     );
 };
 
-export default MapUser;
+export default MapTeacher;

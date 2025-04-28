@@ -88,12 +88,12 @@ const RegisterStudent = () => {
 
         try {
             setLoading(true);
+            const db = getDatabase();
             const usercredential = await createUserWithEmailAndPassword(email, password);
             const user = usercredential?.user
 
             if (!user) return;
 
-            const db = getDatabase();
             await set(ref(db, `student/${user.uid}`), {
                 uid: user.uid,
                 email: user.email,

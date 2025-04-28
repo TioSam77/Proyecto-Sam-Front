@@ -6,6 +6,7 @@ import card from "@/app/css/card.module.css"
 import HeaderAdmin from "./HeaderAdmin";
 import { usePathname } from "next/navigation";
 import ReturnButton from "../componets/ReturnButton";
+import Header from "../componets/Header";
 
 export default function RootLayout({
     children,
@@ -31,7 +32,7 @@ export default function RootLayout({
     return (
         <section className="containerSection">
             <ReturnButton />
-            <HeaderAdmin />
+            <Header />
             <section className={course.center}>
                 <div className={card.containerCard}>
                     <LinkCard name="Alumnos" url="/Administrador/Alumnos" icon="bi bi-person-check" />

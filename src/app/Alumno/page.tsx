@@ -1,6 +1,5 @@
 
-import HeaderAlumno from "../Profesor/HeaderProfesor";
-import CourseGroup from "../componets/MapCourse";
+import CourseGroup from "../componets/course/MapCourse";
 
 export default function Page() {
   return (

@@ -59,7 +59,7 @@ const Login: React.FC<LoginProps> = ({
         setError("Demasiados intentos fallidos. Intenta de nuevo más tarde.");
         break;
       default:
-        setError("Ocurrió un error al registrar el usuario. Intenta nuevamente.");
+        setError("Ocurrió un error al intentar ingresar como usuario. Intenta nuevamente.");
         break;
     }
   }, [firebaseError]);
@@ -84,11 +84,12 @@ const Login: React.FC<LoginProps> = ({
       const user = userCredential?.user;
 
       if (!user) return;
-
-      if (!user.emailVerified) {
-        await sendEmailVerification(user);
-        setAlert("Tu correo no está verificado. Te enviamos un correo de verificación.");
-        return;
+      {
+      // if (!user.emailVerified) {
+      //   await sendEmailVerification(user);
+      //   setAlert("Tu correo no está verificado. Te enviamos un correo de verificación.");
+      //   return;
+      // }
       }
 
       const uid = user.uid;

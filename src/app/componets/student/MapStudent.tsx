@@ -2,21 +2,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import styleUser from "../css/User.module.css";
-import { teacher } from "../data/teacher";
+import styleUser from "@/app/css/User.module.css";
+import { initialData } from "@/app/data/student";
 
-const MapTeacher = () => {
+const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const currentPath = usePathname();
 
-    const filteredUsers = teacher.filter(user =>
+    const filteredUsers = initialData.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <section className={styleUser.center}>
 
-            <div style={{display:"flex", gap:"10px", width:"100%", justifyContent:"center"}}>
+            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
                     placeholder="Buscar usuario..."
@@ -25,7 +25,7 @@ const MapTeacher = () => {
                     className="searchBox"
                 />
                 <Link href={`${currentPath}/Registro`}>
-                    <button className={styleUser.button}>Nuevo Profesor</button>
+                    <button className={styleUser.button}>Nuevo Alumno</button>
                 </Link>
             </div>
             <ol className={styleUser.containerUsers}>
@@ -39,8 +39,14 @@ const MapTeacher = () => {
                         <div className={styleUser.body}>
                             <h5>Información sobre {user.name}</h5>
                         </div>
+
                         <div className={styleUser.footer}>
                             <h5>Más detalles</h5>
+                        </div>
+
+                        <div className={styleUser.containerButton}>
+                            <button className="bluebutton">Editar</button>
+                            <button className="redbutton">Eliminar</button>
                         </div>
                     </li>
                 ))}
@@ -49,4 +55,4 @@ const MapTeacher = () => {
     );
 };
 
-export default MapTeacher;
+export default MapStudent;

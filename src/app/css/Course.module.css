@@ -78,6 +78,11 @@
     border: 1px solid #cfcfcf;
 }
 
+.containerButton{
+    display: flex;
+    gap: 10px;
+}
+
 @media(max-width:647px) {
 
     .subjects {

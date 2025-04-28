@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import teacherStyles from "../css/Teacher.module.css";
-import MapCourse from "./MapCourse";
+import MapCourse from "./course/MapCourse";
 
 const InfoProfesor = () => {
     const [showCourses, setShowCourses] = useState(false);

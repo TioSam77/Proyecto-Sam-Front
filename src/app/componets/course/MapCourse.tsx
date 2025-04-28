@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { courses } from "@/app/data/courses"
 import { useState } from "react";
 
-import styleCourse from "../css/Course.module.css";
-import styleUser from "../css/User.module.css";
+import styleCourse from "@/app/css/Course.module.css";
+import styleUser from "@/app/css/User.module.css";
 
 const MapCourse = () => {
     const currentPath = usePathname();
@@ -28,7 +28,7 @@ const MapCourse = () => {
                 <Link href={`${currentPath}/Registro`}>
                     <button className={styleUser.button}>Nuevo Grupo</button>
                 </Link>
-                    <button className={styleUser.button}>Unirte a una clase</button>
+                <button className={styleUser.button}>Unirte a una clase</button>
             </div>
             <ol className={styleCourse.containerSubjects}>
                 {filteredCourses.map((course) => (
@@ -44,6 +44,12 @@ const MapCourse = () => {
                         </div>
                         <div className={styleCourse.footer}>
                             <h5>Más detalles</h5>
+
+                            <div className={styleCourse.containerButton}>
+                                <button className="bluebutton">Editar</button>
+                                <button className="redbutton">Eliminar</button>
+                            </div>
+
                         </div>
                     </li>
                 ))}
