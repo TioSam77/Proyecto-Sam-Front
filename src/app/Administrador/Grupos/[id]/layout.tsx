@@ -1,6 +1,6 @@
 'use client'
 import LinkCard from "@/app/componets/LinkCard";
-import ViewGroup from "@/app/componets/ViewGroup";
+import ViewGroup from "@/app/componets/course/ViewGroup";
 import React from "react";
 
 import { usePathname } from "next/navigation";

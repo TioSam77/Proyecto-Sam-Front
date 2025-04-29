@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import styles from "../css/aviability.module.css";
+import styles from "@/app/css/aviability.module.css";
 
 type Day =
     | "Lunes"

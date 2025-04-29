@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import tables from "../css/Table.module.css";
-import { initialData } from "../data/student";
+import tables from "@/app/css/Table.module.css";
+import { initialData } from "@/app/data/student";//temporal
 
 interface TableProps {
     apiUrl: string;
@@ -15,7 +15,7 @@ interface StudentRecord {
 
 const grades: (number | null)[] = [null, 5, 6, 7, 8, 9, 10];
 
-const TableQualification = (props: TableProps) => {
+const TableCourseFinalGrade = (props: TableProps) => {
     const [data, setData] = useState<StudentRecord[]>(initialData);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -82,4 +82,4 @@ const TableQualification = (props: TableProps) => {
     );
 };
 
-export default TableQualification;
+export default TableCourseFinalGrade;

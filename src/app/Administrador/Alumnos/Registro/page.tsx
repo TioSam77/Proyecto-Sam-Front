@@ -1,7 +1,5 @@
 
-import RegisterStudent from "@/app/componets/RegisterStudent";
-import RegisterTeacher from "@/app/componets/RegisterTeacher";
-
+import RegisterStudent from "@/app/componets/student/RegisterStudent";
 
 export default function Page() {
     return (

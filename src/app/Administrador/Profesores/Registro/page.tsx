@@ -1,5 +1,5 @@
 
-import RegisterTeacher from "@/app/componets/RegisterTeacher";
+import RegisterTeacher from "@/app/componets/teacher/RegisterTeacher";
 
 
 export default function Page() {

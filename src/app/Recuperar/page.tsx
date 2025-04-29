@@ -1,4 +1,4 @@
-import RecoverPassword from "../componets/RecoverPassword";
+import RecoverPassword from "../componets/course/RecoverPassword";
 
 export default function Page() {
     return (

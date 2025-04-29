@@ -1,4 +1,4 @@
-import styleCourse from "../css/Course.module.css"
+import styleCourse from "@/app/css/Course.module.css"
 
 const ViewGroup = () => {
     return (

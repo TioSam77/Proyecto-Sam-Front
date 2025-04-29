@@ -1,4 +1,4 @@
-import Syllabus from "@/app/componets/Syllabus";
+import Syllabus from "@/app/componets/course/Syllabus";
 
 export default function Page() {
     return (

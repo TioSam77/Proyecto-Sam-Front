@@ -1,5 +1,5 @@
-import InfoProfesor from "@/app/componets/InfoProfesor";
-import ViewTeacher from "@/app/componets/ViewTeacher";
+import InfoProfesor from "@/app/componets/teacher/InfoProfesor";
+import ViewTeacher from "@/app/componets/teacher/ViewTeacher";
 
 export default function Page() {
   return (

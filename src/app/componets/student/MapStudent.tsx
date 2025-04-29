@@ -9,6 +9,8 @@ const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const currentPath = usePathname();
 
+    const isAdmin = currentPath.includes('/Administrador')
+
     const filteredUsers = initialData.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -44,10 +46,12 @@ const MapStudent = () => {
                             <h5>Más detalles</h5>
                         </div>
 
-                        <div className={styleUser.containerButton}>
-                            <button className="bluebutton">Editar</button>
-                            <button className="redbutton">Eliminar</button>
-                        </div>
+                        {isAdmin && (
+                            <div className={styleUser.containerButton}>
+                                <button className="bluebutton">Editar</button>
+                                <button className="redbutton">Eliminar</button>
+                            </div>
+                        )}
                     </li>
                 ))}
             </ol>

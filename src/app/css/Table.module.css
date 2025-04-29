@@ -66,5 +66,8 @@
 }
 
 .select{
+    min-width: 21px;
+    width: min-content;
     padding: 0 2px;
+    border-radius: 4px;
 }

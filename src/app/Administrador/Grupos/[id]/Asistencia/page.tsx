@@ -1,7 +1,7 @@
 
 import style from "@/app/css/Teacher.module.css"
 import styles from "@/app/css/Login.module.css"
-import Table from "@/app/componets/Table"
+import TableAttendance from "@/app/componets/course/TableAttendance"
 
 export default function Page() {
     return (
@@ -14,7 +14,7 @@ export default function Page() {
                     <h5 style={{ backgroundColor: "#CBC3E3", borderRadius: "4px", padding: "3px" }}>N = Absent with notification</h5>
                     <h5 style={{ backgroundColor: "lightcoral", borderRadius: "4px", padding: "3px" }}>A = Absent</h5>
                 </div>
-                <Table apiUrl="" />
+                <TableAttendance apiUrl="" />
             </section>
         </>
         )

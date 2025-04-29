@@ -1,4 +1,4 @@
-import Aviability from "../componets/Aviability";
+import Aviability from "../componets/teacher/Aviability";
 import MapCourse from "../componets/course/MapCourse";
 
 export default function Page() {

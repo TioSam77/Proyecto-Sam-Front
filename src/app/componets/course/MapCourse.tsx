@@ -4,12 +4,16 @@ import { usePathname } from "next/navigation";
 import { courses } from "@/app/data/courses"
 import { useState } from "react";
 
+
 import styleCourse from "@/app/css/Course.module.css";
 import styleUser from "@/app/css/User.module.css";
 
 const MapCourse = () => {
     const currentPath = usePathname();
     const [searchTerm, setSearchTerm] = useState("");
+
+    const isAdmin = currentPath.includes('/Administrador')
+    const isStudent = currentPath.includes('/Alumno')
 
     const filteredCourses = courses.filter(course =>
         course.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -25,10 +29,14 @@ const MapCourse = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <Link href={`${currentPath}/Registro`}>
-                    <button className={styleUser.button}>Nuevo Grupo</button>
-                </Link>
-                <button className={styleUser.button}>Unirte a una clase</button>
+                {(isAdmin) && (
+                    <Link href={`${currentPath}/Registro`}>
+                        <button className={styleUser.button}>Nuevo Grupo</button>
+                    </Link>
+                )}
+                {(isStudent) && (
+                    <button className={styleUser.button}>Unirte a una clase</button>
+                )}
             </div>
             <ol className={styleCourse.containerSubjects}>
                 {filteredCourses.map((course) => (
@@ -45,10 +53,12 @@ const MapCourse = () => {
                         <div className={styleCourse.footer}>
                             <h5>Más detalles</h5>
 
-                            <div className={styleCourse.containerButton}>
-                                <button className="bluebutton">Editar</button>
-                                <button className="redbutton">Eliminar</button>
-                            </div>
+                            {isAdmin && (
+                                <div className={styleCourse.containerButton}>
+                                    <button className="bluebutton">Editar</button>
+                                    <button className="redbutton">Eliminar</button>
+                                </div>
+                            )}
 
                         </div>
                     </li>

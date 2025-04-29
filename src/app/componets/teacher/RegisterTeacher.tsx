@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import styles from "../css/Login.module.css";
-import countryList from "./countries.json";
+import styles from "@/app/css/Login.module.css";
+import countryList from "../countries.json";
 import { auth } from "@/../firebase/clientApp";
 import { getDatabase, ref, set } from "firebase/database";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
