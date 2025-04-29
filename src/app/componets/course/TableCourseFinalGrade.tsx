@@ -2,6 +2,7 @@
 import { useState } from "react";
 import tables from "@/app/css/Table.module.css";
 import { initialData } from "@/app/data/student";//temporal
+import { usePathname } from "next/navigation";
 
 interface TableProps {
     apiUrl: string;
@@ -18,6 +19,9 @@ const grades: (number | null)[] = [null, 5, 6, 7, 8, 9, 10];
 const TableCourseFinalGrade = (props: TableProps) => {
     const [data, setData] = useState<StudentRecord[]>(initialData);
     const [searchTerm, setSearchTerm] = useState("");
+    const pathname = usePathname();
+
+    const isStudent = pathname.includes('/Alumno')
 
     const handleGradeChange = (id: number, value: number) => {
         setData((prevData) =>
@@ -52,26 +56,45 @@ const TableCourseFinalGrade = (props: TableProps) => {
                                 <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                     {row.name}
                                 </td>
-                                <td>
-                                    <select
-                                        className={tables.select}
-                                        value={row.grade ?? ""}
-                                        onChange={(e) => handleGradeChange(row.id, Number(e.target.value))}
-                                        style={{
-                                            backgroundColor:
-                                                row.grade === 10 ? "lightgreen" :
-                                                row.grade === 9 ? "lightblue" :
-                                                row.grade === 8 ? "#CBC3E3" :
-                                                row.grade === 7 ? "lightyellow" :
-                                                row.grade === 6 ? "orange" :
-                                                row.grade === 5 ? "lightcoral" : "",
-                                            cursor: "pointer"
-                                        }}
-                                    >
-                                        {grades.map((grade) => (
-                                            <option key={grade} value={grade ?? ""}>{grade}</option>
-                                        ))}
-                                    </select>
+                                <td style={{
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}>
+                                    {isStudent ?
+                                        <div
+                                            className={tables.select}
+                                            style={{
+                                                backgroundColor:
+                                                    row.grade === 10 ? "lightgreen" :
+                                                        row.grade === 9 ? "lightblue" :
+                                                            row.grade === 8 ? "#CBC3E3" :
+                                                                row.grade === 7 ? "lightyellow" :
+                                                                    row.grade === 6 ? "orange" :
+                                                                        row.grade === 5 ? "lightcoral" : "",
+                                            }} >{row.grade ?? " "}</div>
+                                        :
+
+                                        <select
+                                            className={tables.select}
+                                            value={row.grade ?? ""}
+                                            onChange={(e) => handleGradeChange(row.id, Number(e.target.value))}
+                                            style={{
+                                                backgroundColor:
+                                                    row.grade === 10 ? "lightgreen" :
+                                                        row.grade === 9 ? "lightblue" :
+                                                            row.grade === 8 ? "#CBC3E3" :
+                                                                row.grade === 7 ? "lightyellow" :
+                                                                    row.grade === 6 ? "orange" :
+                                                                        row.grade === 5 ? "lightcoral" : "",
+                                                cursor: "pointer"
+                                            }}
+                                        >
+                                            {grades.map((grade) => (
+                                                <option key={grade} value={grade ?? ""}>{grade}</option>
+                                            ))}
+                                        </select>
+                                    }
+
                                 </td>
                             </tr>
                         ))}

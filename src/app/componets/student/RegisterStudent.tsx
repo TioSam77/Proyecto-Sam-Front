@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "../countries.json";
-import { auth } from "@/../firebase/clientApp";
+import { auth,db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { getDatabase, ref, set } from "firebase/database";
+import { doc, setDoc } from "firebase/firestore";
+
 
 const RegisterStudent = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -88,23 +89,29 @@ const RegisterStudent = () => {
 
         try {
             setLoading(true);
-            const db = getDatabase();
-            const usercredential = await createUserWithEmailAndPassword(email, password);
-            const user = usercredential?.user
+            createUserWithEmailAndPassword(email, password)
+            .then((userCredential)=>{
+                const user = userCredential?.user
 
-            if (!user) return;
+                if (!user?.uid) {
+                    throw new Error("No se pudo obtener el UID del usuario.");
+                }
 
-            await set(ref(db, `student/${user.uid}`), {
-                uid: user.uid,
-                email: user.email,
-                nombres: name,
-                apellidos: surname,
-                telefono: `${countryCode} ${phoneNumber}`,
-                notaProfesor: teacherNote,
-                escuchoDe: heardFrom
-            });
-
-
+                const userData = {
+                    email:email,
+                    name:name,
+                    surname:surname,
+                    phoneNumber:phoneNumber,
+                    teacherNote:teacherNote,
+                    heardFrom:heardFrom
+                }
+                
+                const docRef = doc(db,"student",user.uid);
+                setDoc(docRef,userData)
+                .then(()=>{
+                    setEmail('')
+                })
+            })
             setAlert("Alumno registrado exitosamente.");
         } catch (err: any) {
             setError(err.message);

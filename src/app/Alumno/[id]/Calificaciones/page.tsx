@@ -1,8 +1,10 @@
-import TableGradeStudent from "@/app/componets/TableGradeStudent";
+import TableCourseFinalGrade from "@/app/componets/course/TableCourseFinalGrade";
 
 export default function Page() {
 
     return (
-        <TableGradeStudent apiUrl=""/>
+        <>
+        <TableCourseFinalGrade apiUrl=""/>
+        </>
     )
 }

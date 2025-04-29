@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "../countries.json";
-import { auth } from "@/../firebase/clientApp";
-import { getDatabase, ref, set } from "firebase/database";
+import { auth, db } from "@/../firebase/clientApp";
+import { ref, set } from "firebase/database";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const RegisterTeacher = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -78,19 +79,22 @@ const RegisterTeacher = () => {
             const usercredential = await createUserWithEmailAndPassword(email, password);
             const user = usercredential?.user
 
-            if (!user) return;
+            if (!user?.uid) {
+                throw new Error("No se pudo obtener el UID del usuario.");
+            }
 
-            const db = getDatabase();
-            await set(ref(db, `teacher/${user.uid}`), {
+            const userData = {
                 uid: user.uid,
                 email: user.email,
-                nombres: name,
-                apellidos: surname,
-                telefono: `${countryCode} ${phoneNumber}`,
-            });
+                name: name,
+                surname: surname,
+                phoneNumber: `${countryCode} ${phoneNumber}`,
+            }
 
+            const docRef = doc(db, "teacher", user.uid);
+            setDoc(docRef, userData)
 
-            setAlert("Alumno registrado exitosamente.");
+            setAlert("Profesor registrado exitosamente.");
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -231,7 +235,7 @@ const RegisterTeacher = () => {
                 {error && <div className={styles.errorBox}>{error}</div>}
                 {alert && <div className={styles.alertBox}>{alert}</div>}
             </div>
-            
+
         </section>
     );
 };

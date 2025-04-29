@@ -74,9 +74,9 @@ const Header = () => {
 
             {(!isStudentPage && !isTeacherPage && !isAdminPage) && (
               <li className="nav-item">
-                <Link className="nav-link" href="/Login">
+                <a className="nav-link" href="/Login">
                   <i className="bi bi-box-arrow-in-right me-2 text-dark"></i>Acceder
-                </Link>
+                </a>
               </li>
             )}
 

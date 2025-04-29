@@ -5,20 +5,12 @@ import styles from "../css/Login.module.css";
 
 import { sendEmailVerification } from "firebase/auth";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth, db} from "@/../firebase/clientApp"
-import { useRouter } from "next/navigation";
+import { auth } from "@/../firebase/clientApp"
+import { usePathname, useRouter } from "next/navigation";
 import { getDoc, doc } from "firebase/firestore";
-import { setCookie } from 'cookies-next';
+import { db } from "@/../firebase/clientApp";
 
-interface LoginProps {
-  userType: string;
-  setUserType: Dispatch<SetStateAction<string>>;
-}
-
-const Login: React.FC<LoginProps> = ({
-  userType,
-  setUserType,
-}) => {
+const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -87,47 +79,13 @@ const Login: React.FC<LoginProps> = ({
       // }
       }
 
-      let redirectPath = "";
-      let roleCollection = "";
-      
-      switch (userType) {
-        case "Alumno":
-          roleCollection = "student";
-          redirectPath = "/Alumno";
-          break;
-          case "Profesor":
-            roleCollection = "teacher";
-            redirectPath = "/Profesor";
-            break;
-            case "Administrador":
-              roleCollection = "admin";
-              redirectPath = "/Administrador";
-              break;
-              default:
-                setError("Rol no válido.");
-          return;
-      }
       const userCredential = await signInWithEmailAndPassword(email, password);
       const user = userCredential?.user;
       
       if (!user) return;
-      
-      const uid = user.uid;
-      
-      const docRef = doc(db, roleCollection, uid);
-      const docSnap = await getDoc(docRef);
-      
-      
-      if (docSnap.exists()) {
-        const idToken = await user.getIdToken(); // 👈 Aquí obtenemos el token real
-        setCookie('token', idToken);
 
-        setEmail("");
-        setPassword("");
-        router.push(redirectPath);
-      } else {
-        setError("Credenciales incorrectas o error en la autenticación.");
-      }
+      router.push('/Alumno')
+      
     } catch (err: any) {
       setError("Credenciales incorrectas o error en la autenticación.");
     }
@@ -143,24 +101,11 @@ const Login: React.FC<LoginProps> = ({
         <div className={styles.loginBox}>
           <h2>Iniciar Sesión</h2>
 
-          {/* Switch de usuario */}
-          <ul className="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-4 shadow-sm">
-            {["Alumno", "Profesor", "Administrador"].map((role) => (
-              <li className="nav-item" key={role}>
-                <button
-                  className={`nav-link rounded-4 ${userType === role ? "active" : ""}`}
-                  onClick={() => setUserType(role)}
-                >
-                  {role}
-                </button>
-              </li>
-            ))}
-          </ul>
 
           <input
             type="text"
             name="email"
-            placeholder={userType === "Alumno" ? "Número de cuenta" : userType === "Profesor" ? "RFC" : "Usuario"}
+            placeholder="correo"
             className={styles.inputField}
             value={email}
             onChange={e => setEmail(e.target.value)}

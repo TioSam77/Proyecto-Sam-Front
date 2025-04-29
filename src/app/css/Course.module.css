@@ -78,7 +78,7 @@
     border: 1px solid #cfcfcf;
 }
 
-.containerButton{
+.containerButton {
     display: flex;
     gap: 10px;
 }

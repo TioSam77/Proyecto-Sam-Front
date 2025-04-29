@@ -1,15 +1,46 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styleUser from "@/app/css/User.module.css";
 import { teacher } from "@/app/data/teacher";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "@/../firebase/clientApp";
+import { collection, getDocs } from "firebase/firestore";
 
 const MapTeacher = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const currentPath = usePathname();
+    const [data, setData] = useState<any[]>([]);
+    const [login,setLogin] = useState<boolean>(false)
 
-    const filteredUsers = teacher.filter(user =>
+    useEffect(() => {
+        setLogin(true);
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                setData([]);
+                setLogin(false);
+                return;
+            }
+    
+            try {
+                const querySnapshot = await getDocs(collection(db, "teacher"));
+                const allData = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setData(allData);
+            } catch (err) {
+                console.error("Error al obtener estudiantes:", err);
+            } finally {
+                setLogin(false);
+            }
+        });
+    
+        return () => unsubscribe();
+    }, []);
+
+    const filteredUsers = data.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -28,6 +59,11 @@ const MapTeacher = () => {
                     <button className={styleUser.button}>Nuevo Profesor</button>
                 </Link>
             </div>
+            
+            {login && (
+                <div>Cargando</div>
+            )}
+
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
                     <li key={user.id} className={styleUser.users}>
