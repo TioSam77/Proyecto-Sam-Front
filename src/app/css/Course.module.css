@@ -1,7 +1,17 @@
 .containerSubjects {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    justify-items: center;
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+}
+
+.containerCards {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
     justify-items: center;
     margin: 0;
     padding: 0;
@@ -13,8 +23,8 @@
     display: flex;
     flex-direction: column;
     background-color: white;
-    width: 18rem;
-    height: 18rem;
+    width: 16rem;
+    height: 16rem;
     border-radius: 4px;
     text-align: left;
     overflow: hidden;
@@ -81,6 +91,19 @@
 .containerButton {
     display: flex;
     gap: 10px;
+}
+
+.containerStudents {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+}
+
+@media(max-width:900px) {
+    .containerStudents {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 @media(max-width:647px) {

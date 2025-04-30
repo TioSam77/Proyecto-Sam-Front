@@ -2,15 +2,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { courses } from "@/app/data/courses"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 import styleCourse from "@/app/css/Course.module.css";
 import styleUser from "@/app/css/User.module.css";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+import { auth, db } from "../../../../firebase/clientApp";
 
 const MapCourse = () => {
     const currentPath = usePathname();
     const [searchTerm, setSearchTerm] = useState("");
+    const [data, setData] = useState<any[]>([]);
+    const [login, setLogin] = useState<boolean>(false)
+    const [notFound, setNotFound] = useState(false);
 
     const isAdmin = currentPath.includes('/Administrador')
     const isStudent = currentPath.includes('/Alumno')
@@ -18,6 +24,37 @@ const MapCourse = () => {
     const filteredCourses = courses.filter(course =>
         course.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                setData([]);
+                return;
+            }
+
+            try {
+                setLogin(true);
+                const q = query(collection(db, "course"), limit(10));
+                const querySnapshot = await getDocs(q);
+
+                const allData = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                setData(allData);
+                setNotFound(allData.length === 0);
+            } catch (err) {
+                console.error("Error al obtener cursos:", err);
+                setNotFound(true);
+            } finally {
+                setLogin(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
 
     return (
         <section className={styleCourse.center}>
@@ -29,6 +66,7 @@ const MapCourse = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
+                <button className="bluebutton">Buscar</button>
                 {(isAdmin) && (
                     <Link href={`${currentPath}/Registro`}>
                         <button className={styleUser.button}>Nuevo Grupo</button>
@@ -39,7 +77,7 @@ const MapCourse = () => {
                 )}
             </div>
             <ol className={styleCourse.containerSubjects}>
-                {filteredCourses.map((course) => (
+                {data.map((course) => (
                     <li key={course.id} className={styleCourse.subjects}>
                         <div className={styleCourse.header}>
                             <Link href={`${currentPath}/${course.id}`}>

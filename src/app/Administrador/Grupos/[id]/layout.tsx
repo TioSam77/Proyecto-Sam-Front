@@ -6,6 +6,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 
 import course from "@/app/css/Course.module.css"
+import InfoCourse from "@/app/componets/course/InfoCourse";
 
 export default function RootLayout({
     children,
@@ -17,12 +18,16 @@ export default function RootLayout({
     return (
         <>
             <ViewGroup />
+            <InfoCourse
+                description="Curso introductorio a lógica, conjuntos y relaciones."
+                teacher="Dra. Julia Morales"
+            />
 
             <section className={course.center}>
-                <div className={course.containerSubjects}>
+                <div className={course.containerCards}>
+                    <LinkCard name="Estudiantes" url={`/Administrador/Grupos/${curseId}/Estudiantes`} icon="bi bi-person-check" />
                     <LinkCard name="Asistencia" url={`/Administrador/Grupos/${curseId}/Asistencia`} icon="bi bi-person-check" />
                     <LinkCard name="Calificaciones" url={`/Administrador/Grupos/${curseId}/Calificaciones`} icon="bi bi-award-fill" />
-                    <LinkCard name="Temario" url={`/Administrador/Grupos/${curseId}/Temario`} icon="bi bi-journal-text" />
                 </div>
             </section>
             {children}

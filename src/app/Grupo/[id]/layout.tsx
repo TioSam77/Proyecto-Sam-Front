@@ -17,7 +17,7 @@ export default function RootLayout({
             <ViewGroup />
 
             <section className={course.center}>
-                <div className={course.containerSubjects}>
+                <div className={course.containerCards}>
                     <LinkCard name="Asistencia" url={`/Grupo/${curseId}/Asistencia`} icon="bi bi-person-check" />
                     <LinkCard name="Calificaciones" url={`/Grupo/${curseId}/Calificaciones`} icon="bi bi-award-fill" />
                     <LinkCard name="Temario" url={`/Grupo/${curseId}/Temario`} icon="bi bi-journal-text" />

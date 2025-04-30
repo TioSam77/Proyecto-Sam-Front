@@ -1,4 +1,4 @@
-import table from "../css/Table.module.css"
+import table from "@/app/css/Table.module.css"
 
 const Syllabus =()=>{
     return(

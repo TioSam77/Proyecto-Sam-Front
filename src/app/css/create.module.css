@@ -41,6 +41,10 @@
     padding: 30px;
     border-radius: 4px;
 }
+.flex{
+    display: flex;
+    gap: 10px;
+}
 
 .button {
     width: 100%;
@@ -94,4 +98,7 @@
 
 .separator {
     margin: 10px 0;
+}
+.textCenter{
+    text-align: center;
 }

@@ -1,6 +1,6 @@
 .containerCard {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(13rem,1fr));
+    grid-template-columns: repeat(auto-fit,minmax(12rem,1fr));
     justify-items: center;
     margin: 10px;
     gap: 10px;
@@ -43,7 +43,7 @@
 .card h3 {
     position: relative;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     margin: auto;
     transition: font-size 0.3s ease;
@@ -68,7 +68,7 @@
 }
 
 .card:hover h3 {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 @media(max-width: 767px) {
@@ -98,6 +98,7 @@
         font-size: 200%;
         margin-top: 0px;
         transition: margin 0.3s ease, color 0.3s ease;
+        text-align: start;
     }
 
     .card:hover i {

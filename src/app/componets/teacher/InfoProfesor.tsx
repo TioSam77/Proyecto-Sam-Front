@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import teacherStyles from "../css/Teacher.module.css";
+import teacherStyles from "@/app/css/Teacher.module.css";
 import MapCourse from "../course/MapCourse";
 
 const InfoProfesor = () => {
@@ -18,7 +18,7 @@ const InfoProfesor = () => {
                 </div>
                 <hr></hr>
                 <h3 onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>
-                    Cursos asignados {showCourses ? "▲" : "▼"}
+                    Cursos asignados {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
                 </h3>
                 {showCourses && (
                     <MapCourse/>
