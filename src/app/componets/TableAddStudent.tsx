@@ -105,7 +105,6 @@ const TableAddStudent = () => {
             await addDoc(collection(db, "student_course"), {
                 student_id: student.id,
                 course_id: courseId,
-                created_at: new Date()
             });
     
             alert(`Estudiante ${student.name} registrado correctamente.`);

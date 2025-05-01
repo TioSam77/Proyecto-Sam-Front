@@ -1,9 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 
-import { initialData, initialConfirmedDates, Attendance } from "../../data/student";
+import { initialData, Attendance } from "../../data/student";
 import { usePathname } from "next/navigation";
+import { collection, getDocs, query, Timestamp, where } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../../../../firebase/clientApp";
+
 
 interface TableProps {
     apiUrl: string;
@@ -13,12 +17,82 @@ const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
 const TableAttendance = (props: TableProps) => {
     const [data, setData] = useState(initialData);
-    const [confirmedDates, setConfirmedDates] = useState(initialConfirmedDates);
-    const confirmedDatesStudent = Object.keys(initialConfirmedDates).filter((date) => initialConfirmedDates[date]);
     const [searchTerm, setSearchTerm] = useState("");
     const Pathname = usePathname();
+    const [scheduleData, setscheduleData] = useState<any[]>([]);
+    const [login, setLogin] = useState<boolean>(false);
+    const [notFound, setNotFound] = useState(false);
+    const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});
+    const [confirmedDatesStudent, setConfirmedDatesStudent] = useState<string[]>([]);
 
     const isStudent = Pathname.includes('/Alumno')
+
+    const pathParts = Pathname.split("/");
+    const courseId = pathParts[pathParts.length - 2]; // Penúltimo segmento de la URL donde esta el id del course
+
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                setscheduleData([]);
+                return;
+            }
+
+            try {
+                setLogin(true);
+
+                const q = query(
+                    collection(db, "course_schedule"),
+                    where("course_id", "==", courseId)
+                );
+                const querySnapshot = await getDocs(q);
+
+                const schedule = querySnapshot.docs
+                    .map((doc) => {
+                        const data = doc.data();
+                        const dateObj = (data.date as Timestamp).toDate();
+                        const formatted = dateObj.toLocaleDateString("es-MX", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                        });
+
+                        return {
+                            id: doc.id,
+                            date: formatted,
+                            dateObj,
+                            entry_time: data.entry_time,
+                            exit_time: data.exit_time,
+                        };
+                    })
+                    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime()); // ORDEN CRONOLÓGICO
+
+
+                setscheduleData(schedule);
+
+                // Inicializar fechas confirmadas para admin (false)
+                const datesMap: { [key: string]: boolean } = {};
+                schedule.forEach((s) => {
+                    datesMap[s.date] = false;
+                });
+                setConfirmedDates(datesMap);
+
+                // Inicializar fechas confirmadas para alumnos
+                const dateKeys = schedule.map((s) => s.date);
+                setConfirmedDatesStudent(dateKeys);
+
+                setNotFound(schedule.length === 0);
+            } catch (err) {
+                console.error("Error al obtener los días del curso:", err);
+                setNotFound(true);
+            } finally {
+                setLogin(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, [courseId]);
+
 
     const handleSelectionChange = (id: number, date: string, value: Attendance) => {
         if (confirmedDates[date]) return;
@@ -53,21 +127,25 @@ const TableAttendance = (props: TableProps) => {
                             <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
 
-                            {(isStudent ? confirmedDatesStudent : Object.keys(initialConfirmedDates)).map((date) => (
-                                <th key={date}>
-                                    {date}
-                                    {!isStudent && !confirmedDates[date] && (
-                                        <div style={{ display: "flex", justifyContent: "center" }}>
-                                            <button
-                                                className={tables.tableButton}
-                                                onClick={() => confirmColumn(date)}
-                                            >
-                                                Confirmar
-                                            </button>
-                                        </div>
-                                    )}
-                                </th>
-                            ))}
+                            {scheduleData.map((s) => {
+                                const date = s.date;
+                                return (
+                                    <th key={date}>
+                                        {date}
+                                        {!isStudent && !confirmedDates[date] && (
+                                            <div style={{ display: "flex", justifyContent: "center" }}>
+                                                <button
+                                                    className={tables.tableButton}
+                                                    onClick={() => confirmColumn(date)}
+                                                >
+                                                    Confirmar
+                                                </button>
+                                            </div>
+                                        )}
+                                    </th>
+                                );
+                            })}
+
 
 
                         </tr>
@@ -80,17 +158,23 @@ const TableAttendance = (props: TableProps) => {
                                     {row.name}
                                 </td>
 
-                                {(isStudent ? confirmedDatesStudent : Object.keys(initialConfirmedDates)).map((date) =>
-                                    isStudent ? (
+                                {scheduleData.map((s) => {
+                                    const date = s.date;
+                                    return isStudent ? (
                                         <td key={date} style={{ display: "flex", justifyContent: "center" }}>
                                             <div
                                                 className={tables.select}
                                                 style={{
                                                     backgroundColor:
-                                                        row.attendance[date] === "P" ? "lightgreen" :
-                                                            row.attendance[date] === "PL" ? "lightblue" :
-                                                                row.attendance[date] === "N" ? "#CBC3E3" :
-                                                                    row.attendance[date] === "A" ? "lightcoral" : "",
+                                                        row.attendance[date] === "P"
+                                                            ? "lightgreen"
+                                                            : row.attendance[date] === "PL"
+                                                                ? "lightblue"
+                                                                : row.attendance[date] === "N"
+                                                                    ? "#CBC3E3"
+                                                                    : row.attendance[date] === "A"
+                                                                        ? "lightcoral"
+                                                                        : "",
                                                 }}
                                             >
                                                 {row.attendance[date] ?? "-"}
@@ -105,11 +189,16 @@ const TableAttendance = (props: TableProps) => {
                                                 disabled={confirmedDates[date]}
                                                 style={{
                                                     backgroundColor:
-                                                        row.attendance[date] === "P" ? "lightgreen" :
-                                                            row.attendance[date] === "PL" ? "lightblue" :
-                                                                row.attendance[date] === "N" ? "#CBC3E3" :
-                                                                    row.attendance[date] === "A" ? "lightcoral" : "",
-                                                    cursor: confirmedDates[date] ? "default" : "pointer"
+                                                        row.attendance[date] === "P"
+                                                            ? "lightgreen"
+                                                            : row.attendance[date] === "PL"
+                                                                ? "lightblue"
+                                                                : row.attendance[date] === "N"
+                                                                    ? "#CBC3E3"
+                                                                    : row.attendance[date] === "A"
+                                                                        ? "lightcoral"
+                                                                        : "",
+                                                    cursor: confirmedDates[date] ? "default" : "pointer",
                                                 }}
                                             >
                                                 {attendanceOptions.map((option) => (
@@ -119,12 +208,12 @@ const TableAttendance = (props: TableProps) => {
                                                 ))}
                                             </select>
                                         </td>
-                                    )
-                                )}
-
+                                    );
+                                })}
                             </tr>
                         ))}
                     </tbody>
+
                 </table>
             </div>
         </section>
