@@ -302,7 +302,11 @@ const CreateCourse = () => {
                                                     : "Cerrado"}
                                             </p>
                                         </div>
-                                        <button className={styles.saveButton} onClick={() => handleEdit(day)}>
+                                        <button
+                                            className={styles.saveButton}
+                                            type="button"
+                                            onClick={() => handleEdit(day)}>
+
                                             Modificar
                                         </button>
                                     </div>
@@ -329,13 +333,22 @@ const CreateCourse = () => {
                                                 />
                                             </label>
                                             <div className={styles.buttonGroup}>
-                                                <button className={styles.cancelButton} onClick={handleCancel}>
+                                                <button
+                                                    className={styles.cancelButton}
+                                                    type="button"
+                                                    onClick={handleCancel}>
                                                     Cancelar
                                                 </button>
-                                                <button className={styles.deleteButton} onClick={handleDelete}>
+                                                <button
+                                                    className={styles.deleteButton}
+                                                    type="button"
+                                                    onClick={handleDelete}>
                                                     Limpiar
                                                 </button>
-                                                <button className={styles.saveButton} onClick={handleSave}>
+                                                <button
+                                                    className={styles.saveButton}
+                                                    type="button"
+                                                    onClick={handleSave}>
                                                     Guardar
                                                 </button>
                                             </div>

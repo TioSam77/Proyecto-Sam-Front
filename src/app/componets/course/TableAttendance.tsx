@@ -32,17 +32,17 @@ const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 const TableAttendance = (props: TableProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchValue, setSearchValue] = useState(""); // valor real del input
-    const pathname = usePathname();
     const [scheduleData, setScheduleData] = useState<any[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
     const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});
     const [confirmedDatesStudent, setConfirmedDatesStudent] = useState<string[]>([]);
     const [students, setStudents] = useState<Student[]>([]);
-
+    
+    const pathname = usePathname();
     const isStudent = pathname.includes("/Alumno");
     const pathParts = pathname.split("/");
-    const courseId = pathParts[pathParts.length - 2]; // Penúltimo segmento de la URL
+    const courseId = pathParts[pathParts.length - 2];
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -55,7 +55,9 @@ const TableAttendance = (props: TableProps) => {
                 setLogin(true);
 
                 // Obtener los días del curso
-                const q = query(collection(db, "course_schedule"), where("course_id", "==", courseId));
+                const q = query(
+                    collection(db, "course_schedule"),
+                    where("course_id", "==", courseId));
                 const querySnapshot = await getDocs(q);
 
                 const schedule = querySnapshot.docs
@@ -261,76 +263,86 @@ const TableAttendance = (props: TableProps) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {students.map((student, index) => (
-                            <tr
-                                key={student.id}
-                                className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
-                            >
-                                <td>{student.id}</td>
-                                <td
-                                    className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]
-                                        }`}
-                                >
-                                    {student.name}
-                                </td>
-                                {scheduleData.map((s) => {
-                                    const date = s.date;
-                                    const attendanceValue = student.attendance?.[date] ?? "";
-
-                                    return isStudent ? (
-                                        <td key={date}>
-                                            <div
-                                                className={tables.select}
-                                                style={{
-                                                    backgroundColor:
-                                                        attendanceValue === "P"
-                                                            ? "lightgreen"
-                                                            : attendanceValue === "PL"
-                                                                ? "lightblue"
-                                                                : attendanceValue === "N"
-                                                                    ? "#CBC3E3"
-                                                                    : attendanceValue === "A"
-                                                                        ? "lightcoral"
-                                                                        : "",
-                                                }}
-                                            >
-                                                {attendanceValue || "-"}
-                                            </div>
-                                        </td>
-                                    ) : (
-                                        <td key={date}>
-                                            <select
-                                                className={tables.select}
-                                                value={attendanceValue}
-                                                onChange={(e) =>
-                                                    handleSelectionChange(student.id, date, e.target.value as Attendance)
-                                                }
-                                                disabled={confirmedDates[date]}
-                                                style={{
-                                                    backgroundColor:
-                                                        attendanceValue === "P"
-                                                            ? "lightgreen"
-                                                            : attendanceValue === "PL"
-                                                                ? "lightblue"
-                                                                : attendanceValue === "N"
-                                                                    ? "#CBC3E3"
-                                                                    : attendanceValue === "A"
-                                                                        ? "lightcoral"
-                                                                        : "",
-                                                    cursor: confirmedDates[date] ? "default" : "pointer",
-                                                }}
-                                            >
-                                                {attendanceOptions.map((option) => (
-                                                    <option key={option ?? "empty"} value={option ?? ""}>
-                                                        {option ?? "-"}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </td>
-                                    );
-                                })}
+                        {login ? (
+                            <tr>
+                                <td colSpan={3}>Cargando...</td>
                             </tr>
-                        ))}
+                        ) : notFound ? (
+                            <tr>
+                                <td colSpan={3}>Estudiantes no Encontrados</td>
+                            </tr>
+                        ) : (
+                            students.map((student, index) => (
+                                <tr
+                                    key={student.id}
+                                    className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
+                                >
+                                    <td>{student.id}</td>
+                                    <td
+                                        className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]
+                                            }`}
+                                    >
+                                        {student.name}
+                                    </td>
+                                    {scheduleData.map((s) => {
+                                        const date = s.date;
+                                        const attendanceValue = student.attendance?.[date] ?? "";
+
+                                        return isStudent ? (
+                                            <td key={date}>
+                                                <div
+                                                    className={tables.select}
+                                                    style={{
+                                                        backgroundColor:
+                                                            attendanceValue === "P"
+                                                                ? "lightgreen"
+                                                                : attendanceValue === "PL"
+                                                                    ? "lightblue"
+                                                                    : attendanceValue === "N"
+                                                                        ? "#CBC3E3"
+                                                                        : attendanceValue === "A"
+                                                                            ? "lightcoral"
+                                                                            : "",
+                                                    }}
+                                                >
+                                                    {attendanceValue || "-"}
+                                                </div>
+                                            </td>
+                                        ) : (
+                                            <td key={date}>
+                                                <select
+                                                    className={tables.select}
+                                                    value={attendanceValue}
+                                                    onChange={(e) =>
+                                                        handleSelectionChange(student.id, date, e.target.value as Attendance)
+                                                    }
+                                                    disabled={confirmedDates[date]}
+                                                    style={{
+                                                        backgroundColor:
+                                                            attendanceValue === "P"
+                                                                ? "lightgreen"
+                                                                : attendanceValue === "PL"
+                                                                    ? "lightblue"
+                                                                    : attendanceValue === "N"
+                                                                        ? "#CBC3E3"
+                                                                        : attendanceValue === "A"
+                                                                            ? "lightcoral"
+                                                                            : "",
+                                                        cursor: confirmedDates[date] ? "default" : "pointer",
+                                                    }}
+                                                >
+                                                    {attendanceOptions.map((option) => (
+                                                        <option key={option ?? "empty"} value={option ?? ""}>
+                                                            {option ?? "-"}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>

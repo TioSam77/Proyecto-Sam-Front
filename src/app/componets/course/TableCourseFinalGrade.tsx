@@ -160,7 +160,7 @@ const TableCourseFinalGrade = (props: TableProps) => {
                             </tr>
                         ) : notFound ? (
                             <tr>
-                                <td colSpan={3}>Estudiante no encontrado</td>
+                                <td colSpan={3}>Estudiantes no Encontrados</td>
                             </tr>
                         ) : (
                             students.map((row, index) => (

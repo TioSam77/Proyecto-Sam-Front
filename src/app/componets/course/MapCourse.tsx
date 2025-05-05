@@ -1,84 +1,109 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { courses } from "@/app/data/courses"
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 
 import styleCourse from "@/app/css/Course.module.css";
 import styleUser from "@/app/css/User.module.css";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, limit, query } from "firebase/firestore";
-import { auth, db } from "../../../../firebase/clientApp";
+import DeleteConfirm from "../DeleteConfirm";
+import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../../firebase/clientApp";
 
-const MapCourse = () => {
+interface MapCourseProps {
+    data: any[];
+    login: boolean;
+    notFound: boolean;
+}
+
+const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const currentPath = usePathname();
+    const [course, setCourse] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [data, setData] = useState<any[]>([]);
-    const [login, setLogin] = useState<boolean>(false)
-    const [notFound, setNotFound] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
 
-    const isAdmin = currentPath.includes('/Administrador')
-    const isStudent = currentPath.includes('/Alumno')
+    const isAdmin = currentPath.includes("/Administrador");
+    const isStudent = currentPath.includes("/Alumno");
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                setData([]);
-                return;
-            }
+    const filteredCourses = data.filter((course) =>
+        course.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-            try {
-                setLogin(true);
-                const q = query(collection(db, "course"), limit(10));
-                const querySnapshot = await getDocs(q);
+    const handleDeleteClick = (user: { id: string, name: string }) => {
+        setSelectedCourse(user);
+        setShowModal(true);
+    };
 
-                const allData = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+    const confirmDelete = async () => {
+        if (!selectedCourse) return;
+        try {
+            // 1. Eliminar el curso principal
+            await deleteDoc(doc(db, "course", selectedCourse.id));
 
-                setData(allData);
-                setNotFound(allData.length === 0);
-            } catch (err) {
-                console.error("Error al obtener cursos:", err);
-                setNotFound(true);
-            } finally {
-                setLogin(false);
-            }
-        });
+            // 2. Eliminar registros relacionados en student_course
+            const studentCoursesSnapshot = await getDocs(
+                query(collection(db, "student_course"), where("course_id", "==", selectedCourse.id))
+            );
+            const deleteStudentCourses = studentCoursesSnapshot.docs.map(docu =>
+                deleteDoc(doc(db, "student_course", docu.id))
+            );
+            await Promise.all(deleteStudentCourses);
 
-        return () => unsubscribe();
-    }, []);
+            // 3. Eliminar registros relacionados en course_schedule
+            const scheduleSnapshot = await getDocs(
+                query(collection(db, "course_schedule"), where("course_id", "==", selectedCourse.id))
+            );
+            const deleteSchedules = scheduleSnapshot.docs.map(docu =>
+                deleteDoc(doc(db, "course_schedule", docu.id))
+            );
+            await Promise.all(deleteSchedules);
+
+            // 4. Actualizar estado local
+            setCourse(prev => prev.filter(user => user.id !== selectedCourse.id));
+        } catch (err) {
+            console.error("Error al eliminar:", err);
+        } finally {
+            setShowModal(false);
+            setSelectedCourse(null);
+        }
+    };
 
 
     return (
         <section className={styleUser.center}>
-            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center", marginBottom: "20px" }}>
+            <div
+                style={{
+                    display: "flex",
+                    gap: "10px",
+                    width: "100%",
+                    justifyContent: "center",
+                    marginBottom: "20px",
+                }}
+            >
                 <input
                     type="text"
-                    placeholder="Buscar usuario..."
+                    placeholder="Buscar curso..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                {(isAdmin) && (
+                {isAdmin && (
                     <Link href={`${currentPath}/Registro`}>
                         <button className={styleUser.button}>Nuevo Grupo</button>
                     </Link>
                 )}
-                {(isStudent) && (
+                {isStudent && (
                     <button className={styleUser.button}>Unirte a una clase</button>
                 )}
             </div>
             <ol className={styleCourse.containerSubjects}>
                 {login ? (
                     <li>Cargando...</li>
-                ) : notFound ? (
-                    <li>No cuentas con ningun curso</li>
+                ) : notFound || filteredCourses.length === 0 ? (
+                    <li>No cuentas con ningún curso inscrito</li>
                 ) : (
-                    data.map((course) => (
+                    filteredCourses.map((course) => (
                         <li key={course.id} className={styleCourse.subjects}>
                             <div className={styleCourse.header}>
                                 <Link href={`${currentPath}/${course.id}`}>
@@ -91,20 +116,29 @@ const MapCourse = () => {
                             </div>
                             <div className={styleCourse.footer}>
                                 <h5>Más detalles</h5>
-
                                 {isAdmin && (
                                     <div className={styleCourse.containerButton}>
                                         <button className="bluebutton">Editar</button>
-                                        <button className="redbutton">Eliminar</button>
+                                        <button className="redbutton" onClick={() => handleDeleteClick(course)}> Eliminar</button>
                                     </div>
                                 )}
-
                             </div>
                         </li>
                     ))
                 )}
             </ol>
-        </section>
+
+            {showModal && selectedCourse && (
+                <DeleteConfirm
+                    name={selectedCourse.name}
+                    onConfirm={confirmDelete}
+                    onCancel={() => {
+                        setShowModal(false);
+                        setSelectedCourse(null);
+                    }}
+                />
+            )}
+        </section >
     );
 };
 

@@ -5,6 +5,7 @@ import tables from "@/app/css/Table.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
 import { auth, db } from "@/../firebase/clientApp";
+import { usePathname } from "next/navigation";
 
 interface Student {
     id: string;
@@ -18,6 +19,10 @@ const TableStudent = () => {
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
 
+    const pathname = usePathname();
+    const pathParts = pathname.split("/");
+    const courseId = pathParts[pathParts.length - 2];
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -27,7 +32,10 @@ const TableStudent = () => {
 
             try {
                 setLogin(true);
-                const q = query(collection(db, "student_course"));
+                const q = query(
+                    collection(db, "student_course"),
+                    where("course_id", "==", courseId)
+                );
                 const querySnapshot = await getDocs(q);
 
                 const studentIds = querySnapshot.docs.map(doc => doc.data().student_id);
@@ -65,22 +73,26 @@ const TableStudent = () => {
                 setLogin(false);
                 return;
             }
-    
+
             try {
                 const q = searchTerm
                     ? query(
-                          collection(db, "student_course"),
-                          where("name", ">=", searchTerm),
-                          where("name", "<=", searchTerm + "\uf8ff")
-                      )
-                    : query(collection(db, "student_course"), limit(10));
-    
+                        collection(db, "student_course"),
+                        where("course_id", "==", courseId),
+                        where("name", ">=", searchTerm),
+                        where("name", "<=", searchTerm + "\uf8ff")
+                    )
+                    : query(
+                        collection(db, "student_course"),
+                        where("course_id", "==", courseId),
+                        );
+
                 const querySnapshot = await getDocs(q);
                 const allData = querySnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 })) as Student[];
-    
+
                 setData(allData);
                 setNotFound(allData.length === 0);
             } catch (err) {
@@ -90,10 +102,10 @@ const TableStudent = () => {
                 setLogin(false);
             }
         });
-    
+
         return () => unsubscribe();
     };
-    
+
 
     return (
         <section className={tables.TableContainer}>
@@ -120,7 +132,7 @@ const TableStudent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {login ? (
+                        {login ? (
                             <tr>
                                 <td colSpan={3}>Cargando...</td>
                             </tr>

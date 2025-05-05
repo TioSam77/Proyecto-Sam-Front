@@ -1,12 +1,45 @@
-
-import CourseGroup from "../componets/course/MapCourse";
+'use client'
+import MapCourse from "@/app/componets/course/MapCourse";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+import { auth, db } from "../../../firebase/clientApp";
 
 export default function Page() {
-  return (
-    <>
-      <div className="containerSection">
-        <CourseGroup />
-      </div>
-    </>
-  );
+    const [data, setData] = useState<any[]>([]);
+    const [login, setLogin] = useState<boolean>(false)
+    const [notFound, setNotFound] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                setData([]);
+                return;
+            }
+
+            try {
+                setLogin(true);
+                const q = query(collection(db, "course"), limit(10));
+                const querySnapshot = await getDocs(q);
+
+                const allData = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                setData(allData);
+                setNotFound(allData.length === 0);
+            } catch (err) {
+                console.error("Error al obtener cursos:", err);
+                setNotFound(true);
+            } finally {
+                setLogin(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+    return (
+        <MapCourse data={data} login={login} notFound={notFound} />
+    )
 }
