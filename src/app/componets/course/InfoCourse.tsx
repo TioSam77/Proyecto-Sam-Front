@@ -11,6 +11,8 @@ interface InfoCourseProps {
 const InfoCourse: React.FC<InfoCourseProps> = ({ description, teacher }) => {
     const pathname = usePathname()
     const isStudent = pathname.includes('/Alumno')
+    const isProfesor = pathname.includes('/Profesor')
+
 
     return (
         <div className={styles.card}>
@@ -18,7 +20,7 @@ const InfoCourse: React.FC<InfoCourseProps> = ({ description, teacher }) => {
             <div className={styles.flexrow}>
                 <p className={styles.description}>{description}</p>
 
-                {isStudent ?
+                {(isStudent || isProfesor) ?
                     <button className='bluebutton'>Adrir temario</button>
                     :
                     <button className='bluebutton'>Agregar Temario</button>}

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styleUser from "@/app/css/User.module.css";
-import { initialData } from "@/app/data/student";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/../firebase/clientApp";
 import { collection, getDocs } from "firebase/firestore";

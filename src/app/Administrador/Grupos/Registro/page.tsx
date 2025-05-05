@@ -1,7 +1,11 @@
 import CreateCourse from "@/app/componets/course/CreateCourse";
+import CreateSubject from "@/app/componets/course/CreateSubject";
 
 export default function Page() {
     return (
+        <div style={{display:"flex", alignItems:"start"}}>
+        <CreateSubject/>
         <CreateCourse/>
+        </div>
     )
 }

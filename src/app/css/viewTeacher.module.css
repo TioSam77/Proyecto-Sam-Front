@@ -1,27 +1,26 @@
 .teacherCard {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .teacherName {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-  }
-  
-  .teacherBio {
-    font-style: italic;
-    margin-bottom: 1rem;
-    color: #555;
-  }
-  
-  .teacherDetails p {
-    margin: 0.3rem 0;
-    color: #333;
-  }
-  
+  max-width: 600px;
+  margin: auto 1.5rem;
+  padding: 1.5rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.teacherName {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.teacherBio {
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.teacherDetails p {
+  margin: 0.3rem 0;
+  color: #333;
+}

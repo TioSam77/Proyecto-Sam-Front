@@ -65,6 +65,7 @@
     max-width: 150px;
 }
 .select{
+    margin: auto;
     min-width: 21px;
     width: min-content;
     padding: 0 2px;

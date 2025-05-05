@@ -1,18 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import styleUser from "@/app/css/User.module.css";
-import { teacher } from "@/app/data/teacher";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/../firebase/clientApp";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 const MapTeacher = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const currentPath = usePathname();
     const [data, setData] = useState<any[]>([]);
-    const [login,setLogin] = useState<boolean>(false)
+    const [login, setLogin] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState(false);
+    const [selectedTeacher, setSelectedTeacher] = useState<{ id: string; name: string } | null>(null);
 
     useEffect(() => {
         setLogin(true);
@@ -22,7 +22,7 @@ const MapTeacher = () => {
                 setLogin(false);
                 return;
             }
-    
+
             try {
                 const querySnapshot = await getDocs(collection(db, "teacher"));
                 const allData = querySnapshot.docs.map(doc => ({
@@ -36,7 +36,7 @@ const MapTeacher = () => {
                 setLogin(false);
             }
         });
-    
+
         return () => unsubscribe();
     }, []);
 
@@ -44,10 +44,29 @@ const MapTeacher = () => {
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const handleDeleteClick = (user: { id: string, name: string }) => {
+        setSelectedTeacher(user);
+        setShowModal(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!selectedTeacher) return;
+        try {
+            await deleteDoc(doc(db, "teacher", selectedTeacher.id));
+            setData(prev => prev.filter(user => user.id !== selectedTeacher.id));
+        } catch (err) {
+            console.error("Error al eliminar:", err);
+        } finally {
+            setShowModal(false);
+            setSelectedTeacher(null);
+        }
+    };
+
+
     return (
         <section className={styleUser.center}>
 
-            <div style={{display:"flex", gap:"10px", width:"100%", justifyContent:"center"}}>
+            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
                     placeholder="Buscar usuario..."
@@ -56,11 +75,11 @@ const MapTeacher = () => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                <Link href={`${currentPath}/Registro`}>
+                <Link href={`/Administrador/Profesores/Registro`}>
                     <button className={styleUser.button}>Nuevo Profesor</button>
                 </Link>
             </div>
-            
+
             {login && (
                 <div>Cargando</div>
             )}
@@ -69,7 +88,7 @@ const MapTeacher = () => {
                 {filteredUsers.map((user) => (
                     <li key={user.id} className={styleUser.users}>
                         <div className={styleUser.header}>
-                            <Link href={`${currentPath}/${user.id}`}>
+                            <Link href={`/Administrador/Profesores/${user.id}`}>
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
                             </Link>
                         </div>
@@ -82,11 +101,23 @@ const MapTeacher = () => {
 
                         <div className={styleUser.containerButton}>
                             <button className="bluebutton">Editar</button>
-                            <button className="redbutton">Eliminar</button>
+                            <button className="redbutton" onClick={() => handleDeleteClick(user)}>Eliminar</button>
                         </div>
                     </li>
                 ))}
             </ol>
+
+            {showModal && selectedTeacher && (
+                <DeleteConfirm
+                    name={selectedTeacher.name}
+                    onConfirm={confirmDelete}
+                    onCancel={() => {
+                        setShowModal(false);
+                        setSelectedTeacher(null);
+                    }}
+                />
+            )}
+
         </section>
     );
 };

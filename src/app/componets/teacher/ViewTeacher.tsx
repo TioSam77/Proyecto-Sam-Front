@@ -1,8 +1,11 @@
-
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import styleTeacher from "@/app/css/viewTeacher.module.css";
+import MapCourse from '../course/MapCourse';
 
 const ViewTeacher = () => {
+  const [showCourses, setShowCourses] = useState(false);
+
   const teacher = {
     name: 'María González',
     email: 'maria.gonzalez@universidad.edu',
@@ -22,6 +25,13 @@ const ViewTeacher = () => {
         <p><strong>Teléfono:</strong> {teacher.phone}</p>
         <p><strong>Oficina:</strong> {teacher.office}</p>
       </div>
+      <hr></hr>
+      <h3 onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>
+        Cursos asignados {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
+      </h3>
+      {showCourses && (
+        <MapCourse />
+      )}
     </div>
   );
 };

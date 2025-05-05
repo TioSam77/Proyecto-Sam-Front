@@ -71,7 +71,7 @@ const TableCourseFinalGrade = (props: TableProps) => {
                                                                 row.grade === 7 ? "lightyellow" :
                                                                     row.grade === 6 ? "orange" :
                                                                         row.grade === 5 ? "lightcoral" : "",
-                                            }} >{row.grade ?? " "}</div>
+                                            }} >{row.grade ?? "-"}</div>
                                         :
 
                                         <select
@@ -90,7 +90,7 @@ const TableCourseFinalGrade = (props: TableProps) => {
                                             }}
                                         >
                                             {grades.map((grade) => (
-                                                <option key={grade} value={grade ?? ""}>{grade}</option>
+                                                <option key={grade} value={grade ?? ""}>{grade ?? "-"}</option>
                                             ))}
                                         </select>
                                     }

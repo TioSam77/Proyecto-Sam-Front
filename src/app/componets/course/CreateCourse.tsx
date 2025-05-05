@@ -45,6 +45,7 @@ const CreateCourse = () => {
     const [selectedSubject, setSelectedSubject] = useState("");
     const [selectedTeacher, setSelectedTeacher] = useState("");
     const [data, setData] = useState<any[]>([]);
+    const [subject, setSubject] = useState<any[]>([]);
     const [login, setLogin] = useState<boolean>(false)
 
 
@@ -64,8 +65,16 @@ const CreateCourse = () => {
                     ...doc.data()
                 }));
                 setData(allData);
+
+                const querySnapshotSubject = await getDocs(collection(db, "subject"));
+                const allDataSubjects = querySnapshotSubject.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setSubject(allDataSubjects);
+
             } catch (err) {
-                console.error("Error al obtener estudiantes:", err);
+                console.error("Error al obtener datos:", err);
             } finally {
                 setLogin(false);
             }

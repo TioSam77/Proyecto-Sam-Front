@@ -2,12 +2,26 @@
 import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 
-import { initialData, Attendance } from "../../data/student";
+import { Attendance } from "../../data/student";
 import { usePathname } from "next/navigation";
-import { collection, getDocs, query, Timestamp, where } from "firebase/firestore";
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+    Timestamp,
+} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../../firebase/clientApp";
+import { doc, updateDoc, setDoc } from "firebase/firestore";
 
+interface Student {
+    id: string;
+    name: string;
+    attendance: {
+        [date: string]: Attendance;
+    };
+}
 
 interface TableProps {
     apiUrl: string;
@@ -16,35 +30,32 @@ interface TableProps {
 const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
 const TableAttendance = (props: TableProps) => {
-    const [data, setData] = useState(initialData);
     const [searchTerm, setSearchTerm] = useState("");
-    const Pathname = usePathname();
-    const [scheduleData, setscheduleData] = useState<any[]>([]);
+    const [searchValue, setSearchValue] = useState(""); // valor real del input
+    const pathname = usePathname();
+    const [scheduleData, setScheduleData] = useState<any[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
     const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});
     const [confirmedDatesStudent, setConfirmedDatesStudent] = useState<string[]>([]);
+    const [students, setStudents] = useState<Student[]>([]);
 
-    const isStudent = Pathname.includes('/Alumno')
-
-    const pathParts = Pathname.split("/");
-    const courseId = pathParts[pathParts.length - 2]; // Penúltimo segmento de la URL donde esta el id del course
-
+    const isStudent = pathname.includes("/Alumno");
+    const pathParts = pathname.split("/");
+    const courseId = pathParts[pathParts.length - 2]; // Penúltimo segmento de la URL
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                setscheduleData([]);
+                setScheduleData([]);
                 return;
             }
 
             try {
                 setLogin(true);
 
-                const q = query(
-                    collection(db, "course_schedule"),
-                    where("course_id", "==", courseId)
-                );
+                // Obtener los días del curso
+                const q = query(collection(db, "course_schedule"), where("course_id", "==", courseId));
                 const querySnapshot = await getDocs(q);
 
                 const schedule = querySnapshot.docs
@@ -63,21 +74,21 @@ const TableAttendance = (props: TableProps) => {
                             dateObj,
                             entry_time: data.entry_time,
                             exit_time: data.exit_time,
+                            confirmed: data.confirm === true,
                         };
                     })
-                    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime()); // ORDEN CRONOLÓGICO
+                    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
 
+                setScheduleData(schedule);
 
-                setscheduleData(schedule);
-
-                // Inicializar fechas confirmadas para admin (false)
+                // Inicializar fechas confirmadas
                 const datesMap: { [key: string]: boolean } = {};
                 schedule.forEach((s) => {
-                    datesMap[s.date] = false;
+                    datesMap[s.date] = s.confirmed;
                 });
                 setConfirmedDates(datesMap);
 
-                // Inicializar fechas confirmadas para alumnos
+
                 const dateKeys = schedule.map((s) => s.date);
                 setConfirmedDatesStudent(dateKeys);
 
@@ -90,43 +101,145 @@ const TableAttendance = (props: TableProps) => {
             }
         });
 
+        fetchStudents();
         return () => unsubscribe();
     }, [courseId]);
 
+    const fetchStudents = async () => {
+        try {
+            const q = query(
+                collection(db, "student_course"),
+                where("course_id", "==", courseId),
+            );
 
-    const handleSelectionChange = (id: number, date: string, value: Attendance) => {
+            const querySnapshot = await getDocs(q);
+
+            const filteredStudents: Student[] = querySnapshot.docs
+                .map((doc) => ({
+                    id: doc.data().student_id,
+                    name: doc.data().name,
+                    attendance: doc.data().attendance ?? {},
+                }))
+
+            setStudents(filteredStudents);
+        } catch (err) {
+            console.error("Error al obtener estudiantes del curso:", err);
+        }
+    };
+
+    const handleSelectionChange = (id: string, date: string, value: Attendance) => {
         if (confirmedDates[date]) return;
-        setData((prevData) =>
-            prevData.map((row) =>
-                row.id === id
-                    ? { ...row, attendance: { ...row.attendance, [date]: value } }
-                    : row
+
+        setStudents((prevData) =>
+            prevData.map((student) =>
+                student.id === id
+                    ? {
+                        ...student,
+                        attendance: {
+                            ...student.attendance,
+                            [date]: value,
+                        },
+                    }
+                    : student
             )
         );
     };
 
-    const confirmColumn = (date: string) => {
-        setConfirmedDates((prev) => ({ ...prev, [date]: true }));
+    const confirmColumn = async (date: string) => {
+        try {
+            // Actualiza el estado local para bloquear la columna
+            setConfirmedDates((prev) => ({ ...prev, [date]: true }));
+
+            // Paso 1: Actualiza asistencia de cada estudiante en student_course
+            const updatePromises = students.map(async (student) => {
+                const attendanceValue = student.attendance[date] ?? null;
+                if (!attendanceValue) return;
+
+                const q = query(
+                    collection(db, "student_course"),
+                    where("course_id", "==", courseId),
+                    where("student_id", "==", student.id)
+                );
+
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    const docRef = snapshot.docs[0].ref;
+
+                    await setDoc(
+                        docRef,
+                        {
+                            attendance: {
+                                [date]: attendanceValue,
+                            },
+                        },
+                        { merge: true }
+                    );
+                }
+            });
+
+            // Paso 2: Actualiza el documento correspondiente en course_schedule
+            const qSchedule = query(
+                collection(db, "course_schedule"),
+                where("course_id", "==", courseId)
+            );
+            const querySnapshot = await getDocs(qSchedule);
+
+            // Convertir fecha del string "dd/mm/yyyy" al objeto Date
+            const [day, month, year] = date.split("/").map(Number);
+            const formattedDate = new Date(year, month - 1, day);
+
+            const matchDoc = querySnapshot.docs.find((doc) => {
+                const docDate = (doc.data().date as Timestamp).toDate();
+
+                return (
+                    docDate.getFullYear() === formattedDate.getFullYear() &&
+                    docDate.getMonth() === formattedDate.getMonth() &&
+                    docDate.getDate() === formattedDate.getDate()
+                );
+            });
+
+
+            if (matchDoc) {
+                await updateDoc(doc(db, "course_schedule", matchDoc.id), {
+                    confirm: true,
+                });
+            }
+
+            await Promise.all(updatePromises);
+            console.log(`Asistencia del ${date} confirmada correctamente`);
+        } catch (err) {
+            console.error("Error al confirmar asistencia:", err);
+        }
     };
 
-    const filteredData = data.filter((row) => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
         <section className={tables.TableContainer}>
-            <input
-                type="text"
-                placeholder="Buscar usuario..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="searchBox"
-            />
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+                <input
+                    type="text"
+                    placeholder="Buscar estudiante"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    className="searchBox"
+                />
+                <button
+                    className={tables.tableButton}
+                    onClick={() => {
+                        setSearchTerm(searchValue);
+                        fetchStudents();
+                    }}
+                >
+                    Buscar
+                </button>
+            </div>
+
             <div className={tables.box}>
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
                             <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
-
                             {scheduleData.map((s) => {
                                 const date = s.date;
                                 return (
@@ -145,64 +258,70 @@ const TableAttendance = (props: TableProps) => {
                                     </th>
                                 );
                             })}
-
-
-
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredData.map((row, index) => (
-                            <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
-                                <td>{row.id}</td>
-                                <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
-                                    {row.name}
+                        {students.map((student, index) => (
+                            <tr
+                                key={student.id}
+                                className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
+                            >
+                                <td>{student.id}</td>
+                                <td
+                                    className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]
+                                        }`}
+                                >
+                                    {student.name}
                                 </td>
-
                                 {scheduleData.map((s) => {
                                     const date = s.date;
+                                    const attendanceValue = student.attendance?.[date] ?? "";
+
                                     return isStudent ? (
-                                        <td key={date} style={{ display: "flex", justifyContent: "center" }}>
+                                        <td key={date}>
                                             <div
                                                 className={tables.select}
                                                 style={{
                                                     backgroundColor:
-                                                        row.attendance[date] === "P"
+                                                        attendanceValue === "P"
                                                             ? "lightgreen"
-                                                            : row.attendance[date] === "PL"
+                                                            : attendanceValue === "PL"
                                                                 ? "lightblue"
-                                                                : row.attendance[date] === "N"
+                                                                : attendanceValue === "N"
                                                                     ? "#CBC3E3"
-                                                                    : row.attendance[date] === "A"
+                                                                    : attendanceValue === "A"
                                                                         ? "lightcoral"
                                                                         : "",
                                                 }}
                                             >
-                                                {row.attendance[date] ?? "-"}
+                                                {attendanceValue || "-"}
                                             </div>
                                         </td>
                                     ) : (
                                         <td key={date}>
                                             <select
                                                 className={tables.select}
-                                                value={row.attendance[date] ?? ""}
-                                                onChange={(e) => handleSelectionChange(row.id, date, e.target.value as Attendance)}
+                                                value={attendanceValue}
+                                                onChange={(e) =>
+                                                    handleSelectionChange(student.id, date, e.target.value as Attendance)
+                                                }
                                                 disabled={confirmedDates[date]}
                                                 style={{
                                                     backgroundColor:
-                                                        row.attendance[date] === "P"
+                                                        attendanceValue === "P"
                                                             ? "lightgreen"
-                                                            : row.attendance[date] === "PL"
+                                                            : attendanceValue === "PL"
                                                                 ? "lightblue"
-                                                                : row.attendance[date] === "N"
+                                                                : attendanceValue === "N"
                                                                     ? "#CBC3E3"
-                                                                    : row.attendance[date] === "A"
+                                                                    : attendanceValue === "A"
                                                                         ? "lightcoral"
                                                                         : "",
                                                     cursor: confirmedDates[date] ? "default" : "pointer",
                                                 }}
                                             >
                                                 {attendanceOptions.map((option) => (
-                                                    <option key={option} value={option ?? ""}>
+                                                    <option key={option ?? "empty"} value={option ?? ""}>
                                                         {option ?? "-"}
                                                     </option>
                                                 ))}
@@ -213,7 +332,6 @@ const TableAttendance = (props: TableProps) => {
                             </tr>
                         ))}
                     </tbody>
-
                 </table>
             </div>
         </section>

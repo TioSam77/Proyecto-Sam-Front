@@ -57,7 +57,7 @@ const MapCourse = () => {
 
 
     return (
-        <section className={styleCourse.center}>
+        <section className={styleUser.center}>
             <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center", marginBottom: "20px" }}>
                 <input
                     type="text"

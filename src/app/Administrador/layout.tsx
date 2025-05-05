@@ -13,9 +13,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname();
 
-    const isAdminSubroute = pathname.match(/^\/Administrador\/(Alumnos|Grupos|Profesores)\/.+/);
+    const isAdminSubroute = pathname.match(/^\/Administrador\/(Alumnos|Grupos)\/.+/);
     const isRegistroRuta = [
-        "/Administrador/Profesores/Registro",
         "/Administrador/Grupos/Registro",
         "/Administrador/Alumnos/Registro",
       ].some(route => pathname.startsWith(route));

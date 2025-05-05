@@ -1,6 +1,6 @@
 import MapStudent from "@/app/componets/student/MapStudent";
 import TableAddStudent from "@/app/componets/TableAddStudent";
-import TableStudent from "@/app/componets/TableStudents";
+import TableStudent from "@/app/componets/student/TableStudents";
 import course from "@/app/css/Course.module.css"
 
 export default function Page() {

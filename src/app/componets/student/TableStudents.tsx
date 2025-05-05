@@ -4,7 +4,7 @@ import tables from "@/app/css/Table.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
-import { auth, db } from "../../../firebase/clientApp";
+import { auth, db } from "@/../firebase/clientApp";
 
 interface Student {
     id: string;
@@ -27,7 +27,7 @@ const TableStudent = () => {
 
             try {
                 setLogin(true);
-                const q = query(collection(db, "student_course"), limit(10));
+                const q = query(collection(db, "student_course"));
                 const querySnapshot = await getDocs(q);
 
                 const studentIds = querySnapshot.docs.map(doc => doc.data().student_id);
