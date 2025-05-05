@@ -5,7 +5,6 @@ import React from "react";
 import course from "../../css/Course.module.css"
 import card from "@/app/css/card.module.css"
 import { usePathname } from "next/navigation";
-import InfoCourse from "@/app/componets/course/InfoCourse";
 
 export default function RootLayout({
     children,
@@ -18,10 +17,6 @@ export default function RootLayout({
     return (
         <section className="containerSection">
             <ViewGroup />
-            <InfoCourse
-                description="Curso introductorio a lógica, conjuntos y relaciones."
-                teacher="Dra. Julia Morales"
-            />
 
             <section className={course.center}>
                 <div className={card.containerCard}>

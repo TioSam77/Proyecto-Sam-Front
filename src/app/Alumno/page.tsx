@@ -19,7 +19,7 @@ export default function Page() {
 
             try {
                 setLogin(true);
-                const q = query(collection(db, "course"), limit(10));
+                const q = query(collection(db, "course"));
                 const querySnapshot = await getDocs(q);
 
                 const allData = querySnapshot.docs.map((doc) => ({

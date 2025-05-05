@@ -1,8 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
 
-import { subject } from "@/app/data/teacher"
-
 import create from "@/app/css/create.module.css"
 import styles from "@/app/css/aviability.module.css";
 import { addDoc, collection, getDocs, Timestamp } from "firebase/firestore";
@@ -120,26 +118,6 @@ const CreateCourse = () => {
         }
     };
 
-
-    const [diasSeleccionados, setDiasSeleccionados] = useState<{
-        [dia: string]: { inicio: string; fin: string };
-    }>({});
-
-    const toggleDia = (dia: string) => {
-        setDiasSeleccionados((prev) =>
-            dia in prev
-                ? Object.fromEntries(Object.entries(prev).filter(([key]) => key !== dia))
-                : { ...prev, [dia]: { inicio: "", fin: "" } }
-        );
-    };
-
-    const actualizarHorario = (dia: string, tipo: "inicio" | "fin", valor: string) => {
-        setDiasSeleccionados((prev) => ({
-            ...prev,
-            [dia]: { ...prev[dia], [tipo]: valor },
-        }));
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -148,12 +126,18 @@ const CreateCourse = () => {
             const end = new Date(endDate);
             const parsedStartDate = new Date(startDate);
             const parsedEndDate = new Date(endDate);
+            const selectedSubjectObj = subject.find((s) => s.id === selectedSubject);
+            const selectedTeacherObj = data.find((t) => t.id === selectedTeacher);
 
+            if (!selectedSubjectObj || !selectedTeacherObj) {
+                alert("Error: no se pudo encontrar el profesor o la materia seleccionada.");
+                return;
+            }
 
             const courseRef = await addDoc(collection(db, "course"), {
                 name: courseName,
-                subject_id: selectedSubject,
-                teacher_id: selectedTeacher,
+                subject_name: selectedSubjectObj.name,
+                teacher_name: selectedTeacherObj.name,
                 start_date: Timestamp.fromDate(start),
                 end_date: Timestamp.fromDate(end),
             });
@@ -166,6 +150,7 @@ const CreateCourse = () => {
 
                 // Mapea día a índice (0=Lunes ... 6=Domingo)
                 const dayIndexMap: Record<string, number> = {
+                    Domingo: 0,
                     Lunes: 1,
                     Martes: 2,
                     Miércoles: 3,
@@ -174,22 +159,28 @@ const CreateCourse = () => {
                     Sábado: 6,
                 };
 
+
                 const targetDay = dayIndexMap[day];
 
                 // 3. Generar las fechas para ese día entre el rango
-                let current = new Date(parsedStartDate);
+                const currentDate = new Date(parsedStartDate);
 
-                while (current <= parsedEndDate) {
-                    if (current.getDay() === targetDay) {
+                while (currentDate <= parsedEndDate) {
+                    const dayName = diasSemana[currentDate.getDay() - 1]; // porque Lunes = 1
+                    const horario = availability[dayName as Day];
+
+                    if (horario?.start && horario?.end) {
                         await addDoc(collection(db, "course_schedule"), {
                             course_id: courseId,
-                            date: Timestamp.fromDate(new Date(current)),
-                            entry_time: start,
-                            exit_time: end,
+                            date: Timestamp.fromDate(new Date(currentDate)),
+                            entry_time: horario.start,
+                            exit_time: horario.end,
                         });
                     }
-                    current.setDate(current.getDate() + 1);
+
+                    currentDate.setDate(currentDate.getDate() + 1);
                 }
+
 
             }
 

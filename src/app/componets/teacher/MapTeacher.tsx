@@ -4,7 +4,7 @@ import Link from "next/link";
 import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/../firebase/clientApp";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 const MapTeacher = () => {
@@ -51,7 +51,21 @@ const MapTeacher = () => {
 
     const confirmDelete = async () => {
         if (!selectedTeacher) return;
+    
         try {
+            // Verificar si hay algún curso con ese teacher_id
+            const courseQuery = query(
+                collection(db, "course"),
+                where("teacher_id", "==", selectedTeacher.id)
+            );
+            const courseSnapshot = await getDocs(courseQuery);
+    
+            if (!courseSnapshot.empty) {
+                alert("No se puede eliminar al profesor porque está asignado a uno o más cursos.");
+                return;
+            }
+    
+            // Si no tiene cursos, se puede eliminar
             await deleteDoc(doc(db, "teacher", selectedTeacher.id));
             setData(prev => prev.filter(user => user.id !== selectedTeacher.id));
         } catch (err) {
@@ -61,6 +75,7 @@ const MapTeacher = () => {
             setSelectedTeacher(null);
         }
     };
+    
 
 
     return (

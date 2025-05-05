@@ -11,12 +11,6 @@ interface TableProps {
     apiUrl: string;
 }
 
-interface StudentRecord {
-    id: number;
-    name: string;
-    grade: number | null;
-}
-
 interface Student {
     id: string;
     name: string;
@@ -71,7 +65,7 @@ const TableCourseFinalGrade = (props: TableProps) => {
                 // Solo usamos el filtro de course_id en Firestore
                 const q = query(
                     collection(db, "student_course"),
-                    where("course_id", "==", courseId)
+                    where("course_id", "==", courseId),
                 );
     
                 const querySnapshot = await getDocs(q);
@@ -90,7 +84,7 @@ const TableCourseFinalGrade = (props: TableProps) => {
                 setStudents(filtered);
                 setNotFound(filtered.length === 0);
             } catch (err) {
-                console.error("Error al obtener estudiantes:", err);
+                console.error("Error al obtener estudiantes:", err);//arreglar
                 setNotFound(true);
             } finally {
                 setLogin(false);

@@ -1,4 +1,5 @@
 .containerSubjects {
+    width: 100%;
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -48,6 +49,14 @@
 .textHeader {
     padding: 1rem;
     position: absolute;
+    color: white;
+    font-weight: bold;
+    text-align: start;
+}
+.textSubject {
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
     color: white;
     font-weight: bold;
     text-align: start;

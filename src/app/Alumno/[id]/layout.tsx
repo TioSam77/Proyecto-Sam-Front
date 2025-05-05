@@ -16,10 +16,6 @@ export default function RootLayout({
     return (
         <section className="containerSection">
             <ViewGroup />
-            <InfoCourse
-                description="Curso introductorio a lógica, conjuntos y relaciones."
-                teacher="Dra. Julia Morales"
-            />
 
             <section className={course.center}>
                 <div className={course.containerCards}>

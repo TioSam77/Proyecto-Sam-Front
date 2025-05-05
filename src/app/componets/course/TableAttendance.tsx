@@ -31,7 +31,6 @@ const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
 const TableAttendance = (props: TableProps) => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchValue, setSearchValue] = useState(""); // valor real del input
     const [scheduleData, setScheduleData] = useState<any[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
@@ -103,30 +102,50 @@ const TableAttendance = (props: TableProps) => {
             }
         });
 
-        fetchStudents();
+        handleSearch();
         return () => unsubscribe();
     }, [courseId]);
 
-    const fetchStudents = async () => {
-        try {
-            const q = query(
-                collection(db, "student_course"),
-                where("course_id", "==", courseId),
-            );
-
-            const querySnapshot = await getDocs(q);
-
-            const filteredStudents: Student[] = querySnapshot.docs
-                .map((doc) => ({
-                    id: doc.data().student_id,
-                    name: doc.data().name,
-                    attendance: doc.data().attendance ?? {},
-                }))
-
-            setStudents(filteredStudents);
-        } catch (err) {
-            console.error("Error al obtener estudiantes del curso:", err);
-        }
+    const handleSearch = () => {
+        setLogin(true);
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                setStudents([]);
+                setLogin(false);
+                return;
+            }
+    
+            try {
+                // Solo usamos el filtro de course_id en Firestore
+                const q = query(
+                    collection(db, "student_course"),
+                    where("course_id", "==", courseId),
+                );
+    
+                const querySnapshot = await getDocs(q);
+                const allData = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                })) as Student[];
+    
+                // Filtramos por nombre en el frontend
+                const filtered = searchTerm
+                    ? allData.filter(s =>
+                        s.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    : allData;
+    
+                setStudents(filtered);
+                setNotFound(filtered.length === 0);
+            } catch (err) {
+                console.error("Error al obtener estudiantes:", err);//arreglar
+                setNotFound(true);
+            } finally {
+                setLogin(false);
+            }
+        });
+    
+        return () => unsubscribe();
     };
 
     const handleSelectionChange = (id: string, date: string, value: Attendance) => {
@@ -221,16 +240,13 @@ const TableAttendance = (props: TableProps) => {
                 <input
                     type="text"
                     placeholder="Buscar estudiante"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
                 <button
                     className={tables.tableButton}
-                    onClick={() => {
-                        setSearchTerm(searchValue);
-                        fetchStudents();
-                    }}
+                    onClick={handleSearch}
                 >
                     Buscar
                 </button>

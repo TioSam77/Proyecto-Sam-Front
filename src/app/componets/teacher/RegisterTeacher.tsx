@@ -84,7 +84,6 @@ const RegisterTeacher = () => {
             }
 
             const userData = {
-                uid: user.uid,
                 email: user.email,
                 name: name,
                 surname: surname,
