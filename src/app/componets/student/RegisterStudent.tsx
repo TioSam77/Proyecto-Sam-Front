@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "../countries.json";
-import { auth,db } from "@/../firebase/clientApp";
+import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from "firebase/firestore";
 
@@ -34,7 +34,7 @@ const RegisterStudent = () => {
 
         switch (errorCode) {
             case "auth/email-already-in-use":
-                setError("Ese correo ya está registrado. Intenta iniciar sesión.");
+                setError("Ese correo ya está registrado.");
                 break;
             case "auth/invalid-email":
                 setError("Ese correo es inválido.");
@@ -87,38 +87,46 @@ const RegisterStudent = () => {
             return;
         }
 
+        setLoading(true);
+
         try {
-            setLoading(true);
-            createUserWithEmailAndPassword(email, password)
-            .then((userCredential)=>{
-                const user = userCredential?.user
+            const userCredential = await createUserWithEmailAndPassword(email, password);
+            const user = userCredential?.user;
 
-                if (!user?.uid) {
-                    throw new Error("No se pudo obtener el UID del usuario.");
-                }
+            if (!user?.uid) {
+                setError("No se pudo crear el usuario.");
+                return;
+            }
 
-                const userData = {
-                    email:email,
-                    name:name,
-                    surname:surname,
-                    phoneNumber:phoneNumber,
-                    teacherNote:teacherNote,
-                    heardFrom:heardFrom
-                }
-                
-                const docRef = doc(db,"student",user.uid);
-                setDoc(docRef,userData)
-                .then(()=>{
-                    setEmail('')
-                })
-            })
+            const userData = {
+                email,
+                name,
+                surname,
+                phoneNumber,
+                teacherNote,
+                heardFrom
+            };
+
+            const docRef = doc(db, "student", user.uid);
+            await setDoc(docRef, userData);
+
             setAlert("Alumno registrado exitosamente.");
+            setEmail("");
+            setName("");
+            setSurname("");
+            setPhoneNumber("");
+            setPassword("");
+            setConfirmPassword("");
+            setTeacherNote("");
+            setHeardFrom("");
+
         } catch (err: any) {
-            setError(err.message);
+            setError(err.message)
         } finally {
             setLoading(false);
         }
     };
+
 
     // Buscar el código de país seleccionado
     const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);

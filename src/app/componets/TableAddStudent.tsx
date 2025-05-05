@@ -103,6 +103,7 @@ const TableAddStudent = () => {
     
             // Registrar la relación
             await addDoc(collection(db, "student_course"), {
+                name:student.name,
                 student_id: student.id,
                 course_id: courseId,
             });

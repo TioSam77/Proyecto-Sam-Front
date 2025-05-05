@@ -117,7 +117,6 @@ const TableStudent = () => {
                             <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Mensualidad</th>
-
                         </tr>
                     </thead>
                     <tbody>
