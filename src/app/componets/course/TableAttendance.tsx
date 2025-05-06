@@ -123,10 +123,15 @@ const TableAttendance = (props: TableProps) => {
                 );
     
                 const querySnapshot = await getDocs(q);
-                const allData = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })) as Student[];
+                const allData = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: data.student_id,
+                        name: data.name,
+                        attendance: data.attendance || {},
+                    } as Student;
+                });
+                
     
                 // Filtramos por nombre en el frontend
                 const filtered = searchTerm

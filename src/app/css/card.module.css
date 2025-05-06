@@ -73,10 +73,16 @@
 
 @media(max-width: 767px) {
 
+    .containerCard {
+        grid-template-columns: repeat(auto-fit,minmax(11rem,1fr));
+        margin: 0px;
+        gap: 5px;
+    }
+
     .card {
-        width: 100%;
-        height: 5rem;
-        margin: 5px;
+        width: 11rem;
+        height: 3rem;
+        margin: 0;
         padding: 5px;
         align-items: start;
         transition: justify-content 0.5s ease;
@@ -88,7 +94,7 @@
 
     .card::before {
         width: 100%;
-        height: 50%;
+        height: 100%;
     }
 
     .card i {

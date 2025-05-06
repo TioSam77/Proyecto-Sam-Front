@@ -145,30 +145,27 @@ const CreateCourse = () => {
             const courseId = courseRef.id;
 
             // 2. Recorrer días seleccionados con horario
-            for (const [day, { start, end }] of Object.entries(availability)) {
-                if (!start || !end) continue;
+            const dayIndexMap: Record<Day, number> = {
+                Lunes: 1,
+                Martes: 2,
+                Miércoles: 3,
+                Jueves: 4,
+                Viernes: 5,
+                Sábado: 6,
+            };
 
-                // Mapea día a índice (0=Lunes ... 6=Domingo)
-                const dayIndexMap: Record<string, number> = {
-                    Domingo: 0,
-                    Lunes: 1,
-                    Martes: 2,
-                    Miércoles: 3,
-                    Jueves: 4,
-                    Viernes: 5,
-                    Sábado: 6,
-                };
+            let currentDate = new Date(parsedStartDate);
 
+            while (currentDate <= parsedEndDate) {
+                const currentDayIndex = currentDate.getDay(); // 0 = Domingo, 1 = Lunes, ...
 
-                const targetDay = dayIndexMap[day];
+                // Buscar si el día actual tiene horario configurado
+                const matchingDay = Object.entries(dayIndexMap).find(
+                    ([, index]) => index === currentDayIndex
+                )?.[0] as Day | undefined;
 
-                // 3. Generar las fechas para ese día entre el rango
-                const currentDate = new Date(parsedStartDate);
-
-                while (currentDate <= parsedEndDate) {
-                    const dayName = diasSemana[currentDate.getDay() - 1]; // porque Lunes = 1
-                    const horario = availability[dayName as Day];
-
+                if (matchingDay) {
+                    const horario = availability[matchingDay];
                     if (horario?.start && horario?.end) {
                         await addDoc(collection(db, "course_schedule"), {
                             course_id: courseId,
@@ -177,12 +174,11 @@ const CreateCourse = () => {
                             exit_time: horario.end,
                         });
                     }
-
-                    currentDate.setDate(currentDate.getDate() + 1);
                 }
 
-
+                currentDate.setDate(currentDate.getDate() + 1);
             }
+
 
             alert("Curso y horarios creados correctamente.");
         } catch (error) {

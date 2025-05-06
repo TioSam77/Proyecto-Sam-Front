@@ -13,9 +13,10 @@ const ViewGroup = () => {
 
     const pathname = usePathname();
     const isAdmin = pathname.includes("/Administrador")
+    const isTeacher = pathname.includes("/Profesor")
     const segments = pathname.split('/');
-    let courseId:string = ""
-    isAdmin ? courseId =segments[3]: courseId=segments[2]
+    let courseId: string = ""
+    isAdmin ? courseId = segments[3] : courseId = segments[2]
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -51,13 +52,19 @@ const ViewGroup = () => {
             <section className={styleCourse.viewHeader}>
                 <div className={styleCourse.header}>
                     <div className={styleCourse.image}></div>
-                    <h1 className={styleCourse.textHeader}>{courseData?.name || "Login"}</h1>
-                    <h4 className={styleCourse.textSubject}>{courseData?.subject_name || "Login"}</h4>
+                    <h1 className={styleCourse.textHeader}>{courseData?.name || ""}</h1>
+                    <h4 className={styleCourse.textSubject}>{courseData?.subject_name || ""}</h4>
                 </div>
             </section>
             <div className={styles.card}>
-                <p className={styles.teacher}>Profesor: {courseData?.teacher_name || "Login"}</p>
+                {isTeacher ?
+                    <p className={styles.welcome}>Bienvenido:</p>
+
+                    :
+                    <p className={styles.welcome}>Profesor:</p>
+                }
                 <div className={styles.flexrow}>
+                    <p className={styles.teacher}>{courseData?.teacher_name || ""}</p>
                     <div></div>
                     {(!isAdmin) ?
                         <button className='bluebutton'>Abrir temario</button>

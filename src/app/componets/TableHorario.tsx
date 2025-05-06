@@ -1,21 +1,49 @@
 'use client'
 import { useRef, useState, useEffect } from "react";
 import tables from "../css/Table.module.css";
+import { usePathname } from "next/navigation";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebase/clientApp";
 
 const TableHorario = () => {
   const tableRef = useRef<HTMLTableElement | null>(null);
   const [celdasOcupadas, setCeldasOcupadas] = useState(new Set<string>());
   const [diasSemana, setDiasSemana] = useState<string[]>([]);
+  const [horario, setHorario] = useState<any[]>([]);
 
-  const horario = [
-    { horaInicio: "7:00", horaFin: "9:00", dia: "2025-04-28", clase: "Matemáticas aplicadas y computacion" },
-    { horaInicio: "7:00", horaFin: "9:00", dia: "2025-04-29", clase: "Inglés avanzado" },
-    { horaInicio: "9:00", horaFin: "10:00", dia: "2025-04-30", clase: "Proba" },
-    { horaInicio: "9:00", horaFin: "11:00", dia: "2025-05-01", clase: "Historia" },
-    { horaInicio: "11:00", horaFin: "13:00", dia: "2025-05-02", clase: "Física" },
-    { horaInicio: "15:00", horaFin: "17:00", dia: "2025-05-03", clase: "Química" },
-    { horaInicio: "12:00", horaFin: "13:00", dia: "2025-05-04", clase: "Procesos" },
-  ];
+  const pathname = usePathname();
+  const isAdmin = pathname.includes("/Administrador")
+  const segments = pathname.split('/');
+  let courseId: string = ""
+  isAdmin ? courseId = segments[3] : courseId = segments[2]
+  
+  useEffect(() => {
+    const obtenerFechas = async () => {
+      const q = query(
+        collection(db, "asistencias"), // o el nombre que tengas para esa colección
+        where("course_id", "==", courseId),
+      );
+  
+      const snapshot = await getDocs(q);
+  
+      const datos = snapshot.docs.map(doc => {
+        const data = doc.data();
+        const fecha = data.date.toDate(); // convierte Timestamp a Date
+  
+        return {
+          dia: fecha.toISOString().split("T")[0], // YYYY-MM-DD
+          horaInicio: data.entry_time,
+          horaFin: data.exit_time,
+          clase: data.name,
+        };
+      });
+  
+      setHorario(datos);
+    };
+  
+    obtenerFechas();
+  }, [courseId]);
+  
 
   const horas = Array.from({ length: 15 }, (_, i) => `${7 + i}:00`);
 

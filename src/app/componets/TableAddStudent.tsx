@@ -100,14 +100,14 @@ const TableAddStudent = () => {
                 alert("El estudiante ya está registrado en este curso.");
                 return;
             }
-    
+            
             // Registrar la relación
             await addDoc(collection(db, "student_course"), {
                 name:student.name,
                 student_id: student.id,
                 course_id: courseId,
             });
-    
+            
             alert(`Estudiante ${student.name} registrado correctamente.`);
         } catch (error) {
             console.error("Error al registrar estudiante:", error);

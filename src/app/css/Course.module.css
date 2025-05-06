@@ -117,6 +117,10 @@
 
 @media(max-width:647px) {
 
+    .viewHeader {
+        height: 7rem;
+    }
+
     .subjects {
         background-color: white;
         width: 100%;

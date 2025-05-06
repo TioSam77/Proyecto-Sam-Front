@@ -23,7 +23,6 @@ export default function RootLayout({
                     <LinkCard name="Estudiantes" url={`/Profesor/${curseId}/Estudiantes`} icon="bi bi-person-check" />
                     <LinkCard name="Asistencia" url={`/Profesor/${curseId}/Asistencia`} icon="bi bi-person-check" />
                     <LinkCard name="Calificaciones" url={`/Profesor/${curseId}/Calificaciones`} icon="bi bi-award-fill" />
-                    <LinkCard name="Temario" url={`/Profesor/${curseId}/Temario`} icon="bi bi-journal-text" />
                 </div>
             </section>
             {children}
