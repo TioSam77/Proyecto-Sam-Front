@@ -34,7 +34,7 @@
     left: 0;
     width: 100%;
     height: 20%;
-    background: linear-gradient(to right, #0547ff, #6698e9);
+    background: linear-gradient(to right, #2c64fd, #82b2ff);
     border-radius: 4px 4px 0 0;
     transition: height 0.3s ease;
     z-index: 1;
@@ -80,7 +80,7 @@
     }
 
     .card {
-        width: 11rem;
+        width: 100%;
         height: 3rem;
         margin: 0;
         padding: 5px;

@@ -90,11 +90,10 @@
 }
 
 .viewHeader {
-    border-radius: 4px;
+    border-radius: 4px 4px 0 0;
     width: 100%;
     height: 8rem;
     overflow: hidden;
-    border: 1px solid #cfcfcf;
 }
 
 .containerButton {
