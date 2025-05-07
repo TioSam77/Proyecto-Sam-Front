@@ -135,19 +135,41 @@ hr {
     transition: background-color 0.3s, transform 0.3s;
 }
 
-.redbutton{
+.redbutton {
     background-color: rgb(205, 75, 75);
 }
 
 .bluebutton {
-    background-color:rgb(70, 153, 237);
+    background-color: rgb(70, 153, 237);
 }
 
-.redbutton:hover{
+.redbutton:hover {
     background-color: rgb(180, 74, 74);
     transform: translateY(-2px);
 }
+
 .bluebutton:hover {
-    background-color:rgb(70, 143, 222);
+    background-color: rgb(70, 143, 222);
     transform: translateY(-2px);
+}
+
+.toggle-button {
+    font-weight: bold;
+    padding: 6px 12px;
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.toggle-button:hover {
+    background-color: #e6f0ff;
+}
+
+.toggle-button.active {
+    border: 1px solid #ff3d3d;
+    background-color: #ffffff;
+    color: #ff3d3d;
 }

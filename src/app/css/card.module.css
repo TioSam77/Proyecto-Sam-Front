@@ -103,14 +103,12 @@
         position: absolute;
         font-size: 200%;
         margin-top: 0px;
-        transition: margin 0.3s ease, color 0.3s ease;
+        transition: color 0.3s ease;
         text-align: start;
     }
 
     .card:hover i {
-        transform: scale(1.8);
         color: rgb(255, 255, 255);
-        margin: 16px 10px 0 0;
     }
 
     .card:hover::before {

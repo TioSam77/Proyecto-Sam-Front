@@ -11,6 +11,7 @@ interface Student {
     id: string;
     name: string;
     active: boolean;
+    montlyPayment: boolean;
 }
 
 const TableStudent = () => {
@@ -85,7 +86,7 @@ const TableStudent = () => {
                     : query(
                         collection(db, "student_course"),
                         where("course_id", "==", courseId),
-                        );
+                    );
 
                 const querySnapshot = await getDocs(q);
                 const allData = querySnapshot.docs.map(doc => ({
@@ -127,6 +128,10 @@ const TableStudent = () => {
                     <thead>
                         <tr className={tables.fixedRow}>
                             <th className={tables.fixedColRow}>Nombre</th>
+                            <th>Monto</th>
+                            <th>Beca</th>
+                            <th>Ultimo dia de pago</th>
+                            <th>Total</th>
                             <th>Mensualidad</th>
                         </tr>
                     </thead>
@@ -149,6 +154,15 @@ const TableStudent = () => {
                                         {row.name}
                                     </td>
                                     <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        {!row.montlyPayment && "No pagada"}
                                     </td>
                                 </tr>
                             ))

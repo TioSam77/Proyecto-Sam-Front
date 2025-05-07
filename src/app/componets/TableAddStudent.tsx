@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, limit, where, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, query, limit, where, addDoc, setDoc, doc, deleteDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
 import { usePathname } from "next/navigation";
 
@@ -20,6 +20,9 @@ const TableAddStudent = () => {
     const [notFound, setNotFound] = useState(false);
 
     const pathname = usePathname();
+
+    const pathParts = pathname.split("/");
+    const courseId = pathParts[3];
 
     useEffect(() => {
         handleSearch();
@@ -44,13 +47,32 @@ const TableAddStudent = () => {
                     : query(collection(db, "student"), limit(10));
 
                 const querySnapshot = await getDocs(q);
-                const allData = querySnapshot.docs.map(doc => ({
+                const students = querySnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 })) as Student[];
 
-                setData(allData);
-                setNotFound(allData.length === 0);
+                // Verificar si cada estudiante está registrado en el curso
+                const studentsWithStatus = await Promise.all(
+                    students.map(async (student) => {
+                        const relQuery = query(
+                            collection(db, "student_course"),
+                            where("student_id", "==", student.id),
+                            where("course_id", "==", courseId)
+                        );
+
+                        const relSnapshot = await getDocs(relQuery);
+                        const isRegistered = !relSnapshot.empty;
+
+                        return {
+                            ...student,
+                            active: isRegistered, // Esto activa el toggle visual
+                        };
+                    })
+                );
+
+                setData(studentsWithStatus);
+                setNotFound(studentsWithStatus.length === 0);
             } catch (err) {
                 console.error("Error al obtener estudiantes:", err);
                 setNotFound(true);
@@ -62,10 +84,8 @@ const TableAddStudent = () => {
         return () => unsubscribe();
     };
 
+
     const handleRegister = async (student: Student) => {
-        const pathParts = pathname.split("/");
-        const courseId = pathParts[pathParts.length - 2]; // Penúltimo segmento de la URL
-    
         try {
             // Verificar si el curso existe
             const courseRef = query(
@@ -77,7 +97,7 @@ const TableAddStudent = () => {
                 alert("El curso no existe.");
                 return;
             }
-    
+
             // Verificar si el estudiante existe
             const studentRef = query(
                 collection(db, "student"),
@@ -88,19 +108,7 @@ const TableAddStudent = () => {
                 alert("El estudiante no existe.");
                 return;
             }
-    
-            // Verificar si ya existe la relación
-            const relationRef = query(
-                collection(db, "student_course"),
-                where("student_id", "==", student.id),
-                where("course_id", "==", courseId)
-            );
-            const relationSnap = await getDocs(relationRef);
-            if (!relationSnap.empty) {
-                alert("El estudiante ya está registrado en este curso.");
-                return;
-            }
-            
+
             // Registrar la relación
             const customId = `${student.id}_${courseId}`;
             await setDoc(doc(db, "student_course", customId), {
@@ -108,15 +116,43 @@ const TableAddStudent = () => {
                 student_id: student.id,
                 course_id: courseId,
             });
-            
+
             alert(`Estudiante ${student.name} registrado correctamente.`);
         } catch (error) {
             console.error("Error al registrar estudiante:", error);
             alert("Ocurrió un error al registrar al estudiante.");
         }
     };
-    
 
+    const handleRemove = async (student: Student) => {
+        try {
+            const relationRef = query(
+                collection(db, "student_course"),
+                where("student_id", "==", student.id),
+                where("course_id", "==", courseId)
+            );
+            const relationSnap = await getDocs(relationRef);
+
+            if (relationSnap.empty) {
+                alert("El estudiante no está registrado en este curso.");
+                return;
+            }
+
+            const batchDelete = relationSnap.docs.map(docRef => deleteDoc(doc(db, "student_course", docRef.id)));
+            await Promise.all(batchDelete);
+
+            alert(`Estudiante ${student.name} fue retirado del curso.`);
+
+            setData(prev =>
+                prev.map(s =>
+                    s.id === student.id ? { ...s, active: false } : s
+                )
+            );
+        } catch (error) {
+            console.error("Error al sacar al estudiante:", error);
+            alert("Ocurrió un error al retirar al estudiante del curso.");
+        }
+    };
 
     return (
         <section className={tables.TableContainer}>
@@ -160,15 +196,12 @@ const TableAddStudent = () => {
                                         {row.name}
                                     </td>
                                     <td>
-                                        {row.active ? (
-                                            <button className="redbutton" disabled>
-                                                Registrado
-                                            </button>
-                                        ) : (
-                                            <button onClick={() => handleRegister(row)} className="bluebutton">
-                                                Registrar
-                                            </button>
-                                        )}
+                                        <button
+                                            onClick={() => row.active ? handleRemove(row) : handleRegister(row)}
+                                            className={row.active ? "toggle-button active" : "toggle-button"}
+                                        >
+                                            {row.active ? "Eliminar" : "Inscribir"}
+                                        </button>
 
                                     </td>
                                 </tr>
