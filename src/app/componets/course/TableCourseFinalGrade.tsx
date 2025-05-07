@@ -131,7 +131,6 @@ const TableCourseFinalGrade = (props: TableProps) => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
-                            <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Calificación
                                 {!isStudent && (
@@ -159,7 +158,6 @@ const TableCourseFinalGrade = (props: TableProps) => {
                         ) : (
                             students.map((row, index) => (
                                 <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
-                                    <td>{row.id}</td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                         {row.name}
                                     </td>

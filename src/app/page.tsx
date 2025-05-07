@@ -12,9 +12,7 @@ export default function Page() {
         <Header />
         <h1>Horario de clases</h1>
         <CustomCalendar />
-        <TableHorario />
       </section>
-
     </>
   );
 }

@@ -80,7 +80,8 @@ const RegisterTeacher = () => {
             const user = usercredential?.user
 
             if (!user?.uid) {
-                throw new Error("No se pudo obtener el UID del usuario.");
+                setError("No se pudo crear el usuario.");
+                return;
             }
 
             const userData = {

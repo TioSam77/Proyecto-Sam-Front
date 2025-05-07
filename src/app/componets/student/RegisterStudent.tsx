@@ -102,7 +102,7 @@ const RegisterStudent = () => {
                 email,
                 name,
                 surname,
-                phoneNumber,
+                phoneNumber: `${countryCode} ${phoneNumber}`,
                 teacherNote,
                 heardFrom
             };

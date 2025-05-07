@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, limit, where, addDoc } from "firebase/firestore";
+import { collection, getDocs, query, limit, where, addDoc, setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
 import { usePathname } from "next/navigation";
 
@@ -102,8 +102,9 @@ const TableAddStudent = () => {
             }
             
             // Registrar la relación
-            await addDoc(collection(db, "student_course"), {
-                name:student.name,
+            const customId = `${student.id}_${courseId}`;
+            await setDoc(doc(db, "student_course", customId), {
+                name: student.name,
                 student_id: student.id,
                 course_id: courseId,
             });
@@ -136,7 +137,6 @@ const TableAddStudent = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
-                            <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Curso actual</th>
                         </tr>
@@ -156,7 +156,6 @@ const TableAddStudent = () => {
                                     key={row.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
-                                    <td>{row.id}</td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                         {row.name}
                                     </td>

@@ -348,7 +348,7 @@ const CreateCourse = () => {
                     </div>
                     <button
                         className={create.button}
-                        type="submit">
+                        >
                         Crear Grupo
                     </button>
                 </form>

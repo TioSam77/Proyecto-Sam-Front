@@ -1,13 +1,13 @@
-'use client'
+'use client';
 import MapCourse from "@/app/componets/course/MapCourse";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, getDocs, limit, query } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
 
 export default function Page() {
     const [data, setData] = useState<any[]>([]);
-    const [login, setLogin] = useState<boolean>(false)
+    const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
@@ -17,20 +17,38 @@ export default function Page() {
                 return;
             }
 
+            setLogin(true);
             try {
-                setLogin(true);
-                const q = query(collection(db, "course"));
-                const querySnapshot = await getDocs(q);
+                // Paso 1: obtener las relaciones student_course del alumno actual
+                const relQuery = query(
+                    collection(db, "student_course"),
+                    where("student_id", "==", user.uid)
+                );
+                const relSnap = await getDocs(relQuery);
 
-                const allData = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+                const courseIds = relSnap.docs.map((doc) => doc.data().course_id);
 
-                setData(allData);
-                setNotFound(allData.length === 0);
+                if (courseIds.length === 0) {
+                    setData([]);
+                    setNotFound(true);
+                    return;
+                }
+
+                // Paso 2: obtener los cursos con esos IDs
+                const coursesPromises = courseIds.map(async (id) => {
+                    const courseDoc = await getDoc(doc(db, "course", id));
+                    if (courseDoc.exists()) {
+                        return { id: courseDoc.id, ...courseDoc.data() };
+                    }
+                    return null;
+                });
+
+                const courses = (await Promise.all(coursesPromises)).filter(Boolean);
+
+                setData(courses);
+                setNotFound(courses.length === 0);
             } catch (err) {
-                console.error("Error al obtener cursos:", err);
+                console.error("Error al obtener cursos inscritos:", err);
                 setNotFound(true);
             } finally {
                 setLogin(false);
@@ -39,7 +57,6 @@ export default function Page() {
 
         return () => unsubscribe();
     }, []);
-    return (
-        <MapCourse data={data} login={login} notFound={notFound} />
-    )
+
+    return <MapCourse data={data} login={login} notFound={notFound} />;
 }

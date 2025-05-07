@@ -126,7 +126,6 @@ const TableStudent = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
-                            <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Mensualidad</th>
                         </tr>
@@ -146,7 +145,6 @@ const TableStudent = () => {
                                     key={row.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
-                                    <td>{row.id}</td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                         {row.name}
                                     </td>

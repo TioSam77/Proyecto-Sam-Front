@@ -3,7 +3,7 @@ import LinkCard from "@/app/componets/LinkCard";
 import ViewGroup from "@/app/componets/course/ViewGroup";
 import React from "react";
 import course from "../../css/Course.module.css"
-import card from "@/app/css/card.module.css"
+
 import { usePathname } from "next/navigation";
 
 export default function RootLayout({
@@ -19,8 +19,8 @@ export default function RootLayout({
             <ViewGroup />
 
             <section className={course.center}>
-                <div className={card.containerCard}>
-                    <LinkCard name="Estudiantes" url={`/Profesor/${curseId}/Estudiantes`} icon="bi bi-person-check" />
+                <div className={course.containerCards}>
+                    <LinkCard name="Estudiantes" url={`/Profesor/${curseId}/Estudiantes`} icon="bi bi-backpack" />
                     <LinkCard name="Asistencia" url={`/Profesor/${curseId}/Asistencia`} icon="bi bi-person-check" />
                     <LinkCard name="Calificaciones" url={`/Profesor/${curseId}/Calificaciones`} icon="bi bi-award-fill" />
                 </div>

@@ -37,7 +37,7 @@ const TableAttendance = (props: TableProps) => {
     const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});
     const [confirmedDatesStudent, setConfirmedDatesStudent] = useState<string[]>([]);
     const [students, setStudents] = useState<Student[]>([]);
-    
+
     const pathname = usePathname();
     const isStudent = pathname.includes("/Alumno");
     const pathParts = pathname.split("/");
@@ -114,32 +114,28 @@ const TableAttendance = (props: TableProps) => {
                 setLogin(false);
                 return;
             }
-    
+
             try {
                 // Solo usamos el filtro de course_id en Firestore
                 const q = query(
                     collection(db, "student_course"),
                     where("course_id", "==", courseId),
                 );
-    
+
                 const querySnapshot = await getDocs(q);
-                const allData = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return {
-                        id: data.student_id,
-                        name: data.name,
-                        attendance: data.attendance || {},
-                    } as Student;
-                });
-                
-    
+                const allData = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                })) as Student[];
+
+
                 // Filtramos por nombre en el frontend
                 const filtered = searchTerm
                     ? allData.filter(s =>
                         s.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     : allData;
-    
+
                 setStudents(filtered);
                 setNotFound(filtered.length === 0);
             } catch (err) {
@@ -149,7 +145,7 @@ const TableAttendance = (props: TableProps) => {
                 setLogin(false);
             }
         });
-    
+
         return () => unsubscribe();
     };
 
@@ -181,26 +177,16 @@ const TableAttendance = (props: TableProps) => {
                 const attendanceValue = student.attendance[date] ?? null;
                 if (!attendanceValue) return;
 
-                const q = query(
-                    collection(db, "student_course"),
-                    where("course_id", "==", courseId),
-                    where("student_id", "==", student.id)
-                );
-
-                const snapshot = await getDocs(q);
-                if (!snapshot.empty) {
-                    const docRef = snapshot.docs[0].ref;
-
-                    await setDoc(
-                        docRef,
-                        {
-                            attendance: {
-                                [date]: attendanceValue,
-                            },
+                const docRef = doc(db, "student_course", student.id);
+                await setDoc(
+                    docRef,
+                    {
+                        attendance: {
+                            [date]: attendanceValue,
                         },
-                        { merge: true }
-                    );
-                }
+                    },
+                    { merge: true }
+                );
             });
 
             // Paso 2: Actualiza el documento correspondiente en course_schedule
@@ -261,7 +247,6 @@ const TableAttendance = (props: TableProps) => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
-                            <th>Código</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             {scheduleData.map((s) => {
                                 const date = s.date;
@@ -298,7 +283,6 @@ const TableAttendance = (props: TableProps) => {
                                     key={student.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
-                                    <td>{student.id}</td>
                                     <td
                                         className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]
                                             }`}

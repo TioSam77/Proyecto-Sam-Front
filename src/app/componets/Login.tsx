@@ -2,10 +2,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "../css/Login.module.css";
 
-
 import { sendEmailVerification } from "firebase/auth";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth, db} from "@/../firebase/clientApp"
+import { auth, db } from "@/../firebase/clientApp"
 import { useRouter } from "next/navigation";
 import { getDoc, doc } from "firebase/firestore";
 import { setCookie } from 'cookies-next';
@@ -27,7 +26,7 @@ const Login: React.FC<LoginProps> = ({
 
   const [
     signInWithEmailAndPassword,
-    firebaseUser,
+    firebaseAuthUser,
     loadingfirebase,
     firebaseError
   ] = useSignInWithEmailAndPassword(auth);
@@ -64,6 +63,49 @@ const Login: React.FC<LoginProps> = ({
   }, [firebaseError]);
 
   useEffect(() => {
+    const checkLogin = async () => {
+      if (!firebaseAuthUser || !firebaseAuthUser.user) return;
+
+      let roleCollection = "";
+      let redirectPath = "";
+  
+      switch (userType) {
+        case "Alumno":
+          roleCollection = "student";
+          redirectPath = "/Alumno";
+          break;
+        case "Profesor":
+          roleCollection = "teacher";
+          redirectPath = "/Profesor";
+          break;
+        case "Administrador":
+          roleCollection = "admin";
+          redirectPath = "/Administrador";
+          break;
+        default:
+          setError("Rol no válido.");
+          return;
+      }
+  
+      const uid = firebaseAuthUser.user.uid;
+      console.log(uid)
+      const docRef = doc(db, roleCollection, uid);
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        const idToken = await firebaseAuthUser.user.getIdToken();
+        setCookie("token", idToken);
+  
+        router.push(redirectPath);
+      } else {
+        setError("Credenciales incorrectas o error en la autenticación.");
+      }
+    };
+  
+    checkLogin();
+  }, [firebaseAuthUser]);  
+
+  useEffect(() => {
     if (!error) return;
     const timeout = setTimeout(() => setError(""), 5000);
     return () => clearTimeout(timeout);
@@ -78,61 +120,16 @@ const Login: React.FC<LoginProps> = ({
   const router = useRouter()
 
   const handleSignIn = async () => {
-    try {
-      {
-      // if (!user.emailVerified) {
-      //   await sendEmailVerification(user);
-      //   setAlert("Tu correo no está verificado. Te enviamos un correo de verificación.");
-      //   return;
-      // }
-      }
 
-      let redirectPath = "";
-      let roleCollection = "";
-      
-      switch (userType) {
-        case "Alumno":
-          roleCollection = "student";
-          redirectPath = "/Alumno";
-          break;
-          case "Profesor":
-            roleCollection = "teacher";
-            redirectPath = "/Profesor";
-            break;
-            case "Administrador":
-              roleCollection = "admin";
-              redirectPath = "/Administrador";
-              break;
-              default:
-                setError("Rol no válido.");
-          return;
-      }
-      const userCredential = await signInWithEmailAndPassword(email, password);
-      const user = userCredential?.user;
-      
-      if (!user) return;
-      
-      const uid = user.uid;
-      
-      const docRef = doc(db, roleCollection, uid);
-      const docSnap = await getDoc(docRef);
-      
-      
-      if (docSnap.exists()) {
-        const idToken = await user.getIdToken(); // 👈 Aquí obtenemos el token real
-        setCookie('token', idToken);
-
-        setEmail("");
-        setPassword("");
-        router.push(redirectPath);
-      } else {
-        setError("Credenciales incorrectas o error en la autenticación.");
-      }
-    } catch (err: any) {
-      setError("Credenciales incorrectas o error en la autenticación.");
+    if (!email || !password) {
+      setError("Por favor ingresa tu correo y contraseña.");
+      return;
     }
-  };
 
+    setError(""); // limpiar error anterior
+    setAlert("");
+    await signInWithEmailAndPassword(email, password);
+  };
 
   return (
     <div className={styles.loginContainer}>
@@ -174,8 +171,12 @@ const Login: React.FC<LoginProps> = ({
             onChange={e => setPassword(e.target.value)}
           />
 
-          <button className={styles.blueButton} onClick={handleSignIn}>
-            Acceder
+          <button
+            className={styles.blueButton}
+            onClick={handleSignIn}
+            disabled={loadingfirebase}
+          >
+            {loadingfirebase ? "Cargando..." : "Acceder"}
           </button>
 
           <p className={styles.forgotPassword}>
@@ -184,7 +185,7 @@ const Login: React.FC<LoginProps> = ({
           </p>
           <p className={styles.register}>
             ¿No tienes cuenta?
-            <a href="/Registro" className={styles.registerLink}>Regístrate</a>
+            <a href="/" className={styles.registerLink}>Solicita el registro de tu cuenta</a>
           </p>
         </div>
       </div>
@@ -192,6 +193,8 @@ const Login: React.FC<LoginProps> = ({
       <div className={styles.messageContainer}>
         {error && <div className={styles.errorBox}>{error}</div>}
         {alert && <div className={styles.alertBox}>{alert}</div>}
+        {loadingfirebase && <div className={styles.loading}>Loaging</div>}
+
       </div>
 
     </div>
