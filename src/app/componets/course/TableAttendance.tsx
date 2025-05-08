@@ -88,7 +88,6 @@ const TableAttendance = (props: TableProps) => {
 
                 setConfirmedDates(datesMap);
 
-
                 const dateKeys = schedule.map((s) => s.date);
                 setConfirmedDatesStudent(dateKeys);
 
@@ -238,15 +237,20 @@ const TableAttendance = (props: TableProps) => {
                         <tr className={tables.fixedRow}>
                             <th className={tables.fixedColRow}>Nombre</th>
                             {scheduleData.map((s) => {
-                                const date = s.date;
+                                const [year, month, day] = s.date.split("-").map(Number);
+                                const dateObj = new Date(year, month - 1, day);
+                                const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+                                const dayName = dayNames[dateObj.getDay()];
+
                                 return (
-                                    <th key={date}>
-                                        {date.split('-').reverse().join('/')}
-                                        {!isStudent && !confirmedDates[date] && (
+                                    <th key={s.date}>
+                                        <div>{dayName}</div>
+                                        {s.date.split('-').reverse().join('/')}
+                                        {!isStudent && !confirmedDates[s.date] && (
                                             <div style={{ display: "flex", justifyContent: "center" }}>
                                                 <button
                                                     className={tables.tableButton}
-                                                    onClick={() => confirmColumn(date)}
+                                                    onClick={() => confirmColumn(s.date)}
                                                 >
                                                     Confirmar
                                                 </button>

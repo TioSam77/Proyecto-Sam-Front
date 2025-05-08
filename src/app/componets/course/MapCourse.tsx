@@ -88,14 +88,18 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                {isAdmin && (
-                    <Link href={`${currentPath}/Registro`}>
-                        <button className={styleUser.button}>Nuevo Grupo</button>
-                    </Link>
-                )}
-                {isStudent && (
-                    <button className={styleUser.button}>+</button>
-                )}
+                {!isStudent ? (
+                    isAdmin && (
+                        <Link href={`${currentPath}/Registro`}>
+                            <button className={styleUser.button}>Nuevo Grupo</button>
+                        </Link>
+                    )
+                ) : (
+                    !isAdmin && (
+                        <button className={styleUser.button}>+</button>
+                    )
+                )
+                }
             </div>
             <ol className={styleCourse.containerSubjects}>
                 {login ? (

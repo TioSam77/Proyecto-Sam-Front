@@ -6,10 +6,9 @@ export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <>
-            <ReturnButton />
+        <section className="containerSection">
             <HeaderProfesor />
             {children}
-        </>
+        </section>
     )
 }

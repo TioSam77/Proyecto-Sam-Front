@@ -93,7 +93,7 @@ const MapStudent = () => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                <Link href={`${currentPath}/Registro`}>
+                <Link href={`/Administrador/Alumnos/Registro`}>
                     <button className={styleUser.button}>Nuevo Alumno</button>
                 </Link>
             </div>
@@ -105,18 +105,14 @@ const MapStudent = () => {
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
                     <li key={user.id} className={styleUser.users}>
-                        <div className={styleUser.header}>
-                            <Link href={`${currentPath}/${user.id}`}>
+                        <Link href={`${currentPath}/${user.id}`}>
+                            <div className={styleUser.header}>
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
-                            </Link>
-                        </div>
-                        <div className={styleUser.body}>
-                            <h5>Información sobre {user.name}</h5>
-                        </div>
-
-                        <div className={styleUser.footer}>
-                            <h5>Más detalles</h5>
-                        </div>
+                            </div>
+                            <div className={styleUser.body}>
+                                <h5>Información sobre {user.name}</h5>
+                            </div>
+                        </Link>
 
                         {isAdmin && (
                             <div className={styleUser.containerButton}>

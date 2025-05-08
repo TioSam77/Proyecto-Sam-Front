@@ -84,7 +84,7 @@ const MapTeacher = () => {
             <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
-                    placeholder="Buscar usuario..."
+                    placeholder="Buscar profesor..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
