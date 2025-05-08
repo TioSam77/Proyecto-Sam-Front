@@ -32,7 +32,6 @@ const initialAvailability: Availability = {
 };
 
 const CreateCourse = () => {
-    const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const [availability, setAvailability] = useState<Availability>(initialAvailability);
     const [editingDay, setEditingDay] = useState<Day | null>(null);
     const [startTime, setStartTime] = useState("");
@@ -122,8 +121,6 @@ const CreateCourse = () => {
         e.preventDefault();
 
         try {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
             const parsedStartDate = new Date(startDate);
             const parsedEndDate = new Date(endDate);
             const selectedSubjectObj = subject.find((s) => s.id === selectedSubject);
@@ -138,8 +135,8 @@ const CreateCourse = () => {
                 name: courseName,
                 subject_name: selectedSubjectObj.name,
                 teacher_name: selectedTeacherObj.name,
-                start_date: Timestamp.fromDate(start),
-                end_date: Timestamp.fromDate(end),
+                start_date: startDate,
+                end_date: endDate,
             });
 
             const courseId = courseRef.id;
@@ -157,9 +154,10 @@ const CreateCourse = () => {
             let currentDate = new Date(parsedStartDate);
 
             while (currentDate <= parsedEndDate) {
+                currentDate.setHours(12, 0, 0, 0); // Establece hora para evitar desfaces por zona horaria
+
                 const currentDayIndex = currentDate.getDay(); // 0 = Domingo, 1 = Lunes, ...
 
-                // Buscar si el día actual tiene horario configurado
                 const matchingDay = Object.entries(dayIndexMap).find(
                     ([, index]) => index === currentDayIndex
                 )?.[0] as Day | undefined;
@@ -167,9 +165,11 @@ const CreateCourse = () => {
                 if (matchingDay) {
                     const horario = availability[matchingDay];
                     if (horario?.start && horario?.end) {
+                        const dateString = currentDate.toISOString().slice(0, 10); // "YYYY-MM-DD"
                         await addDoc(collection(db, "course_schedule"), {
+                            name: courseName,
                             course_id: courseId,
-                            date: Timestamp.fromDate(new Date(currentDate)),
+                            date: dateString, // ya es un string, no Date ni Timestamp
                             entry_time: horario.start,
                             exit_time: horario.end,
                         });
@@ -178,6 +178,7 @@ const CreateCourse = () => {
 
                 currentDate.setDate(currentDate.getDate() + 1);
             }
+
 
 
             alert("Curso y horarios creados correctamente.");
@@ -348,7 +349,7 @@ const CreateCourse = () => {
                     </div>
                     <button
                         className={create.button}
-                        >
+                    >
                         Crear Grupo
                     </button>
                 </form>

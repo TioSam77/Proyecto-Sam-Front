@@ -118,6 +118,7 @@ const TableAddStudent = () => {
             });
 
             alert(`Estudiante ${student.name} registrado correctamente.`);
+            handleSearch();
         } catch (error) {
             console.error("Error al registrar estudiante:", error);
             alert("Ocurrió un error al registrar al estudiante.");

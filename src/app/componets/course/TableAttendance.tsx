@@ -9,7 +9,6 @@ import {
     getDocs,
     query,
     where,
-    Timestamp,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../../firebase/clientApp";
@@ -37,6 +36,8 @@ const TableAttendance = (props: TableProps) => {
     const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});
     const [confirmedDatesStudent, setConfirmedDatesStudent] = useState<string[]>([]);
     const [students, setStudents] = useState<Student[]>([]);
+    const [loadingSchedule, setLoadingSchedule] = useState(true);
+    const [loadingStudents, setLoadingStudents] = useState(true);
 
     const pathname = usePathname();
     const isStudent = pathname.includes("/Alumno");
@@ -51,6 +52,7 @@ const TableAttendance = (props: TableProps) => {
             }
 
             try {
+                setLoadingSchedule(true);
                 setLogin(true);
 
                 // Obtener los días del curso
@@ -62,17 +64,12 @@ const TableAttendance = (props: TableProps) => {
                 const schedule = querySnapshot.docs
                     .map((doc) => {
                         const data = doc.data();
-                        const dateObj = (data.date as Timestamp).toDate();
-                        const formatted = dateObj.toLocaleDateString("es-MX", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                        });
+                        const dateObj = data.date;
 
                         return {
                             id: doc.id,
-                            date: formatted,
-                            dateObj,
+                            date: dateObj,
+                            dateObj: dateObj,
                             entry_time: data.entry_time,
                             exit_time: data.exit_time,
                             confirmed: data.confirm === true,
@@ -82,11 +79,12 @@ const TableAttendance = (props: TableProps) => {
 
                 setScheduleData(schedule);
 
-                // Inicializar fechas confirmadas
                 const datesMap: { [key: string]: boolean } = {};
+
                 schedule.forEach((s) => {
                     datesMap[s.date] = s.confirmed;
                 });
+
                 setConfirmedDates(datesMap);
 
 
@@ -98,6 +96,7 @@ const TableAttendance = (props: TableProps) => {
                 console.error("Error al obtener los días del curso:", err);
                 setNotFound(true);
             } finally {
+                setLoadingSchedule(false);
                 setLogin(false);
             }
         });
@@ -107,6 +106,7 @@ const TableAttendance = (props: TableProps) => {
     }, [courseId]);
 
     const handleSearch = () => {
+        setLoadingStudents(true);
         setLogin(true);
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -128,7 +128,6 @@ const TableAttendance = (props: TableProps) => {
                     ...doc.data()
                 })) as Student[];
 
-
                 // Filtramos por nombre en el frontend
                 const filtered = searchTerm
                     ? allData.filter(s =>
@@ -137,11 +136,11 @@ const TableAttendance = (props: TableProps) => {
                     : allData;
 
                 setStudents(filtered);
-                setNotFound(filtered.length === 0);
             } catch (err) {
                 console.error("Error al obtener estudiantes:", err);//arreglar
                 setNotFound(true);
             } finally {
+                setLoadingStudents(false);
                 setLogin(false);
             }
         });
@@ -195,21 +194,11 @@ const TableAttendance = (props: TableProps) => {
                 where("course_id", "==", courseId)
             );
             const querySnapshot = await getDocs(qSchedule);
-
-            // Convertir fecha del string "dd/mm/yyyy" al objeto Date
-            const [day, month, year] = date.split("/").map(Number);
-            const formattedDate = new Date(year, month - 1, day);
-
-            const matchDoc = querySnapshot.docs.find((doc) => {
-                const docDate = (doc.data().date as Timestamp).toDate();
-
-                return (
-                    docDate.getFullYear() === formattedDate.getFullYear() &&
-                    docDate.getMonth() === formattedDate.getMonth() &&
-                    docDate.getDate() === formattedDate.getDate()
-                );
+            const matchDoc = querySnapshot.docs.find((docSnap) => {
+                const data = docSnap.data();
+                const docDate = data.date; // ya es string, no necesitas convertir
+                return docDate === date;
             });
-
 
             if (matchDoc) {
                 await updateDoc(doc(db, "course_schedule", matchDoc.id), {
@@ -223,7 +212,6 @@ const TableAttendance = (props: TableProps) => {
             console.error("Error al confirmar asistencia:", err);
         }
     };
-
 
     return (
         <section className={tables.TableContainer}>
@@ -252,7 +240,7 @@ const TableAttendance = (props: TableProps) => {
                                 const date = s.date;
                                 return (
                                     <th key={date}>
-                                        {date}
+                                        {date.split('-').reverse().join('/')}
                                         {!isStudent && !confirmedDates[date] && (
                                             <div style={{ display: "flex", justifyContent: "center" }}>
                                                 <button
@@ -273,9 +261,13 @@ const TableAttendance = (props: TableProps) => {
                             <tr>
                                 <td colSpan={3}>Cargando...</td>
                             </tr>
-                        ) : notFound ? (
+                        ) : loadingSchedule || loadingStudents ? (
                             <tr>
-                                <td colSpan={3}>Estudiantes no Encontrados</td>
+                                <td colSpan={3}>Cargando...</td>
+                            </tr>
+                        ) : students.length === 0 ? (
+                            <tr>
+                                <td colSpan={3}>Estudiantes no encontrados</td>
                             </tr>
                         ) : (
                             students.map((student, index) => (

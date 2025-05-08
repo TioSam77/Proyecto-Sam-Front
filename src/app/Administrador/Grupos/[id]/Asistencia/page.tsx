@@ -2,6 +2,8 @@
 import style from "@/app/css/Teacher.module.css"
 import styles from "@/app/css/Login.module.css"
 import TableAttendance from "@/app/componets/course/TableAttendance"
+import CreateSchedule from "@/app/componets/CreateSchedule"
+import DeleteSchedule from "@/app/componets/DeleteSchedule"
 
 export default function Page() {
     return (
@@ -16,6 +18,9 @@ export default function Page() {
                 </div>
                 <TableAttendance apiUrl="" />
             </section>
+
+            <CreateSchedule/>
+            <DeleteSchedule/>
         </>
-        )
+    )
 }
