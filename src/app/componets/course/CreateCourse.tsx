@@ -134,7 +134,8 @@ const CreateCourse = () => {
             const courseRef = await addDoc(collection(db, "course"), {
                 name: courseName,
                 subject_name: selectedSubjectObj.name,
-                teacher_name: selectedTeacherObj.name,
+                teacher_name: `${selectedTeacherObj.surname} ${selectedTeacherObj.name}`,
+                teacher_id:selectedTeacher,
                 start_date: startDate,
                 end_date: endDate,
             });

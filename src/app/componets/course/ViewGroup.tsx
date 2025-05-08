@@ -1,3 +1,4 @@
+'use client'
 import styleCourse from "@/app/css/Course.module.css";
 import styles from '@/app/css/infoCourse.module.css';
 import { onAuthStateChanged } from "firebase/auth";

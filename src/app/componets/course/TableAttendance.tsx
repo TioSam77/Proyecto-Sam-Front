@@ -64,18 +64,19 @@ const TableAttendance = (props: TableProps) => {
                 const schedule = querySnapshot.docs
                     .map((doc) => {
                         const data = doc.data();
-                        const dateObj = data.date;
+                        const dateStr = data.date;
 
                         return {
                             id: doc.id,
-                            date: dateObj,
-                            dateObj: dateObj,
+                            date: dateStr,
+                            dateObj: new Date(dateStr),
                             entry_time: data.entry_time,
                             exit_time: data.exit_time,
                             confirmed: data.confirm === true,
                         };
                     })
-                    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+                    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
+                    .map(({ dateObj, ...rest }) => rest);
 
                 setScheduleData(schedule);
 

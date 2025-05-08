@@ -75,7 +75,7 @@
 
     .containerCard {
         grid-template-columns: repeat(auto-fit,minmax(11rem,1fr));
-        margin: 0px;
+        margin-top: 10px;
         gap: 5px;
     }
 

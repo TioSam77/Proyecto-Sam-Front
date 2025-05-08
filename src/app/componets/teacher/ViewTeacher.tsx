@@ -2,72 +2,88 @@
 import React, { useEffect, useState } from 'react';
 import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
-import { onAuthStateChanged } from 'firebase/auth';
-import { collection, getDocs, query } from 'firebase/firestore';
-import { db ,auth} from '../../../../firebase/clientApp';
+import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
+import { db } from '../../../../firebase/clientApp';
+import { usePathname } from 'next/navigation';
 
 const ViewTeacher = () => {
   const [showCourses, setShowCourses] = useState(false);
-
-  const teacher = {
-    name: 'María González',
-    email: 'maria.gonzalez@universidad.edu',
-    department: 'Matemáticas',
-    phone: '+52 55 1234 5678',
-    office: 'Edificio A, oficina 204',
-    bio: 'Profesora con más de 10 años de experiencia en cálculo y álgebra lineal. Apasionada por la enseñanza y la tecnología educativa.'
-  };
-
+  const [teacherData, setTeacherData] = useState<any>(null);
   const [data, setData] = useState<any[]>([]);
-  const [login, setLogin] = useState<boolean>(false)
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
+  const pathname = usePathname();
+  const segments = pathname.split('/');
+  const teacherId = segments[3]; // Ajusta esto según tu estructura de URL
+
   useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
-          if (!user) {
-              setData([]);
-              return;
-          }
+    const fetchData = async () => {
+      try {
+        setLoading(true);
 
-          try {
-              setLogin(true);
-              const q = query(collection(db, "course"));
-              const querySnapshot = await getDocs(q);
+        // 1. Traer datos del profesor
+        const teacherRef = doc(db, 'teacher', teacherId);
+        const teacherSnap = await getDoc(teacherRef);
 
-              const allData = querySnapshot.docs.map((doc) => ({
-                  id: doc.id,
-                  ...doc.data()
-              }));
+        if (!teacherSnap.exists()) {
+          setNotFound(true);
+          setLoading(false);
+          return;
+        }
 
-              setData(allData);
-              setNotFound(allData.length === 0);
-          } catch (err) {
-              console.error("Error al obtener cursos:", err);
-              setNotFound(true);
-          } finally {
-              setLogin(false);
-          }
-      });
+        const teacher = {
+          id: teacherSnap.id,
+          ...teacherSnap.data(),
+        };
+        setTeacherData(teacher);
+        console.log(teacher)
 
-      return () => unsubscribe();
-  }, []);
+        // 2. Traer cursos donde teacher_id == teacherId
+        const q = query(collection(db, 'course'), where('teacher_id', '==', teacherId));
+        const querySnapshot = await getDocs(q);
+        const courses = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setData(courses);
+
+      } catch (err) {
+        console.error("Error al obtener datos:", err);
+        setNotFound(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [teacherId]);
+
+  if (notFound) return <p>Profesor no encontrado.</p>;
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <div className={styleTeacher.teacherCard}>
-      <h2 className={styleTeacher.teacherName}>{teacher.name}</h2>
-      <p className={styleTeacher.teacherBio}>{teacher.bio}</p>
+      <h3 className={styleTeacher.teacherName}>
+        {(teacherData?.surname && teacherData?.name)
+          ? `${teacherData.surname} ${teacherData.name}`
+          : 'Nombre del profesor'}
+      </h3>
+
+      <p className={styleTeacher.teacherBio}>{teacherData?.bio || 'Descripción no disponible.'}</p>
       <div className={styleTeacher.teacherDetails}>
-        <p><strong>Correo:</strong> {teacher.email}</p>
-        <p><strong>Departamento:</strong> {teacher.department}</p>
-        <p><strong>Teléfono:</strong> {teacher.phone}</p>
-        <p><strong>Oficina:</strong> {teacher.office}</p>
+        <p><strong>Correo:</strong> {teacherData?.email || '-'}</p>
+        <p><strong>Departamento:</strong> {teacherData?.department || '-'}</p>
+        <p><strong>Teléfono:</strong> {teacherData?.phoneNumber || '-'}</p>
+        <p><strong>Oficina:</strong> {teacherData?.office || '-'}</p>
       </div>
-      <hr></hr>
+      <hr />
       <h3 onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>
         Cursos asignados {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
       </h3>
       {showCourses && (
-        <MapCourse data={data} login={login} notFound={notFound} />
+        <MapCourse data={data} login={loading} notFound={notFound} />
       )}
     </div>
   );

@@ -173,3 +173,8 @@ hr {
     background-color: #ffffff;
     color: #ff3d3d;
 }
+
+a{
+    text-decoration: none;
+    color: black;
+}

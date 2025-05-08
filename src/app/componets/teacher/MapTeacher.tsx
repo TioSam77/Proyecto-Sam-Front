@@ -51,7 +51,7 @@ const MapTeacher = () => {
 
     const confirmDelete = async () => {
         if (!selectedTeacher) return;
-    
+
         try {
             // Verificar si hay algún curso con ese teacher_id
             const courseQuery = query(
@@ -59,12 +59,12 @@ const MapTeacher = () => {
                 where("teacher_id", "==", selectedTeacher.id)
             );
             const courseSnapshot = await getDocs(courseQuery);
-    
+
             if (!courseSnapshot.empty) {
                 alert("No se puede eliminar al profesor porque está asignado a uno o más cursos.");
                 return;
             }
-    
+
             // Si no tiene cursos, se puede eliminar
             await deleteDoc(doc(db, "teacher", selectedTeacher.id));
             setData(prev => prev.filter(user => user.id !== selectedTeacher.id));
@@ -75,7 +75,7 @@ const MapTeacher = () => {
             setSelectedTeacher(null);
         }
     };
-    
+
 
 
     return (
@@ -102,17 +102,14 @@ const MapTeacher = () => {
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
                     <li key={user.id} className={styleUser.users}>
-                        <div className={styleUser.header}>
-                            <Link href={`/Administrador/Profesores/${user.id}`}>
+                        <Link href={`/Administrador/Profesores/${user.id}`}>
+                            <div className={styleUser.header}>
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
-                            </Link>
-                        </div>
-                        <div className={styleUser.body}>
-                            <h5>Información sobre {user.name}</h5>
-                        </div>
-                        <div className={styleUser.footer}>
-                            <h5>Más detalles</h5>
-                        </div>
+                            </div>
+                            <div className={styleUser.body}>
+                                <h5>Información sobre {user.name}</h5>
+                            </div>
+                        </Link>
 
                         <div className={styleUser.containerButton}>
                             <button className="bluebutton">Editar</button>

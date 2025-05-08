@@ -94,7 +94,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     </Link>
                 )}
                 {isStudent && (
-                    <button className={styleUser.button}> + </button>
+                    <button className={styleUser.button}>+</button>
                 )}
             </div>
             <ol className={styleCourse.containerSubjects}>
@@ -105,15 +105,13 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                 ) : (
                     filteredCourses.map((course) => (
                         <li key={course.id} className={styleCourse.subjects}>
-                            <div className={styleCourse.header}>
-                                <Link href={`${currentPath}/${course.id}`}>
-                                    <div className={styleCourse.image}></div>
-                                    <h2 className={styleCourse.textHeader}>{course.name}</h2>
-                                </Link>
-                            </div>
-                            <div className={styleCourse.body}>
+                            <Link href={`${currentPath}/${course.id}`} className={styleCourse.header}>
+                                <div className={styleCourse.image}></div>
+                                <h2 className={styleCourse.textHeader}>{course.name}</h2>
+                            </Link>
+                            <Link href={`${currentPath}/${course.id}`} className={styleCourse.body}>
                                 <h5>Información sobre {course.name}</h5>
-                            </div>
+                            </Link>
                             <div className={styleCourse.footer}>
                                 <h5>Más detalles</h5>
                                 {isAdmin && (
