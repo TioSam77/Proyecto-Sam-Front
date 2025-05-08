@@ -5,6 +5,7 @@ import React from "react";
 import course from "../../css/Course.module.css"
 import { usePathname } from "next/navigation";
 import InfoCourse from "@/app/componets/course/InfoCourse";
+import ReturnButton from "@/app/componets/ReturnButton";
 
 export default function RootLayout({
     children,
@@ -15,6 +16,7 @@ export default function RootLayout({
 
     return (
         <section className="containerSection">
+            <ReturnButton/>
             <ViewGroup />
 
             <section className={course.center}>

@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import CustomCalendar from "./componets/Calendar";
-import TableHorario from "./componets/TableHorario";
 import Header from "./componets/Header";
 
 export default function Page() {

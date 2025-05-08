@@ -77,7 +77,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     gap: "10px",
                     width: "100%",
                     justifyContent: "center",
-                    marginBottom: "20px",
+                    marginBottom: "10px",
                 }}
             >
                 <input
@@ -94,7 +94,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     </Link>
                 )}
                 {isStudent && (
-                    <button className={styleUser.button}>Unirte a una clase</button>
+                    <button className={styleUser.button}> + </button>
                 )}
             </div>
             <ol className={styleCourse.containerSubjects}>
