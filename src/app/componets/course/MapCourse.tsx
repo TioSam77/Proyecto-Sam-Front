@@ -10,14 +10,19 @@ import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/fire
 import { db } from "../../../../firebase/clientApp";
 
 interface MapCourseProps {
-    data: any[];
+    data: course[];
     login: boolean;
     notFound: boolean;
 }
 
+interface course{
+    id:string,
+    name:string
+}
+
 const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const currentPath = usePathname();
-    const [_course, setCourse] = useState<any[]>([]);
+    const [course, setCourse] = useState<course[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);

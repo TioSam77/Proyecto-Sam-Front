@@ -30,6 +30,16 @@ const initialAvailability: Availability = {
     Viernes: { start: "", end: "" },
     Sábado: { start: "", end: "" },
 };
+interface data{
+    id:string,
+    surname?:string,
+    name?:string
+}
+
+interface subject{
+    id:string,
+    name?:string
+}
 
 const CreateCourse = () => {
     const [availability, setAvailability] = useState<Availability>(initialAvailability);
@@ -41,8 +51,8 @@ const CreateCourse = () => {
     const [courseName, setCourseName] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
     const [selectedTeacher, setSelectedTeacher] = useState("");
-    const [data, setData] = useState<any[]>([]);
-    const [subject, setSubject] = useState<any[]>([]);
+    const [data, setData] = useState<data[]>([]);
+    const [subject, setSubject] = useState<subject[]>([]);
     const [_login, setLogin] = useState<boolean>(false)
 
 

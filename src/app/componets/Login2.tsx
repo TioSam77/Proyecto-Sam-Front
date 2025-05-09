@@ -81,8 +81,12 @@ const Login = () => {
 
       router.push('/Alumno')
       
-    } catch (_err: any) {
-      setError("Credenciales incorrectas o error en la autenticación.");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Credenciales incorrectas o error en la authenticacion");
+      }
     }
   };
 

@@ -5,9 +5,16 @@ import { usePathname } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase/clientApp";
 
+interface horario{
+  dia:string,
+  clase:string,
+  horaFin:string,
+  horaInicio:string
+}
+
 const TableHorario = () => {
   const [diasSemana, setDiasSemana] = useState<string[]>([]);
-  const [horario, setHorario] = useState<any[]>([]);
+  const [horario, setHorario] = useState<horario[]>([]);
 
   const pathname = usePathname();
   const isAdmin = pathname.includes("/Administrador")

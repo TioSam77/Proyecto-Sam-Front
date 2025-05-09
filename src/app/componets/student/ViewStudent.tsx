@@ -6,10 +6,26 @@ import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firesto
 import { db } from '../../../../firebase/clientApp';
 import { usePathname } from 'next/navigation';
 
+interface studentData{
+  id:string
+  name?:string,
+  surname?:string,
+  email?:string,
+  bio?:string,
+  matricula?:string,
+  career?:string,
+  phoneNumber?:string
+}
+
+interface course{
+  id:string,
+  name:string
+}
+
 const ViewStudent = () => {
   const [showCourses, setShowCourses] = useState(false);
-  const [studentData, setStudentData] = useState<any>(null);
-  const [courses, setCourses] = useState<any[]>([]);
+  const [studentData, setStudentData] = useState<studentData |null>(null);
+  const [courses, setCourses] = useState<course[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [notFound, setNotFound] = useState(false);
@@ -60,7 +76,13 @@ const ViewStudent = () => {
 
         const fullCourses = courseDocs
           .filter(doc => doc.exists())
-          .map(doc => ({ id: doc.id, ...doc.data() }));
+          .map(doc => {
+            const docData = doc.data();
+            return {
+              id: doc.id,
+              name: docData.name,
+            };
+          });
 
         setCourses(fullCourses);
       } catch (err) {

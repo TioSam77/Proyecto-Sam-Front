@@ -8,12 +8,21 @@ import { auth, db } from "@/../firebase/clientApp";
 import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import DeleteConfirm from "../DeleteConfirm";
 
+interface data {
+    id: string,
+    name: string,
+}
+
+interface student {
+    id: string
+}
+
 const MapStudent = () => {
-    const [searchTerm, setSearchTerm] = useState<any>("");
+    const [searchTerm, setSearchTerm] = useState<string>("");
     const currentPath = usePathname();
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<data[]>([]);
     const [login, setLogin] = useState<boolean>(false)
-    const [_student, setStudent] = useState<any[]>([]);
+    const [student, setStudent] = useState<student[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
 
@@ -29,10 +38,14 @@ const MapStudent = () => {
 
             try {
                 const querySnapshot = await getDocs(collection(db, "student"));
-                const allData = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+                const allData: data[] = querySnapshot.docs.map((doc) => {
+                    const docData = doc.data();
+                    return {
+                        id: doc.id,
+                        name: docData.name,
+                    };
+                });
+
                 setData(allData);
             } catch (err) {
                 console.error("Error al obtener estudiantes:", err);

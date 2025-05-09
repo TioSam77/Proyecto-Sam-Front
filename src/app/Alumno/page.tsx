@@ -5,8 +5,13 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
 
+interface data{
+    id:string
+    name:string
+}
+
 export default function Page() {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<data[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
 
@@ -43,7 +48,7 @@ export default function Page() {
                     return null;
                 });
 
-                const courses = (await Promise.all(coursesPromises)).filter(Boolean);
+                const courses = (await Promise.all(coursesPromises)).filter(Boolean) as data[];
 
                 setData(courses);
                 setNotFound(courses.length === 0);

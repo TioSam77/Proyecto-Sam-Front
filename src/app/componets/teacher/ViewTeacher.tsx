@@ -6,10 +6,26 @@ import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firesto
 import { db } from '../../../../firebase/clientApp';
 import { usePathname } from 'next/navigation';
 
+interface data{
+  id:string
+  name:string
+}
+
+interface teacher{
+  id:string,
+  name?:string,
+  surname?:string,
+  email?:string,
+  phoneNumber?:string,
+  bio?:string,
+  office?:string,
+  department?:string
+}
+
 const ViewTeacher = () => {
   const [showCourses, setShowCourses] = useState(false);
-  const [teacherData, setTeacherData] = useState<any>(null);
-  const [data, setData] = useState<any[]>([]);
+  const [teacherData, setTeacherData] = useState<teacher|null>(null);
+  const [data, setData] = useState<data[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -42,10 +58,13 @@ const ViewTeacher = () => {
         // 2. Traer cursos donde teacher_id == teacherId
         const q = query(collection(db, 'course'), where('teacher_id', '==', teacherId));
         const querySnapshot = await getDocs(q);
-        const courses = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const courses: data[] = querySnapshot.docs.map((doc) => {
+          const docData = doc.data();
+          return {
+              id: doc.id,
+              name: docData.name,
+          };
+      });
 
         setData(courses);
 

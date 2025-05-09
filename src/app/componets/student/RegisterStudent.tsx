@@ -20,7 +20,7 @@ const RegisterStudent = () => {
     const [teacherNote, setTeacherNote] = useState("");
     const [heardFrom, setHeardFrom] = useState("");
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState<string|null>("");
     const [alert, setAlert] = useState("");
 
     const [_loading, setLoading] = useState(false);
@@ -121,8 +121,12 @@ const RegisterStudent = () => {
             setTeacherNote("");
             setHeardFrom("");
 
-        } catch (err: any) {
-            setError(err.message)
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message); // ✅ Guarda el objeto Error
+              } else {
+                setError("Ocurrió un error desconocido");
+              }
         } finally {
             setLoading(false);
         }

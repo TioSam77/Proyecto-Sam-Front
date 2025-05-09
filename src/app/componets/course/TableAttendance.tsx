@@ -22,11 +22,15 @@ interface Student {
     };
 }
 
+interface scheduleData{
+    date:string
+}
+
 const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
 const TableAttendance = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [scheduleData, setScheduleData] = useState<any[]>([]);
+    const [scheduleData, setScheduleData] = useState<scheduleData[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
     const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});

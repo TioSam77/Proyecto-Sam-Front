@@ -7,8 +7,15 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../../../../firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
 
+interface courseData{
+    id:string,
+    name?:string,
+    subject_name?:string,
+    teacher_name?:string
+}
+
 const ViewGroup = () => {
-    const [courseData, setCourseData] = useState<any>(null);
+    const [courseData, setCourseData] = useState<courseData|null>(null);
     const [_login, setLogin] = useState<boolean>(false);
     const [_notFound, setNotFound] = useState(false);
 
