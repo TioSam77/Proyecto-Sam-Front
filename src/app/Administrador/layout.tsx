@@ -3,7 +3,6 @@ import LinkCard from "@/app/componets/LinkCard";
 import React from "react";
 import course from "@/app/css/Course.module.css"
 import card from "@/app/css/card.module.css"
-import HeaderAdmin from "./HeaderAdmin";
 import { usePathname } from "next/navigation";
 import ReturnButton from "../componets/ReturnButton";
 import Header from "../componets/Header";
@@ -17,12 +16,12 @@ export default function RootLayout({
     const isRegistroRuta = [
         "/Administrador/Grupos/Registro",
         "/Administrador/Alumnos/Registro",
-      ].some(route => pathname.startsWith(route));
-    
+    ].some(route => pathname.startsWith(route));
+
     if (isAdminSubroute && !isRegistroRuta) {
         return (
             <section className="containerSection">
-                <HeaderAdmin />
+                <Header />
                 {children}
             </section>
         );

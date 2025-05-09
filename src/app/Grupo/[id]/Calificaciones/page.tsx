@@ -6,7 +6,7 @@ export default function Page() {
     return (
         <>
             <h3 className={style.welcomeText}>Calificaciones de estudiantes</h3>
-            <TableCourseFinalGrade apiUrl="" />
+            <TableCourseFinalGrade/>
         </>
     )
 }

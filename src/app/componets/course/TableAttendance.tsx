@@ -22,8 +22,8 @@ interface Student {
     };
 }
 
-interface scheduleData{
-    date:string
+interface scheduleData {
+    date: string
 }
 
 const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
@@ -63,18 +63,26 @@ const TableAttendance = () => {
                     .map((doc) => {
                         const data = doc.data();
                         const dateStr = data.date;
+                        const dateObj = new Date(dateStr);
 
                         return {
                             id: doc.id,
                             date: dateStr,
-                            dateObj: new Date(dateStr),
                             entry_time: data.entry_time,
                             exit_time: data.exit_time,
                             confirmed: data.confirm === true,
+                            dateObj,
                         };
                     })
                     .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
-                    .map(({ dateObj, ...rest }) => rest);
+                    .map(({ id, date, entry_time, exit_time, confirmed }) => ({
+                        id,
+                        date,
+                        entry_time,
+                        exit_time,
+                        confirmed,
+                    }));
+
 
                 setScheduleData(schedule);
 
