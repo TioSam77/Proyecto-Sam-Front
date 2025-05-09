@@ -32,9 +32,7 @@ const TableAttendance = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [scheduleData, setScheduleData] = useState<scheduleData[]>([]);
     const [login, setLogin] = useState<boolean>(false);
-    const [notFound, setNotFound] = useState(false);
     const [confirmedDates, setConfirmedDates] = useState<{ [key: string]: boolean }>({});
-    const [confirmedDatesStudent, setConfirmedDatesStudent] = useState<string[]>([]);
     const [students, setStudents] = useState<Student[]>([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
     const [loadingStudents, setLoadingStudents] = useState(true);
@@ -88,13 +86,8 @@ const TableAttendance = () => {
 
                 setConfirmedDates(datesMap);
 
-                const dateKeys = schedule.map((s) => s.date);
-                setConfirmedDatesStudent(dateKeys);
-
-                setNotFound(schedule.length === 0);
             } catch (err) {
                 console.error("Error al obtener los días del curso:", err);
-                setNotFound(true);
             } finally {
                 setLoadingSchedule(false);
                 setLogin(false);
@@ -138,7 +131,6 @@ const TableAttendance = () => {
                 setStudents(filtered);
             } catch (err) {
                 console.error("Error al obtener estudiantes:", err);//arreglar
-                setNotFound(true);
             } finally {
                 setLoadingStudents(false);
                 setLogin(false);

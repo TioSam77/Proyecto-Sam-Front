@@ -4,26 +4,30 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/clientApp";
 import style from "@/app/css/create.module.css"
+import stylesLogin from "@/app/css/Login.module.css";
 
 export default function CreateSubject() {
     const [subjectName, setSubjectName] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState<string | null>("");
+    const [alert, setAlert] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+
 
     const handleSubmit = async () => {
+        setAlert("")
+        setError("")
         if (!subjectName.trim()) return;
         setLoading(true);
         try {
             await addDoc(collection(db, "subject"), {
                 name: subjectName.trim(),
             });
-            setSuccess(true);
+            setAlert("Materia registrada");
             setSubjectName("");
         } catch (error) {
-            console.error("Error adding subject:", error);
+            setError(`Error adding subject: ${error}`);
         } finally {
             setLoading(false);
-            setTimeout(() => setSuccess(false), 3000);
         }
     };
 
@@ -31,7 +35,6 @@ export default function CreateSubject() {
         <section className={style.sectionContainer}>
             <div className={style.boxWrapper}>
 
-                <div className={style.borderGradient}></div>
                 <div className={style.loginBox}>
 
                     <h2 className="text-xl font-semibold mb-2">Creacion de materias</h2>
@@ -55,9 +58,13 @@ export default function CreateSubject() {
                     >
                         {loading ? "Guardando..." : "Enviar"}
                     </button>
-                    {success && <p className="text-green-600 mt-2">Subject added!</p>}
                 </div>
 
+            </div>
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </section>
     );

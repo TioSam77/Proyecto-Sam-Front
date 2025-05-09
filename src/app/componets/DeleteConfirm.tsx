@@ -42,7 +42,7 @@ const DeleteConfirm = ({ name, onConfirm, onCancel }: Props) => {
                     style={{ width: "100%", padding: "0.5rem", marginTop: "1rem" }}
                 />
                 <div style={{ marginTop: "1.5rem", display: "flex", justifyContent: "space-between" }}>
-                    <button onClick={onCancel} className="graybutton">Cancelar</button>
+                    <button onClick={onCancel} className="bluebutton">Cancelar</button>
                     <button
                         onClick={onConfirm}
                         className="redbutton"

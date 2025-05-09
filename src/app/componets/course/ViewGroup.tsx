@@ -7,24 +7,26 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../../../../firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
 
-interface courseData{
-    id:string,
-    name?:string,
-    subject_name?:string,
-    teacher_name?:string
+import stylesLogin from "@/app/css/Login.module.css";
+
+interface courseData {
+    id: string,
+    name?: string,
+    subject_name?: string,
+    teacher_name?: string
 }
 
 const ViewGroup = () => {
-    const [courseData, setCourseData] = useState<courseData|null>(null);
-    const [_login, setLogin] = useState<boolean>(false);
-    const [_notFound, setNotFound] = useState(false);
+    const [courseData, setCourseData] = useState<courseData | null>(null);
+
+    const [error, setError] = useState<string | null>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     const pathname = usePathname();
     const isAdmin = pathname.includes("/Administrador")
     const isTeacher = pathname.includes("/Profesor")
     const segments = pathname.split('/');
-    let courseId: string = ""
-    isAdmin ? courseId = segments[3] : courseId = segments[2]
+    const courseId: string = isAdmin ? segments[3] : segments[2];
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -34,21 +36,18 @@ const ViewGroup = () => {
             }
 
             try {
-                setLogin(true);
+                setLoading(true);
                 const docRef = doc(db, "course", courseId);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     setCourseData({ id: docSnap.id, ...docSnap.data() });
-                    setNotFound(false);
                 } else {
-                    setNotFound(true);
                 }
             } catch (err) {
-                console.error("Error al obtener el curso:", err);
-                setNotFound(true);
+                setError(`Error al obtener el curso:${err}`);
             } finally {
-                setLogin(false);
+                setLoading(false);
             }
         });
 
@@ -79,6 +78,11 @@ const ViewGroup = () => {
                         :
                         <button className='bluebutton'>Agregar Temario</button>}
                 </div>
+            </div>
+
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </>
     );

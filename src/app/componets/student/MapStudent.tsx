@@ -12,17 +12,11 @@ interface data {
     id: string,
     name: string,
 }
-
-interface student {
-    id: string
-}
-
 const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const currentPath = usePathname();
     const [data, setData] = useState<data[]>([]);
     const [login, setLogin] = useState<boolean>(false)
-    const [student, setStudent] = useState<student[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
 
@@ -85,7 +79,7 @@ const MapStudent = () => {
             await Promise.all(deleteStudentCourses);
 
             // 4. Actualizar estado local
-            setStudent(prev => prev.filter(user => user.id !== selectedStudent.id));
+            setData(prev => prev.filter(user => user.id !== selectedStudent.id));
         } catch (err) {
             console.error("Error al eliminar:", err);
         } finally {

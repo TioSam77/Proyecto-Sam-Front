@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase/clientApp";
 
-interface horario{
-  dia:string,
-  clase:string,
-  horaFin:string,
-  horaInicio:string
+interface horario {
+  dia: string,
+  clase: string,
+  horaFin: string,
+  horaInicio: string
 }
 
 const TableHorario = () => {
@@ -19,8 +19,7 @@ const TableHorario = () => {
   const pathname = usePathname();
   const isAdmin = pathname.includes("/Administrador")
   const segments = pathname.split('/');
-  let courseId: string = ""
-  isAdmin ? courseId = segments[3] : courseId = segments[2]
+  const courseId: string = isAdmin ? segments[3] : segments[2];
 
   useEffect(() => {
     const obtenerFechas = async () => {

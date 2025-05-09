@@ -68,7 +68,7 @@ export default function Page() {
                                         checked={dia in diasSeleccionados}
                                         onChange={() => toggleDia(dia)}
                                     />
-                                    {` ${dia}`}
+                                    {dia}
                                 </label>
 
                                 {dia in diasSeleccionados && (

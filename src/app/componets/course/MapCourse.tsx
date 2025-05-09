@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import styleCourse from "@/app/css/Course.module.css";
 import styleUser from "@/app/css/User.module.css";
+import stylesLogin from "@/app/css/Login.module.css";
 import DeleteConfirm from "../DeleteConfirm";
 import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../../firebase/clientApp";
@@ -15,25 +16,26 @@ interface MapCourseProps {
     notFound: boolean;
 }
 
-interface course{
-    id:string,
-    name:string
+interface course {
+    id: string,
+    name: string
 }
 
 const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const currentPath = usePathname();
-    const [course, setCourse] = useState<course[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
 
+    const [error, setError] = useState<string | null>("");
+
     const isAdmin = currentPath.includes("/Administrador");
     const isStudent = currentPath.includes("/Alumno");
     const basePath = isAdmin
-    ? '/Administrador/Grupos'
-    : isStudent
-      ? '/Alumno'
-      : '/Profesor';
+        ? '/Administrador/Grupos'
+        : isStudent
+            ? '/Alumno'
+            : '/Profesor';
 
     const filteredCourses = data.filter((course) =>
         course.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,10 +70,8 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
             );
             await Promise.all(deleteSchedules);
 
-            // 4. Actualizar estado local
-            setCourse(prev => prev.filter(user => user.id !== selectedCourse.id));
         } catch (err) {
-            console.error("Error al eliminar:", err);
+            setError(`Error al eliminar: ${err}`);
         } finally {
             setShowModal(false);
             setSelectedCourse(null);
@@ -150,6 +150,10 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     }}
                 />
             )}
+
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+            </div>
         </section >
     );
 };

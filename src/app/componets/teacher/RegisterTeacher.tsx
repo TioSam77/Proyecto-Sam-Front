@@ -17,12 +17,11 @@ const RegisterTeacher = () => {
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
 
-    const [error, setError] = useState("");
-    const [alert, setAlert] = useState("");
+    const [error, setError] = useState<string>("");
+    const [alert, setAlert] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const [_loading, setLoading] = useState(false);
-
-    const [createUserWithEmailAndPassword, _user, _loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
+    const [createUserWithEmailAndPassword, , loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
 
     useEffect(() => {
         if (!firebaseError?.message) return;
@@ -76,30 +75,30 @@ const RegisterTeacher = () => {
         try {
             setLoading(true);
             const usercredential = await createUserWithEmailAndPassword(email, password);
-            const user = usercredential?.user
+            const newUser = usercredential?.user
 
-            if (!user?.uid) {
+            if (!newUser?.uid) {
                 setError("No se pudo crear el usuario.");
                 return;
             }
 
             const userData = {
-                email: user.email,
+                email: newUser.email,
                 name: name,
                 surname: surname,
                 phoneNumber: `${countryCode} ${phoneNumber}`,
             }
 
-            const docRef = doc(db, "teacher", user.uid);
+            const docRef = doc(db, "teacher", newUser.uid);
             setDoc(docRef, userData)
 
             setAlert("Profesor registrado exitosamente.");
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
-              } else {
+            } else {
                 setError("Ocurrió un error desconocido");
-              }
+            }
         } finally {
             setLoading(false);
         }
@@ -227,7 +226,10 @@ const RegisterTeacher = () => {
                         <input type="text" placeholder="Ej. Secundaria, Universidad..." className={styles.inputField} />
                     </div>
 
-                    <button className={styles.blueButton}>Crear Cuenta</button>
+                    <button className={styles.blueButton}
+                        disabled={loadingfirebase}>
+                        {loadingfirebase ? "Cargando..." : "Crear"}
+                    </button>
 
                     <p className={styles.register}>
                         ¿Ya tienes una cuenta?
@@ -239,6 +241,7 @@ const RegisterTeacher = () => {
             <div className={styles.messageContainer}>
                 {error && <div className={styles.errorBox}>{error}</div>}
                 {alert && <div className={styles.alertBox}>{alert}</div>}
+                {loading && <div className={styles.loading}>loading</div>}
             </div>
 
         </section>

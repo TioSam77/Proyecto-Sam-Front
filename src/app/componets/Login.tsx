@@ -68,7 +68,7 @@ const Login: React.FC<LoginProps> = ({
 
       let roleCollection = "";
       let redirectPath = "";
-  
+
       switch (userType) {
         case "Alumno":
           roleCollection = "student";
@@ -86,24 +86,24 @@ const Login: React.FC<LoginProps> = ({
           setError("Rol no válido.");
           return;
       }
-  
+
       const uid = firebaseAuthUser.user.uid;
       console.log(uid)
       const docRef = doc(db, roleCollection, uid);
       const docSnap = await getDoc(docRef);
-  
+
       if (docSnap.exists()) {
         const idToken = await firebaseAuthUser.user.getIdToken();
         setCookie("token", idToken);
-  
+
         router.push(redirectPath);
       } else {
         setError("Credenciales incorrectas o error en la autenticación.");
       }
     };
-  
+
     checkLogin();
-  }, [firebaseAuthUser]);  
+  }, [firebaseAuthUser]);
 
   useEffect(() => {
     if (!error) return;
@@ -157,7 +157,7 @@ const Login: React.FC<LoginProps> = ({
           <input
             type="text"
             name="email"
-            placeholder={userType === "Alumno" ? "Número de cuenta" : userType === "Profesor" ? "RFC" : "Usuario"}
+            placeholder={"Correo"}
             className={styles.inputField}
             value={email}
             onChange={e => setEmail(e.target.value)}

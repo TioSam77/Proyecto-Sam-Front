@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import create from "@/app/css/create.module.css"
 import styles from "@/app/css/aviability.module.css";
+import stylesLogin from "@/app/css/Login.module.css";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../../firebase/clientApp";
 import { onAuthStateChanged } from "firebase/auth";
@@ -30,15 +31,15 @@ const initialAvailability: Availability = {
     Viernes: { start: "", end: "" },
     Sábado: { start: "", end: "" },
 };
-interface data{
-    id:string,
-    surname?:string,
-    name?:string
+interface data {
+    id: string,
+    surname?: string,
+    name?: string
 }
 
-interface subject{
-    id:string,
-    name?:string
+interface subject {
+    id: string,
+    name?: string
 }
 
 const CreateCourse = () => {
@@ -53,8 +54,10 @@ const CreateCourse = () => {
     const [selectedTeacher, setSelectedTeacher] = useState("");
     const [data, setData] = useState<data[]>([]);
     const [subject, setSubject] = useState<subject[]>([]);
-    const [_login, setLogin] = useState<boolean>(false)
 
+    const [error, setError] = useState<string | null>("");
+    const [alert, setAlert] = useState("");
+    const [login, setLogin] = useState<boolean>(false)
 
     useEffect(() => {
         setLogin(true);
@@ -81,7 +84,7 @@ const CreateCourse = () => {
                 setSubject(allDataSubjects);
 
             } catch (err) {
-                console.error("Error al obtener datos:", err);
+                setError(`Error al obtener datos:${err}`);
             } finally {
                 setLogin(false);
             }
@@ -137,7 +140,7 @@ const CreateCourse = () => {
             const selectedTeacherObj = data.find((t) => t.id === selectedTeacher);
 
             if (!selectedSubjectObj || !selectedTeacherObj) {
-                alert("Error: no se pudo encontrar el profesor o la materia seleccionada.");
+                setError("Error: no se pudo encontrar el profesor o la materia seleccionada.");
                 return;
             }
 
@@ -145,7 +148,7 @@ const CreateCourse = () => {
                 name: courseName,
                 subject_name: selectedSubjectObj.name,
                 teacher_name: `${selectedTeacherObj.surname} ${selectedTeacherObj.name}`,
-                teacher_id:selectedTeacher,
+                teacher_id: selectedTeacher,
                 start_date: startDate,
                 end_date: endDate,
             });
@@ -190,20 +193,21 @@ const CreateCourse = () => {
                 currentDate.setDate(currentDate.getDate() + 1);
             }
 
-
-
-            alert("Curso y horarios creados correctamente.");
+            setSelectedSubject('')
+            setSelectedTeacher('')
+            setCourseName('')
+            setEndDate('')
+            setStartDate('')
+            setAlert("Curso y horarios creados correctamente.");
         } catch (error) {
-            console.error("Error al crear el curso:", error);
-            alert("Hubo un error al crear el curso.");
+            setError(`Error al crear el curso: ${error}`);
+            setAlert("Hubo un error al crear el curso.");
         }
     };
 
     return (
         <section className={create.sectionContainer}>
             <div className={create.boxWrapper}>
-
-                <div className={create.borderGradient}></div>
 
                 <form className={create.loginBox} onSubmit={handleSubmit}>
                     <h2 className={create.textCenter}>Creacion de Grupo</h2>
@@ -364,7 +368,11 @@ const CreateCourse = () => {
                         Crear Grupo
                     </button>
                 </form>
-
+            </div>
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                {login && <div className={stylesLogin.loading}>{login}</div>}
             </div>
         </section>
     )

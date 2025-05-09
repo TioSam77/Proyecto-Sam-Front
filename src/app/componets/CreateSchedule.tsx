@@ -5,16 +5,25 @@ import { usePathname } from 'next/navigation';
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
 
+import stylesLogin from "@/app/css/Login.module.css";
+
 const CreateSchedule = () => {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+
+  const [error, setError] = useState<string | null>("");
+  const [alert, setAlert] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const pathname = usePathname();
   const pathParts = pathname.split('/');
   const courseId = pathParts[3];
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true)
+    setAlert("")
+    setError("")
     e.preventDefault();
 
     try {
@@ -23,7 +32,8 @@ const CreateSchedule = () => {
       const courseSnap = await getDoc(courseRef);
 
       if (!courseSnap.exists()) {
-        alert('El curso no existe');
+        setError('El curso no existe');
+        setLoading(false)
         return;
       }
 
@@ -32,18 +42,19 @@ const CreateSchedule = () => {
       await addDoc(collection(db, 'course_schedule'), {
         course_id: courseId,
         date: date,
-        entry_time:startTime,
-        exit_time:endTime,
+        entry_time: startTime,
+        exit_time: endTime,
         name: subjectName,
       });
 
-      alert('Horario creado correctamente');
+      setAlert('Horario creado correctamente');
       setDate('');
       setStartTime('');
       setEndTime('');
+      setLoading(false)
     } catch (error) {
-      console.error('Error al crear el horario:', error);
-      alert('Ocurrió un error al guardar el horario');
+      setError(`Error al crear el horario: ${error}`);
+      setLoading(false)
     }
   };
 
@@ -91,6 +102,12 @@ const CreateSchedule = () => {
           Guardar Horario
         </button>
       </form>
+
+      <div className={stylesLogin.messageContainer}>
+        {error && <div className={stylesLogin.errorBox}>{error}</div>}
+        {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+        {loading && <div className={stylesLogin.loading}>loading</div>}
+      </div>
     </div>
   );
 };

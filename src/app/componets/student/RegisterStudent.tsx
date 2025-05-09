@@ -20,12 +20,11 @@ const RegisterStudent = () => {
     const [teacherNote, setTeacherNote] = useState("");
     const [heardFrom, setHeardFrom] = useState("");
 
-    const [error, setError] = useState<string|null>("");
-    const [alert, setAlert] = useState("");
+    const [error, setError] = useState<string | null>("");
+    const [alert, setAlert] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const [_loading, setLoading] = useState(false);
-
-    const [createUserWithEmailAndPassword, _user, _loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
+    const [createUserWithEmailAndPassword, , loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
 
     useEffect(() => {
         if (!firebaseError?.message) return;
@@ -124,9 +123,9 @@ const RegisterStudent = () => {
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message); // ✅ Guarda el objeto Error
-              } else {
+            } else {
                 setError("Ocurrió un error desconocido");
-              }
+            }
         } finally {
             setLoading(false);
         }
@@ -253,7 +252,10 @@ const RegisterStudent = () => {
                         />
                     </div>
 
-                    <button className={styles.blueButton}>Crear</button>
+                    <button className={styles.blueButton}
+                        disabled={loadingfirebase} >
+                        {loadingfirebase ? "Cargando..." : "Crear"}
+                    </button>
 
                     <p className={styles.register}>
                         ¿Ya tienes cuenta?
@@ -265,8 +267,8 @@ const RegisterStudent = () => {
             <div className={styles.messageContainer}>
                 {error && <div className={styles.errorBox}>{error}</div>}
                 {alert && <div className={styles.alertBox}>{alert}</div>}
+                {loading && <div className={styles.loading}>loading</div>}
             </div>
-
 
         </section>
     );
