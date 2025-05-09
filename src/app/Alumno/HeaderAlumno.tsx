@@ -4,10 +4,6 @@ import React from "react";
 import Link from "next/link";
 
 const HeaderAlumno = () => {
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/Login";
-  };
 
   return (
     <>

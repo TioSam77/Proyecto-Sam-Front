@@ -7,10 +7,6 @@ import { auth, db } from "../../../../firebase/clientApp";
 import { Attendance } from "../../data/student";
 import { onAuthStateChanged } from "firebase/auth";
 
-interface TableProps {
-    apiUrl: string;
-}
-
 interface Student {
     id: string;
     name: string;
@@ -22,7 +18,7 @@ interface Student {
 
 const grades: (number | null)[] = [null, 5, 6, 7, 8, 9, 10];
 
-const TableCourseFinalGrade = (props: TableProps) => {
+const TableCourseFinalGrade = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [students, setStudents] = useState<Student[]>([]);
     const [login, setLogin] = useState<boolean>(false);
@@ -47,10 +43,6 @@ const TableCourseFinalGrade = (props: TableProps) => {
             )
         );
     };
-
-    useEffect(() => {
-        handleSearch();
-    }, [])
 
     const handleSearch = () => {
         setLogin(true);
@@ -93,6 +85,10 @@ const TableCourseFinalGrade = (props: TableProps) => {
     
         return () => unsubscribe();
     };
+
+    useEffect(() => {
+        handleSearch();
+    }, [])
     
     const confirmGrades = async () => {
         try {

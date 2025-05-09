@@ -9,11 +9,6 @@ const HeaderAdmin = () => {
     "Recuerden entregar la tarea de lógica"
   ]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/Login";
-  };
-
   const handleSendGroupMessage = () => {
     const nuevo = prompt("Escribe el nuevo mensaje grupal:");
     if (nuevo) {

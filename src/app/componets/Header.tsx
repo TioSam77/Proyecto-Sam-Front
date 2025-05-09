@@ -3,8 +3,10 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 const Header = () => {
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/Login";
@@ -23,10 +25,10 @@ const Header = () => {
       <nav className="navbar bg-body-tertiary fixed-top">
         <div className="container-fluid d-flex justify-content-between align-items-center">
           {/* Logo */}
-          <a className="navbar-brand d-flex align-items-center" href="/">
-            <img src="/logo.jpg" alt="Interactivo Logo" height="40" className="me-2" />
+          <Link className="navbar-brand d-flex align-items-center" href="/">
+            <Image src="/logo.jpg" alt="Interactivo Logo" height="40" width="40" className="me-2" />
             <h3 className="logo">Interactivo</h3>
-          </a>
+          </Link>
 
           <div>
 
@@ -72,9 +74,9 @@ const Header = () => {
 
             {(!isStudentPage && !isTeacherPage && !isAdminPage) && (
               <li className="nav-item">
-                <a className="nav-link" href="/Login">
+                <Link className="nav-link" href="/Login">
                   <i className="bi bi-box-arrow-in-right me-2 text-dark"></i>Acceder
-                </a>
+                </Link>
               </li>
             )}
 
@@ -133,6 +135,9 @@ const Header = () => {
               </Link>
             </li>
 
+            <li className="nav-item" onClick={handleLogout}>
+              <i className="bi bi-gear-fill me-2 "></i>Cerrar cesion
+            </li>
           </ul>
         </div>
       </div>

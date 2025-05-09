@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import styles from "../css/Login.module.css";
+import styles from "@/app/css/Login.module.css"
 import justifications from "../css/StudentJustification.module.css";
 
 const StudentJustification = () => {

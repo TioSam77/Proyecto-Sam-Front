@@ -9,8 +9,8 @@ import { doc, getDoc } from "firebase/firestore";
 
 const ViewGroup = () => {
     const [courseData, setCourseData] = useState<any>(null);
-    const [login, setLogin] = useState<boolean>(false);
-    const [notFound, setNotFound] = useState(false);
+    const [_login, setLogin] = useState<boolean>(false);
+    const [_notFound, setNotFound] = useState(false);
 
     const pathname = usePathname();
     const isAdmin = pathname.includes("/Administrador")

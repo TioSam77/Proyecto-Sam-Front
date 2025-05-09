@@ -84,7 +84,7 @@
         height: 3rem;
         margin: 0;
         padding: 5px;
-        align-items: start;
+        align-items: flex-start;
         transition: justify-content 0.5s ease;
     }
 

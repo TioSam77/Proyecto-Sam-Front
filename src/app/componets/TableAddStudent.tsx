@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, limit, where, addDoc, setDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, query, limit, where, setDoc, doc, deleteDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
 import { usePathname } from "next/navigation";
 
@@ -175,7 +175,7 @@ const TableAddStudent = () => {
                     <thead>
                         <tr className={tables.fixedRow}>
                             <th className={tables.fixedColRow}>Nombre</th>
-                            <th>Curso actual</th>
+                            <th>Estatus</th>
                         </tr>
                     </thead>
                     <tbody>

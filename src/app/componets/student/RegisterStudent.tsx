@@ -6,6 +6,7 @@ import countryList from "../countries.json";
 import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from "firebase/firestore";
+import Image from "next/image";
 
 
 const RegisterStudent = () => {
@@ -22,9 +23,9 @@ const RegisterStudent = () => {
     const [error, setError] = useState("");
     const [alert, setAlert] = useState("");
 
-    const [loading, setLoading] = useState(false);
+    const [_loading, setLoading] = useState(false);
 
-    const [createUserWithEmailAndPassword, user, loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
+    const [createUserWithEmailAndPassword, _user, _loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
 
     useEffect(() => {
         if (!firebaseError?.message) return;
@@ -211,10 +212,12 @@ const RegisterStudent = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <img
+                                <Image
                                     src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry}.svg`}
                                     alt={selectedCountry}
                                     className={styles.flagIcon}
+                                    height="10"
+                                    width="10"
                                 />
                                 <span className={styles.countryCode}>{countryCode}</span>
                             </div>

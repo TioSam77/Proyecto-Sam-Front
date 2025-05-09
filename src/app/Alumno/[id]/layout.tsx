@@ -4,7 +4,6 @@ import ViewGroup from "@/app/componets/course/ViewGroup";
 import React from "react";
 import course from "../../css/Course.module.css"
 import { usePathname } from "next/navigation";
-import InfoCourse from "@/app/componets/course/InfoCourse";
 import ReturnButton from "@/app/componets/ReturnButton";
 
 export default function RootLayout({

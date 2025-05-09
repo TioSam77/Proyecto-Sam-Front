@@ -13,7 +13,7 @@ const MapStudent = () => {
     const currentPath = usePathname();
     const [data, setData] = useState<any[]>([]);
     const [login, setLogin] = useState<boolean>(false)
-    const [student, setStudent] = useState<any[]>([]);
+    const [_student, setStudent] = useState<any[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
 

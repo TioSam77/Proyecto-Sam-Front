@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import create from "@/app/css/create.module.css"
 import styles from "@/app/css/aviability.module.css";
-import { addDoc, collection, getDocs, Timestamp } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../../firebase/clientApp";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -43,7 +43,7 @@ const CreateCourse = () => {
     const [selectedTeacher, setSelectedTeacher] = useState("");
     const [data, setData] = useState<any[]>([]);
     const [subject, setSubject] = useState<any[]>([]);
-    const [login, setLogin] = useState<boolean>(false)
+    const [_login, setLogin] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -152,7 +152,7 @@ const CreateCourse = () => {
                 Sábado: 6,
             };
 
-            let currentDate = new Date(parsedStartDate);
+            const currentDate = new Date(parsedStartDate);
 
             while (currentDate <= parsedEndDate) {
                 currentDate.setHours(12, 0, 0, 0); // Establece hora para evitar desfaces por zona horaria

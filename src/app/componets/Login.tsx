@@ -1,13 +1,13 @@
 'use client'
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import styles from "../css/Login.module.css";
+import styles from "@/app/css/Login.module.css"
 
-import { sendEmailVerification } from "firebase/auth";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, db } from "@/../firebase/clientApp"
 import { useRouter } from "next/navigation";
 import { getDoc, doc } from "firebase/firestore";
 import { setCookie } from 'cookies-next';
+import Link from "next/link";
 
 interface LoginProps {
   userType: string;
@@ -185,7 +185,7 @@ const Login: React.FC<LoginProps> = ({
           </p>
           <p className={styles.register}>
             ¿No tienes cuenta?
-            <a href="/" className={styles.registerLink}>Solicita el registro de tu cuenta</a>
+            <Link href="/" className={styles.registerLink}>Solicita el registro de tu cuenta</Link>
           </p>
         </div>
       </div>

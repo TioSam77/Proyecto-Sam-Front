@@ -1,15 +1,10 @@
 'use client'
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import styles from "../css/Login.module.css";
+import React, { useEffect, useState } from "react";
+import styles from "@/app/css/Login.module.css"
 
-
-import { sendEmailVerification } from "firebase/auth";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/../firebase/clientApp"
-import { usePathname, useRouter } from "next/navigation";
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "@/../firebase/clientApp";
-
+import { useRouter } from "next/navigation";
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,8 +14,8 @@ const Login = () => {
 
   const [
     signInWithEmailAndPassword,
-    firebaseUser,
-    loadingfirebase,
+    _firebaseUser,
+    _loadingfirebase,
     firebaseError
   ] = useSignInWithEmailAndPassword(auth);
 
@@ -86,7 +81,7 @@ const Login = () => {
 
       router.push('/Alumno')
       
-    } catch (err: any) {
+    } catch (_err: any) {
       setError("Credenciales incorrectas o error en la autenticación.");
     }
   };

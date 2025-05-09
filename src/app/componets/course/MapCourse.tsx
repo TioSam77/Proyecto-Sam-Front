@@ -17,13 +17,18 @@ interface MapCourseProps {
 
 const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const currentPath = usePathname();
-    const [course, setCourse] = useState<any[]>([]);
+    const [_course, setCourse] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
 
     const isAdmin = currentPath.includes("/Administrador");
     const isStudent = currentPath.includes("/Alumno");
+    const basePath = isAdmin
+    ? '/Administrador/Grupos'
+    : isStudent
+      ? '/Alumno'
+      : '/Profesor';
 
     const filteredCourses = data.filter((course) =>
         course.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -109,11 +114,11 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                 ) : (
                     filteredCourses.map((course) => (
                         <li key={course.id} className={styleCourse.subjects}>
-                            <Link href={`${currentPath}/${course.id}`} className={styleCourse.header}>
+                            <Link href={`${basePath}/${course.id}`} className={styleCourse.header}>
                                 <div className={styleCourse.image}></div>
                                 <h2 className={styleCourse.textHeader}>{course.name}</h2>
                             </Link>
-                            <Link href={`${currentPath}/${course.id}`} className={styleCourse.body}>
+                            <Link href={`${basePath}/${course.id}`} className={styleCourse.body}>
                                 <h5>Información sobre {course.name}</h5>
                             </Link>
                             <div className={styleCourse.footer}>

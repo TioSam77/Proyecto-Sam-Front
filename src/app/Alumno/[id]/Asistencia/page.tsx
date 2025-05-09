@@ -8,7 +8,6 @@ export default function Page() {
     const currentPath = usePathname();
     const pathSegments = currentPath.split("/");
     pathSegments.pop();
-    const basePath = pathSegments.join("/");
 
     return (
         <>
@@ -20,7 +19,7 @@ export default function Page() {
                     <h5 style={{ backgroundColor: "#CBC3E3", borderRadius: "4px", padding: "3px" }}>N = Absent with notification</h5>
                     <h5 style={{ backgroundColor: "lightcoral", borderRadius: "4px", padding: "3px" }}>A = Absent</h5>
                 </div>
-                <TableAttendance apiUrl=""/>
+                <TableAttendance />
             </section>
         </>
     )

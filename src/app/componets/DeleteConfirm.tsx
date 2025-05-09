@@ -1,7 +1,6 @@
 
 "use client";
 import { useState } from "react";
-import styleUser from "@/app/css/User.module.css";
 
 interface Props {
     name: string;

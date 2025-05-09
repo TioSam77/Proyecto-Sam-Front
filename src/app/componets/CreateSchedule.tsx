@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { collection, addDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
 
 const CreateSchedule = () => {

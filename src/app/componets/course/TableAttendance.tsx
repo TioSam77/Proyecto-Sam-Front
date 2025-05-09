@@ -22,13 +22,9 @@ interface Student {
     };
 }
 
-interface TableProps {
-    apiUrl: string;
-}
-
 const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
-const TableAttendance = (props: TableProps) => {
+const TableAttendance = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [scheduleData, setScheduleData] = useState<any[]>([]);
     const [login, setLogin] = useState<boolean>(false);

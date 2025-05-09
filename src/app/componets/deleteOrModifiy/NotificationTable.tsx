@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import tables from "../css/Table.module.css";
-import styles from "../css/Login.module.css";
+import styles from "@/app/css/Login.module.css"
 import notifications from "../css/NotificationTable.module.css";
 
 const NotificationTable = () => {

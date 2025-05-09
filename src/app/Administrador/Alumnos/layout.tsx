@@ -1,6 +1,5 @@
 'use client'
 import MapStudent from "@/app/componets/student/MapStudent";
-import MapTeacher from "@/app/componets/teacher/MapTeacher";
 import { usePathname } from "next/navigation";
 import React from "react";
 export default function RootLayout({
