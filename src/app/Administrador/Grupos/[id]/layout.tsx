@@ -1,11 +1,12 @@
 'use client'
 import LinkCard from "@/app/componets/LinkCard";
-import ViewGroup from "@/app/componets/ViewGroup";
+import ViewGroup from "@/app/componets/course/ViewGroup";
 import React from "react";
 
 import { usePathname } from "next/navigation";
 
 import course from "@/app/css/Course.module.css"
+import ReturnButton from "@/app/componets/ReturnButton";
 
 export default function RootLayout({
     children,
@@ -16,13 +17,13 @@ export default function RootLayout({
 
     return (
         <>
+            <ReturnButton />
             <ViewGroup />
-
             <section className={course.center}>
-                <div className={course.containerSubjects}>
+                <div className={course.containerCards}>
+                    <LinkCard name="Estudiantes" url={`/Administrador/Grupos/${curseId}/Estudiantes`} icon="bi bi-backpack" />
                     <LinkCard name="Asistencia" url={`/Administrador/Grupos/${curseId}/Asistencia`} icon="bi bi-person-check" />
                     <LinkCard name="Calificaciones" url={`/Administrador/Grupos/${curseId}/Calificaciones`} icon="bi bi-award-fill" />
-                    <LinkCard name="Temario" url={`/Administrador/Grupos/${curseId}/Temario`} icon="bi bi-journal-text" />
                 </div>
             </section>
             {children}

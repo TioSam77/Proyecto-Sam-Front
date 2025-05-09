@@ -171,16 +171,17 @@
   margin-right: 10px;
 }
 
-.separator{
+.separator {
   margin: 10px 0;
 }
 
-.welcomeText{
+.welcomeText {
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
   margin: 10px;
 }
+
 .messageContainer {
   position: fixed;
   top: 1rem;
@@ -193,7 +194,9 @@
   align-items: center;
 }
 
-.errorBox, .alertBox {
+.errorBox,
+.alertBox,
+.loading {
   min-width: 300px;
   max-width: 90vw;
   padding: 0.8rem 1.2rem;
@@ -206,16 +209,29 @@
 
 .errorBox {
   background-color: #ffe0e0;
-  color: #b10000;
+  color: #000000;
 }
 
 .alertBox {
   background-color: #e1ffe0;
-  color: #00b11d;
+  color: #000000;
+}
+
+.loading {
+  background-color: #e7e7e7;
+  color: #000000;
 }
 
 @keyframes fadeOut {
-  0% { opacity: 1; }
-  75% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

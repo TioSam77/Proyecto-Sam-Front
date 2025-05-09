@@ -6,15 +6,15 @@ import card from "@/app/css/card.module.css"
 import HeaderAdmin from "./HeaderAdmin";
 import { usePathname } from "next/navigation";
 import ReturnButton from "../componets/ReturnButton";
+import Header from "../componets/Header";
 
 export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname();
 
-    const isAdminSubroute = pathname.match(/^\/Administrador\/(Alumnos|Grupos|Profesores)\/.+/);
+    const isAdminSubroute = pathname.match(/^\/Administrador\/(Grupos)\/.+/);
     const isRegistroRuta = [
-        "/Administrador/Profesores/Registro",
         "/Administrador/Grupos/Registro",
         "/Administrador/Alumnos/Registro",
       ].some(route => pathname.startsWith(route));
@@ -31,7 +31,7 @@ export default function RootLayout({
     return (
         <section className="containerSection">
             <ReturnButton />
-            <HeaderAdmin />
+            <Header />
             <section className={course.center}>
                 <div className={card.containerCard}>
                     <LinkCard name="Alumnos" url="/Administrador/Alumnos" icon="bi bi-person-check" />

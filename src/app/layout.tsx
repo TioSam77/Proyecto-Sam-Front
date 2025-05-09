@@ -31,7 +31,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <main className="container ">
           <section style={{ display: 'flex', flexDirection: 'column', alignItems: "center", width: "100%" }}>{children}</section>

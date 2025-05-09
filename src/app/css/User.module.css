@@ -1,4 +1,5 @@
 .center {
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,6 +19,10 @@
 }
 
 .users {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
     background-color: #f8f9fa;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -29,7 +34,6 @@
 .header {
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .textHeader {
@@ -51,6 +55,7 @@
 }
 
 .button {
+    min-width: 40px;
     background: rgb(70, 153, 237);
     color: white;
     border-radius: 4px;
@@ -61,4 +66,38 @@
 
 .button:hover {
     background: rgb(30, 132, 234);
+}
+
+.containerButton {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+@media(max-width:647px) {
+
+    .users {
+        width: 100%;
+    }
+
+    .header {
+        align-items: start;
+        padding: 0;
+        margin: 0;
+    }
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        margin: 10px 0;
+    }
+    .body h5{
+        margin: 0;
+    }
+
+    .containerButton {
+        display: flex;
+        justify-content: start;
+        gap: 10px;
+    }
 }

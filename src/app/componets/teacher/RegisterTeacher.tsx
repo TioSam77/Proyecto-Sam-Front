@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import styles from "../css/Login.module.css";
-import countryList from "./countries.json";
-import { auth } from "@/../firebase/clientApp";
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { getDatabase, ref, set } from "firebase/database";
+import styles from "@/app/css/Login.module.css";
+import countryList from "../countries.json";
+import { auth, db } from "@/../firebase/clientApp";
+import { ref, set } from "firebase/database";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { doc, setDoc } from "firebase/firestore";
 
-const RegisterStudent = () => {
+const RegisterTeacher = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
@@ -15,13 +16,12 @@ const RegisterStudent = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
-    const [teacherNote, setTeacherNote] = useState("");
-    const [heardFrom, setHeardFrom] = useState("");
 
     const [error, setError] = useState("");
     const [alert, setAlert] = useState("");
 
     const [loading, setLoading] = useState(false);
+
 
     const [createUserWithEmailAndPassword, user, loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
 
@@ -56,25 +56,13 @@ const RegisterStudent = () => {
         }
     }, [firebaseError]);
 
-    useEffect(() => {
-        if (!error) return;
-        const timeout = setTimeout(() => setError(""), 4000);
-        return () => clearTimeout(timeout);
-    }, [error]);
-
-    useEffect(() => {
-        if (!alert) return;
-        const timeout = setTimeout(() => setAlert(""), 4000);
-        return () => clearTimeout(timeout);
-    }, [alert]);
-
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(e.target.value);
     };
 
     const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const input = e.target.value;
-        const cleanedInput = input.replace(/\D/g, ""); // Elimina cualquier carácter no numérico
+        const cleanedInput = input.replace(/\D/g, "");
         setPhoneNumber(cleanedInput);
     };
 
@@ -91,21 +79,22 @@ const RegisterStudent = () => {
             const usercredential = await createUserWithEmailAndPassword(email, password);
             const user = usercredential?.user
 
-            if (!user) return;
+            if (!user?.uid) {
+                setError("No se pudo crear el usuario.");
+                return;
+            }
 
-            const db = getDatabase();
-            await set(ref(db, `students/${user.uid}`), {
-                uid: user.uid,
+            const userData = {
                 email: user.email,
-                nombres: name,
-                apellidos: surname,
-                telefono: `${countryCode} ${phoneNumber}`,
-                notaProfesor: teacherNote,
-                escuchoDe: heardFrom
-            });
+                name: name,
+                surname: surname,
+                phoneNumber: `${countryCode} ${phoneNumber}`,
+            }
 
+            const docRef = doc(db, "teacher", user.uid);
+            setDoc(docRef, userData)
 
-            setAlert("Alumno registrado exitosamente.");
+            setAlert("Profesor registrado exitosamente.");
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -113,24 +102,34 @@ const RegisterStudent = () => {
         }
     };
 
-    // Buscar el código de país seleccionado
+    useEffect(() => {
+        if (!error) return;
+        const timeout = setTimeout(() => setError(""), 4000);
+        return () => clearTimeout(timeout);
+    }, [error]);
+
+    useEffect(() => {
+        if (!alert) return;
+        const timeout = setTimeout(() => setAlert(""), 4000);
+        return () => clearTimeout(timeout);
+    }, [alert]);
+
     const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);
     const countryCode = selectedCountryData ? `+${selectedCountryData.phoneCode}` : "";
 
     return (
         <section className={styles.loginContainer}>
-
             <form className={styles.boxWrapper} onSubmit={handleSubmit}>
-                <div className={styles.borderGradient}></div> {/* Borde degradado */}
+                <div className={styles.borderGradient}></div>
 
                 <div className={styles.loginBox}>
-                    <h2>Creacion de Cuenta de Alumno</h2>
+                    <h2>Creación de Cuenta de Profesor(a)</h2>
 
                     <div className={styles.separator}>
-                        <label>Correo Electronico</label>
+                        <label>Correo Electrónico</label>
                         <input
                             type="email"
-                            placeholder="Tu@gmail.com"
+                            placeholder="profe@gmail.com"
                             className={styles.inputField}
                             value={email}
                             onChange={e => setEmail(e.target.value)}
@@ -152,7 +151,7 @@ const RegisterStudent = () => {
                         <label>Confirmar Contraseña</label>
                         <input
                             type="password"
-                            placeholder="Confirmar Contrasena"
+                            placeholder="Confirmar Contraseña"
                             className={styles.inputField}
                             value={confirmPassword}
                             onChange={e => setConfirmPassword(e.target.value)}
@@ -163,7 +162,7 @@ const RegisterStudent = () => {
                         <label>Nombres</label>
                         <input
                             type="text"
-                            placeholder="Tus Nombres"
+                            placeholder="Nombres"
                             className={styles.inputField}
                             value={name}
                             onChange={e => setName(e.target.value)}
@@ -174,12 +173,13 @@ const RegisterStudent = () => {
                         <label>Apellidos</label>
                         <input
                             type="text"
-                            placeholder=" Tus Apellidos"
+                            placeholder="Apellidos"
                             className={styles.inputField}
                             value={surname}
                             onChange={e => setSurname(e.target.value)}
                         />
                     </div>
+
                     <div className={styles.separator}>
                         <label>Teléfono</label>
                         <div className={styles.inputField} style={{ display: 'flex' }}>
@@ -205,37 +205,28 @@ const RegisterStudent = () => {
                             </div>
                             <input
                                 type="tel"
-                                className={styles.phoneInput}
                                 value={phoneNumber}
                                 onChange={handlePhoneNumberChange}
+                                className={styles.phoneInput}
                             />
                         </div>
                     </div>
+
                     <div className={styles.separator}>
-                        <label>¿Hay algo que su profesor(a) debería saber?</label>
-                        <input
-                            type="text"
-                            className={styles.inputField}
-                            value={teacherNote}
-                            onChange={e => setTeacherNote(e.target.value)}
-                        />
+                        <label>Materia(s) que imparte</label>
+                        <input type="text" placeholder="Ej. Matemáticas, Física..." className={styles.inputField} />
                     </div>
 
                     <div className={styles.separator}>
-                        <label>¿Cómo escuchó de nosotros?</label>
-                        <input
-                            type="text"
-                            className={styles.inputField}
-                            value={heardFrom}
-                            onChange={e => setHeardFrom(e.target.value)}
-                        />
+                        <label>Nivel educativo que enseña</label>
+                        <input type="text" placeholder="Ej. Secundaria, Universidad..." className={styles.inputField} />
                     </div>
 
-                    <button className={styles.blueButton}>Crear</button>
+                    <button className={styles.blueButton}>Crear Cuenta</button>
 
                     <p className={styles.register}>
-                        ¿Ya tienes cuenta?
-                        <a href="/Login" className={styles.registerLink}>Logearte</a>
+                        ¿Ya tienes una cuenta?
+                        <a href="/Login" className={styles.registerLink}>Inicia sesión</a>
                     </p>
                 </div>
             </form>
@@ -245,9 +236,8 @@ const RegisterStudent = () => {
                 {alert && <div className={styles.alertBox}>{alert}</div>}
             </div>
 
-
         </section>
     );
 };
 
-export default RegisterStudent;
+export default RegisterTeacher;

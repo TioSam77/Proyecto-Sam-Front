@@ -6,6 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #f0f0f0 !important;
+    z-index: -1;
 }
 
 /* Empuja el contenido para que el footer quede abajo */
@@ -77,11 +78,11 @@ table {
     border: hidden;
     border-collapse: collapse;
     width: max-content;
-    min-width: 900px;
+    min-width: 350px;
     color: #4f4f4f;
 }
 
-table th{
+table th {
     background-color: #ffffff;
 }
 
@@ -89,10 +90,12 @@ table th,
 table td {
     padding: 8px 16px;
 }
-table tr{
+
+table tr {
     border-bottom: 2px solid #cfcfcf;
 }
-select{
+
+select {
     text-align: center;
     height: 100%;
     margin: 0;
@@ -102,22 +105,22 @@ select{
     appearance: none;
 }
 
-hr{
+hr {
     align-items: center;
     width: 100%;
 }
 
-.containerSection{
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  width: 100%;
+.containerSection {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
 }
 
-.searchBox{
+.searchBox {
     padding: 10px;
     width: 100%;
     max-width: 300px;
@@ -127,7 +130,7 @@ hr{
     transition: 0.3s;
 }
 
-.containerLink{
+.containerLink {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -135,4 +138,58 @@ hr{
     border-radius: 4px;
     margin: 4px;
     padding: 0px 6px !important;
+}
+
+.redbutton,
+.bluebutton {
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    padding: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.redbutton {
+    background-color: rgb(205, 75, 75);
+}
+
+.bluebutton {
+    background-color: rgb(70, 153, 237);
+}
+
+.redbutton:hover {
+    background-color: rgb(180, 74, 74);
+    transform: translateY(-2px);
+}
+
+.bluebutton:hover {
+    background-color: rgb(70, 143, 222);
+    transform: translateY(-2px);
+}
+
+.toggle-button {
+    font-weight: bold;
+    padding: 6px 12px;
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.toggle-button:hover {
+    background-color: #e6f0ff;
+}
+
+.toggle-button.active {
+    border: 1px solid #ff3d3d;
+    background-color: #ffffff;
+    color: #ff3d3d;
+}
+
+a{
+    text-decoration: none;
+    color: black;
 }
