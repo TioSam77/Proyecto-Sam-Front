@@ -75,7 +75,6 @@ footer {
 
 table {
     text-align: center;
-    border: hidden;
     border-collapse: collapse;
     width: max-content;
     min-width: 350px;
@@ -155,7 +154,7 @@ hr {
 }
 
 .bluebutton {
-    background-color: rgb(70, 153, 237);
+    background-color: #2563eb;
 }
 
 .redbutton:hover {
@@ -164,7 +163,7 @@ hr {
 }
 
 .bluebutton:hover {
-    background-color: rgb(70, 143, 222);
+    background-color: #1d4ed8;
     transform: translateY(-2px);
 }
 

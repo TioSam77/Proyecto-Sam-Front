@@ -86,7 +86,7 @@ const DeleteSchedule = () => {
                                             onClick={() => handleDelete(schedule.id)}
                                             className={styles.deleteButton}
                                         >
-                                            Eliminar
+                                            <i className="bi bi-trash-fill"></i>
                                         </button>
                                     </td>
                                 </tr>

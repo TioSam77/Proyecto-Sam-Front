@@ -19,8 +19,10 @@ export default function Page() {
                 <TableAttendance />
             </section>
 
-            <CreateSchedule/>
-            <DeleteSchedule/>
+            <div style={{display:"flex", gap:"10px"}}>
+                <CreateSchedule />
+                <DeleteSchedule />
+            </div>
         </>
     )
 }

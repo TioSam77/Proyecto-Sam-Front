@@ -131,7 +131,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                                 {isAdmin && (
                                     <div className={styleCourse.containerButton}>
                                         <button className="bluebutton">Editar</button>
-                                        <button className="redbutton" onClick={() => handleDeleteClick(course)}> Eliminar</button>
+                                        <button className="redbutton" onClick={() => handleDeleteClick(course)}><i className="bi bi-trash-fill"></i></button>
                                     </div>
                                 )}
                             </div>
