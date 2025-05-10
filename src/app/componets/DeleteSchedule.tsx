@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
+import styles from '../css/DeleteSchedule.module.css';
 
 interface Schedule {
     id: string;
@@ -56,44 +57,42 @@ const DeleteSchedule = () => {
     }, []);
 
     return (
-        <div>
-            <h2>Eliminar Horarios</h2>
-
-            {loading ? (
-                <p>Cargando horarios...</p>
-            ) : schedules.length === 0 ? (
-                <p>No hay horarios registrados.</p>
-            ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Día</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {schedules.map((schedule) => (
-                            <tr key={schedule.id}>
-                                <td>
-                                    {schedule.date
-                                        ? schedule.date.split('-').reverse().join('/')
-                                        : 'Fecha inválida'}
-                                </td>
-                                <td>
-                                    <button
-                                        onClick={() => handleDelete(schedule.id)}
-                                        className="bluebutton"
-                                    >
-                                        Eliminar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+        <div className={styles.containerDelete}>
+          <h2 className={styles.titleDelete}>Eliminar Horarios</h2>
+      
+          {loading ? (
+            <p className={styles.message}>Cargando horarios...</p>
+          ) : schedules.length === 0 ? (
+            <p className={styles.message}>No hay horarios registrados.</p>
+          ) : (
+            <div className={styles.tableContainer}>
+              <table className={styles.scheduleTable}>
+                <thead>
+                  <tr>
+                    <th>Día</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {schedules.map((schedule) => (
+                    <tr key={schedule.id}>
+                      <td>{schedule.date ? schedule.date.split('-').reverse().join('/') : 'Fecha inválida'}</td>
+                      <td>
+                        <button
+                          onClick={() => handleDelete(schedule.id)}
+                          className={styles.deleteButton}
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-    );
+      );
 };
 
 export default DeleteSchedule;
