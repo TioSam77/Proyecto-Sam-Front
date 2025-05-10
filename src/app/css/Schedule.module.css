@@ -1,0 +1,77 @@
+.containerSchedule {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .containerSchedule h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #003366;
+  }
+  
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .labelSchedule {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .inputSchedule {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  .bluebutton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 1rem;
+  }
+  
+  .bluebutton:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Tabla en DeleteSchedule */
+  .scheduleTable {
+    width: 100%;
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+  }
+  
+  .scheduleTable th,
+  .scheduleTable td {
+    border: 1px solid #ccc;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  
+  .scheduleTable th {
+    background-color: #003366;
+    color: white;
+  }
+  
+  .scheduleTable td {
+    background-color: #f1f1f1;
+  }
+  .buttonContainer {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  

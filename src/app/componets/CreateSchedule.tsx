@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
+import styles from '../css/Schedule.module.css';
 
 import stylesLogin from "@/app/css/Login.module.css";
 
@@ -59,48 +60,47 @@ const CreateSchedule = () => {
   };
 
   return (
-    <div className="">
-      <h2 className="">Crear Dia de clases</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="">Fecha</label>
+    <div className={styles.containerSchedule}>
+      <h2 className={styles.title}>Crear Día de Clases</h2>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.formGroup}>
+          <label className={styles.labelSchedule}>Fecha</label>
           <input
             type="date"
-            className=""
+            className={styles.inputSchedule}
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
           />
         </div>
-
-        <div>
-          <label className="">Hora de Entrada</label>
+  
+        <div className={styles.formGroup}>
+          <label className={styles.labelSchedule}>Hora de Entrada</label>
           <input
             type="time"
-            className=""
+            className={styles.inputSchedule}
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             required
           />
         </div>
-
-        <div>
-          <label className="">Hora de Salida</label>
+  
+        <div className={styles.formGroup}>
+          <label className={styles.labelSchedule}>Hora de Salida</label>
           <input
             type="time"
-            className=""
+            className={styles.inputSchedule}
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
             required
           />
         </div>
-
-        <button
-          type="submit"
-          className="bluebutton"
-        >
-          Guardar Horario
-        </button>
+  
+        <div className={styles.buttonContainer}>
+          <button type="submit" className={styles.bluebutton}>
+            Guardar Horario
+          </button>
+        </div>
       </form>
 
       <div className={stylesLogin.messageContainer}>
@@ -109,7 +109,7 @@ const CreateSchedule = () => {
         {loading && <div className={stylesLogin.loading}>loading</div>}
       </div>
     </div>
-  );
+  );  
 };
 
 export default CreateSchedule;
