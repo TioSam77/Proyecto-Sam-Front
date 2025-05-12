@@ -104,8 +104,9 @@
 }
 
 .containerStudents {
+    margin-top: 10px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
 }
 

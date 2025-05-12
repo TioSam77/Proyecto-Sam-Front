@@ -8,8 +8,10 @@ import Image from "next/image";
 const Header = () => {
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/Login";
+    localStorage.removeItem("firebase:host:apifirebase-e635f-default-rtdb.firebaseio.com");
+    localStorage.removeItem("firebase:previous_websocket_failure");
+
+    console.log("holoaoeo")
   };
 
   const pathname = usePathname();
@@ -135,9 +137,10 @@ const Header = () => {
               </Link>
             </li>
 
-            <li className="nav-item" onClick={handleLogout}>
+            <button className="nav-item" onClick={handleLogout}>
               <i className="bi bi-gear-fill me-2 "></i>Cerrar cesion
-            </li>
+            </button>
+
           </ul>
         </div>
       </div>

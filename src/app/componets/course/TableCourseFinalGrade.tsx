@@ -6,6 +6,7 @@ import { collection, getDocs, query, where, setDoc, doc } from "firebase/firesto
 import { auth, db } from "../../../../firebase/clientApp";
 import { Attendance } from "../../data/student";
 import { onAuthStateChanged } from "firebase/auth";
+import style from "@/app/css/Login.module.css"
 
 interface Student {
     id: string;
@@ -52,27 +53,27 @@ const TableCourseFinalGrade = () => {
                 setLogin(false);
                 return;
             }
-    
+
             try {
                 // Solo usamos el filtro de course_id en Firestore
                 const q = query(
                     collection(db, "student_course"),
                     where("course_id", "==", courseId),
                 );
-    
+
                 const querySnapshot = await getDocs(q);
                 const allData = querySnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 })) as Student[];
-    
+
                 // Filtramos por nombre en el frontend
                 const filtered = searchTerm
                     ? allData.filter(s =>
                         s.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     : allData;
-    
+
                 setStudents(filtered);
                 setNotFound(filtered.length === 0);
             } catch (err) {
@@ -82,31 +83,33 @@ const TableCourseFinalGrade = () => {
                 setLogin(false);
             }
         });
-    
+
         return () => unsubscribe();
     };
 
     useEffect(() => {
         handleSearch();
     }, [])
-    
+
     const confirmGrades = async () => {
         try {
             const updatePromises = students.map(async (student) => {
                 const docRef = doc(db, "student_course", student.id);
                 await setDoc(docRef, { grade: student.grade ?? null }, { merge: true });
             });
-    
+
             await Promise.all(updatePromises);
             console.log("Calificaciones confirmadas correctamente");
         } catch (error) {
             console.error("Error al confirmar calificaciones:", error);
         }
     };
-    
+
 
     return (
         <section className={tables.TableContainer}>
+
+            <h3 className={style.welcomeText}>Calificaciones de estudiantes</h3>
             <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
                 <input
                     type="text"

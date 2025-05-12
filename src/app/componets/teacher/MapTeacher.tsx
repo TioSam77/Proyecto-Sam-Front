@@ -122,7 +122,7 @@ const MapTeacher = () => {
 
                         <div className={styleUser.containerButton}>
                             <button className="bluebutton">Editar</button>
-                            <button className="redbutton" onClick={() => handleDeleteClick(user)}>Eliminar</button>
+                            <button className="redbutton" onClick={() => handleDeleteClick(user)}><i className="bi bi-trash-fill"></i></button>
                         </div>
                     </li>
                 ))}

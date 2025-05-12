@@ -1,7 +1,8 @@
 .containerSchedule {
+  width: 400px;
   max-width: 500px;
   padding: 1.5rem;
-  background-color: #f8f9fa;
+  background-color: #f7f9fc;
   border-radius: 4px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }

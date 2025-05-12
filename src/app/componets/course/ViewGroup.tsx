@@ -8,6 +8,7 @@ import { auth, db } from "../../../../firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
 
 import stylesLogin from "@/app/css/Login.module.css";
+import Link from "next/link";
 
 interface courseData {
     id: string,
@@ -74,9 +75,15 @@ const ViewGroup = () => {
                     <p className={styles.teacher}>{courseData?.teacher_name || ""}</p>
                     <div></div>
                     {(!isAdmin) ?
-                        <button className='bluebutton'>Abrir temario</button>
+                        <Link href={`/Profesor/Temario`}>
+                            <button className='bluebutton'>Abrir temario</button>
+                        </Link>
                         :
-                        <button className='bluebutton'>Agregar Temario</button>}
+                        <Link href={`/Administrador/Temario`}>
+                            <button className='bluebutton'>Agregar Temario</button>
+                        </Link>
+
+                    }
                 </div>
             </div>
 
