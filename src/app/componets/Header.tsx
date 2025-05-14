@@ -1,71 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import NavbarCourses from "./course/NavbarCourses";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, limit, query } from "firebase/firestore";
-import { db,auth } from "../../../firebase/clientApp";
-
-interface data{
-  id:string
-  name:string
-}
 
 const Header = () => {
 
   const handleLogout = () => {
-    localStorage.removeItem("firebase:host:apifirebase-e635f-default-rtdb.firebaseio.com");
-    localStorage.removeItem("firebase:previous_websocket_failure");
 
-    console.log("holoaoeo")
   };
 
   const pathname = usePathname();
+  const firstSegment = pathname?.split("/")[1];
 
-  const isAdminPage = pathname?.includes("/Administrador")
-  const isStudentPage = pathname?.includes("/Alumno")
-  const isTeacherPage = pathname?.includes("/Profesor")
-
-  const [data, setData] = useState<data[]>([]);
-  const [login, setLogin] = useState<boolean>(false)
-  const [notFound, setNotFound] = useState(false);
-
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        setData([]);
-        return;
-      }
-
-      try {
-        setLogin(true);
-        const q = query(collection(db, "course"), limit(9));
-        const querySnapshot = await getDocs(q);
-
-        const allData: data[] = querySnapshot.docs.map((doc) => {
-          const docData = doc.data();
-          return {
-            id: doc.id,
-            name: docData.name,
-          };
-        });
-
-        setData(allData);
-        setNotFound(allData.length === 0);
-      } catch (err) {
-        console.error("Error al obtener cursos:", err);
-        setNotFound(true);
-      } finally {
-        setLogin(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [isStudentPage]);
+  const isAdminPage = firstSegment === "Administrador";
+  const isStudentPage = firstSegment === "Alumno";
+  const isTeacherPage = firstSegment === "Profesor";
 
   return (
     <>
@@ -129,11 +81,15 @@ const Header = () => {
             )}
 
             {isTeacherPage && (
-              <li className="nav-item">
-                <Link className="nav-link" href="/Profesor">
-                  <i className="bi bi-easel-fill me-2 text-dark"></i>Profesor
-                </Link>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" href="/Profesor">
+                    <i className="bi bi-easel-fill me-2 text-dark"></i>Profesor
+                  </Link>
+                </li>
+                
+                <NavbarCourses/>
+              </>
             )}
 
             {isStudentPage && (
@@ -144,7 +100,7 @@ const Header = () => {
                   </Link>
                 </li>
 
-                <NavbarCourses data={data}/>
+                <NavbarCourses />
               </>
             )}
 

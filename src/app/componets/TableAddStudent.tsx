@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, limit, where, setDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, query, limit, where, setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
 import { usePathname } from "next/navigation";
 
@@ -22,7 +22,7 @@ const TableAddStudent = () => {
     const pathname = usePathname();
 
     const pathParts = pathname.split("/");
-    const courseId = pathParts[3];
+    const courseId = (pathParts[1] === "Profesor" ? pathParts[2] : pathParts[3]);
 
     useEffect(() => {
         handleSearch();

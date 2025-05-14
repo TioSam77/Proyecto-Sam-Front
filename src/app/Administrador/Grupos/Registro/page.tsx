@@ -1,5 +1,4 @@
 import CreateCourse from "@/app/componets/course/CreateCourse";
-import Link from "next/link";
 
 export default function Page() {
     return (

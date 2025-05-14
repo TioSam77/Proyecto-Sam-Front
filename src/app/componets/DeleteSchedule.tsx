@@ -14,7 +14,7 @@ interface Schedule {
 const DeleteSchedule = () => {
     const pathname = usePathname();
     const pathParts = pathname.split('/');
-    const courseId = pathParts[3];
+    const courseId = (pathParts[1] === "Profesor" ? pathParts[2] : pathParts[3]);
 
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [loading, setLoading] = useState(true);

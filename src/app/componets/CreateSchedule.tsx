@@ -19,7 +19,7 @@ const CreateSchedule = () => {
 
   const pathname = usePathname();
   const pathParts = pathname.split('/');
-  const courseId = pathParts[3];
+  const courseId = (pathParts[1] === "Profesor" ? pathParts[2] : pathParts[3]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true)

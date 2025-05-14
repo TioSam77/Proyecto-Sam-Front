@@ -46,19 +46,21 @@ footer {
 }
 
 .navbar-nav .nav-link {
-    font-size: 1.1rem;        
-    font-weight: bold;         
-    padding: 10px 15px;      
-    border-radius: 6px;        
-    transition: all 0.3s ease; 
-    color: #000 !important;    
-  }
-  
-  .navbar-nav .nav-link:hover {
-    background-color: #007bff; 
-    color: #fff !important;    
-  }
-  
+    width: 100%;
+    text-align: start;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    color: #000 !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #007bff;
+    color: #fff !important;
+}
+
 
 .fondImage {
     width: 100%;
@@ -188,7 +190,7 @@ hr {
     color: #ff3d3d;
 }
 
-a{
+a {
     text-decoration: none;
     color: black;
 }
