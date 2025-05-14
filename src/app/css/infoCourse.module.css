@@ -1,41 +1,41 @@
-
 .card {
-    border: 1px solid #cfcfcf;
-    border-radius: 0 0 4px 4px;
-    padding: 1rem;
-    width: 100%;
-    background-color: #f9f9f9;
-    margin-bottom: 10px;
-  }
-  
-  .title {
-    font-size: 1.75rem;
-    color: #0070f3;
-    margin-bottom: 0.5rem;
-  }
-  
-  .description {
-    font-size: 1rem;
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
+  border: 1px solid #cfcfcf;
+  border-radius: 0 0 4px 4px;
+  padding: 1rem;
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
 
-  .welcome {
-    font-weight: bold;
-    font-size: 1.6rem;
-    color: #000000;
-    margin:0;
-  }
+.title {
+  font-size: 1.75rem;
+  color: #0070f3;
+  margin-bottom: 0.5rem;
+}
 
-  .teacher {
-    font-size: 1.2rem;
-    color: #0070f3;
-    margin:0;
+.description {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
 
-  }
-  .flexrow{
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    align-items: center;
-  }
+.welcome {
+  font-weight: bold;
+  font-size: 1.6rem;
+  color: #000000;
+  margin: 0;
+}
+
+.teacher {
+  font-size: 1.2rem;
+  color: #0070f3;
+  margin: 0;
+
+}
+
+.flexrow {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}

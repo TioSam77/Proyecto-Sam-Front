@@ -3,8 +3,9 @@
   max-width: 500px;
   padding: 1.5rem;
   background-color: #f7f9fc;
+  border: 1px solid #cfcfcf;
   border-radius: 4px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  margin: 10px auto;
 }
 
 .formGroup {
@@ -75,4 +76,10 @@
   font-weight: bold;
   color: #1e3a8a;
   margin-bottom: 1rem;
+}
+
+@media(max-width:993px) {
+  .containerSchedule {
+    width: 100%;
+  }
 }

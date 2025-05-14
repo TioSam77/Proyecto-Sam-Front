@@ -28,6 +28,7 @@ const ViewGroup = () => {
     const isTeacher = pathname.includes("/Profesor")
     const segments = pathname.split('/');
     const courseId: string = isAdmin ? segments[3] : segments[2];
+    const user: string = segments[1]
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -71,18 +72,18 @@ const ViewGroup = () => {
                     :
                     <p className={styles.welcome}>Profesor:</p>
                 }
+                <p className={styles.teacher}>{courseData?.teacher_name}</p>
                 <div className={styles.flexrow}>
-                    <p className={styles.teacher}>{courseData?.teacher_name || ""}</p>
+
                     <div></div>
                     {(!isAdmin) ?
-                        <Link href={`/Profesor/Temario`}>
+                        <Link href={`/${user}/${courseId}/Temario`}>
                             <button className='bluebutton'>Abrir temario</button>
                         </Link>
                         :
-                        <Link href={`/Administrador/Temario`}>
+                        <Link href={`/Administrador/Grupos/${courseId}/Temario`}>
                             <button className='bluebutton'>Agregar Temario</button>
                         </Link>
-
                     }
                 </div>
             </div>

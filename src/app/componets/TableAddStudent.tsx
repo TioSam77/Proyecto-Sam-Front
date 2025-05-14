@@ -125,36 +125,6 @@ const TableAddStudent = () => {
         }
     };
 
-    const handleRemove = async (student: Student) => {
-        try {
-            const relationRef = query(
-                collection(db, "student_course"),
-                where("student_id", "==", student.id),
-                where("course_id", "==", courseId)
-            );
-            const relationSnap = await getDocs(relationRef);
-
-            if (relationSnap.empty) {
-                alert("El estudiante no está registrado en este curso.");
-                return;
-            }
-
-            const batchDelete = relationSnap.docs.map(docRef => deleteDoc(doc(db, "student_course", docRef.id)));
-            await Promise.all(batchDelete);
-
-            alert(`Estudiante ${student.name} fue retirado del curso.`);
-
-            setData(prev =>
-                prev.map(s =>
-                    s.id === student.id ? { ...s, active: false } : s
-                )
-            );
-        } catch (error) {
-            console.error("Error al sacar al estudiante:", error);
-            alert("Ocurrió un error al retirar al estudiante del curso.");
-        }
-    };
-
     return (
         <section className={tables.TableContainer}>
             <h4>Agregar estudiante al curso</h4>
@@ -197,12 +167,16 @@ const TableAddStudent = () => {
                                         {row.name}
                                     </td>
                                     <td>
-                                        <button
-                                            onClick={() => row.active ? handleRemove(row) : handleRegister(row)}
-                                            className={row.active ? "toggle-button active" : "toggle-button"}
-                                        >
-                                            {row.active ? "Eliminar" : "Inscribir"}
-                                        </button>
+                                        {row.active ? (
+                                            <span style={{ fontWeight: "bold", color: "green" }}>Inscrito</span>
+                                        ) : (
+                                            <button
+                                                onClick={() => handleRegister(row)}
+                                                className="toggle-button"
+                                            >
+                                                Inscribir
+                                            </button>
+                                        )}
 
                                     </td>
                                 </tr>

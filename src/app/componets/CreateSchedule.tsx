@@ -61,7 +61,7 @@ const CreateSchedule = () => {
 
   return (
     <div className={styles.containerSchedule}>
-      <h2 className={styles.title}>Crear Día de Clases</h2>
+      <h2 className={styles.title}>Crear un de clases</h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.labelSchedule}>Fecha</label>

@@ -7,6 +7,8 @@ import { auth, db } from "../../../../firebase/clientApp";
 import { Attendance } from "../../data/student";
 import { onAuthStateChanged } from "firebase/auth";
 import style from "@/app/css/Login.module.css"
+import stylesLogin from "@/app/css/Login.module.css";
+
 
 interface Student {
     id: string;
@@ -24,6 +26,11 @@ const TableCourseFinalGrade = () => {
     const [students, setStudents] = useState<Student[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
+
+    const [error, setError] = useState<string | null>("");
+    const [alert, setAlert] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+
 
     const pathname = usePathname();
     const pathParts = pathname.split("/");
@@ -92,6 +99,9 @@ const TableCourseFinalGrade = () => {
     }, [])
 
     const confirmGrades = async () => {
+        setAlert("")
+        setError("")
+        setLoading(true)
         try {
             const updatePromises = students.map(async (student) => {
                 const docRef = doc(db, "student_course", student.id);
@@ -99,9 +109,11 @@ const TableCourseFinalGrade = () => {
             });
 
             await Promise.all(updatePromises);
-            console.log("Calificaciones confirmadas correctamente");
+            setAlert("Calificaciones confirmadas correctamente");
+            setLoading(false)
         } catch (error) {
-            console.error("Error al confirmar calificaciones:", error);
+            setError(`Error al confirmar calificaciones: ${error}`);
+            setLoading(false)
         }
     };
 
@@ -168,37 +180,59 @@ const TableCourseFinalGrade = () => {
                                             <div
                                                 className={tables.select}
                                                 style={{
+                                                    textAlign: "center",
                                                     backgroundColor:
-                                                        row.grade === 10 ? "lightgreen" :
-                                                            row.grade === 9 ? "lightblue" :
-                                                                row.grade === 8 ? "#CBC3E3" :
-                                                                    row.grade === 7 ? "lightyellow" :
-                                                                        row.grade === 6 ? "orange" :
-                                                                            row.grade === 5 ? "lightcoral" : "",
-                                                }} >{row.grade ?? "-"}</div>
-                                            :
-
-                                            <select
-                                                className={tables.select}
-                                                value={row.grade ?? ""}
-                                                onChange={(e) => handleGradeChange(row.id, Number(e.target.value))}
-                                                style={{
-                                                    backgroundColor:
-                                                        row.grade === 10 ? "lightgreen" :
-                                                            row.grade === 9 ? "lightblue" :
-                                                                row.grade === 8 ? "#CBC3E3" :
-                                                                    row.grade === 7 ? "lightyellow" :
-                                                                        row.grade === 6 ? "orange" :
-                                                                            row.grade === 5 ? "lightcoral" : "",
-                                                    cursor: "pointer"
+                                                        !isNaN(row.grade) ? (
+                                                            row.grade >= 90 ? "lightgreen" :
+                                                                row.grade >= 80 ? "lightblue" :
+                                                                    row.grade >= 70 ? "#CBC3E3" :
+                                                                        row.grade >= 60 ? "lightyellow" :
+                                                                            row.grade >= 50 ? "orange" :
+                                                                                "lightcoral"
+                                                        ) : "",
                                                 }}
                                             >
-                                                {grades.map((grade) => (
-                                                    <option key={grade} value={grade ?? ""}>{grade ?? "-"}</option>
-                                                ))}
-                                            </select>
-                                        }
+                                                {(!isNaN(row.grade) && row.grade !== null) ? row.grade : "-"}
+                                            </div>
 
+                                            :
+
+                                            <input
+                                                type="text"
+                                                inputMode="decimal" // <-- ayuda a dispositivos móviles
+                                                className={tables.select}
+                                                value={row.grade !== null && !isNaN(row.grade) ? String(row.grade) : ""}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+
+                                                    // Permitir campo vacío
+                                                    if (value === "") {
+                                                        handleGradeChange(row.id, NaN);
+                                                        return;
+                                                    }
+
+                                                    // Permitir decimales válidos (punto como separador)
+                                                    const numericValue = parseFloat(value);
+                                                    if (!isNaN(numericValue) && numericValue >= 0 && numericValue <= 100) {
+                                                        handleGradeChange(row.id, numericValue);
+                                                    }
+                                                }}
+                                                style={{
+                                                    textAlign: "center",
+                                                    backgroundColor:
+                                                        !isNaN(row.grade) ? (
+                                                            row.grade >= 90 ? "lightgreen" :
+                                                                row.grade >= 80 ? "lightblue" :
+                                                                    row.grade >= 70 ? "#CBC3E3" :
+                                                                        row.grade >= 60 ? "lightyellow" :
+                                                                            row.grade >= 50 ? "orange" :
+                                                                                "lightcoral"
+                                                        ) : "",
+                                                }}
+                                                placeholder="-"
+                                            />
+
+                                        }
 
                                     </td>
                                 </tr>
@@ -206,6 +240,12 @@ const TableCourseFinalGrade = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </section>
     );

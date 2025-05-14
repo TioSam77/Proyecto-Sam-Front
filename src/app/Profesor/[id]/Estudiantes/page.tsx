@@ -8,7 +8,6 @@ export default function Page() {
         <>
             <div className={course.containerStudents}>
 
-                <TableAddStudent />
                 <TableStudent />
                 
             </div>

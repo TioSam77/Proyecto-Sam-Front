@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "@/../firebase/clientApp";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface Student {
     id: string;
@@ -170,6 +171,10 @@ const TableStudent = () => {
                     </tbody>
                 </table>
             </div>
+
+            <Link href={`InscribirEstudiante`}>
+                <button className='bluebutton'>Inscribir Estudiante</button>
+            </Link>
         </section>
     );
 };

@@ -31,13 +31,16 @@ const DeleteSchedule = () => {
             const data = querySnapshot.docs.map((docSnap) => {
                 const d = docSnap.data();
                 const dateStr = d.date;
+                const dateObj = new Date(dateStr);
 
                 return {
                     id: docSnap.id,
                     date: dateStr,
-                    dateObj: new Date(dateStr),
+                    dateObj,
                 };
-            });
+            })
+                .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
+
 
             setSchedules(data);
         } catch (error) {
@@ -78,19 +81,28 @@ const DeleteSchedule = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {schedules.map((schedule) => (
-                                <tr key={schedule.id}>
-                                    <td>{schedule.date ? schedule.date.split('-').reverse().join('/') : 'Fecha inválida'}</td>
-                                    <td>
-                                        <button
-                                            onClick={() => handleDelete(schedule.id)}
-                                            className={styles.deleteButton}
-                                        >
-                                            <i className="bi bi-trash-fill"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {schedules.map((schedule) => {
+                                const [year, month, day] = schedule.date.split("-").map(Number);
+                                const dateObj = new Date(year, month - 1, day);
+                                const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+                                const dayName = dayNames[dateObj.getDay()];
+
+                                return (
+                                    <tr key={schedule.id}>
+                                        <td>
+                                            <div>{dayName}</div>
+                                            {schedule.date ? schedule.date.split('-').reverse().join('/') : 'Fecha inválida'}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleDelete(schedule.id)}
+                                                className={styles.deleteButton}
+                                            >
+                                                <i className="bi bi-trash-fill"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </div>

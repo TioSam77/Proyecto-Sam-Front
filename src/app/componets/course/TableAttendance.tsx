@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
+import style from "@/app/css/Teacher.module.css"
+import styles from "@/app/css/Login.module.css"
 
 import { Attendance } from "../../data/student";
 import { usePathname } from "next/navigation";
@@ -13,6 +15,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../../firebase/clientApp";
 import { doc, updateDoc, setDoc } from "firebase/firestore";
+import Link from "next/link";
 
 interface Student {
     id: string;
@@ -215,6 +218,14 @@ const TableAttendance = () => {
 
     return (
         <section className={tables.TableContainer}>
+            <h3 className={styles.welcomeText}>Asistencia de Estudiantes</h3>
+            <div className={style.simplebox}>
+                <h5 style={{ backgroundColor: "lightgreen", borderRadius: "4px", padding: "3px" }}>P = Present</h5>
+                <h5 style={{ backgroundColor: "lightblue", borderRadius: "4px", padding: "3px" }}>PL = Present/Late</h5>
+                <h5 style={{ backgroundColor: "#CBC3E3", borderRadius: "4px", padding: "3px" }}>N = Absent with notification</h5>
+                <h5 style={{ backgroundColor: "lightcoral", borderRadius: "4px", padding: "3px" }}>A = Absent</h5>
+            </div>
+
             <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
                 <input
                     type="text"
@@ -348,6 +359,16 @@ const TableAttendance = () => {
                     </tbody>
                 </table>
             </div>
+
+            <div style={{display:"flex", gap:"10px"}}>
+                <Link href={`CrearDia`}>
+                    <button className='bluebutton'>Agregar dia de clases</button>
+                </Link>
+                <Link href={`EliminarDia`}>
+                    <button className='bluebutton'>Eliminar dia de clases</button>
+                </Link>
+            </div>
+
         </section>
     );
 };

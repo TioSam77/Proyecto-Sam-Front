@@ -131,13 +131,7 @@ const Header = () => {
               </>
             )}
 
-            <li className="nav-item">
-              <Link className="nav-link" href="/Configuracion">
-                <i className="bi bi-gear-fill me-2 "></i>Configuracion
-              </Link>
-            </li>
-
-            <button className="nav-item" onClick={handleLogout}>
+            <button className="nav-item containerLink nav-link" onClick={handleLogout}>
               <i className="bi bi-gear-fill me-2 "></i>Cerrar cesion
             </button>
 
