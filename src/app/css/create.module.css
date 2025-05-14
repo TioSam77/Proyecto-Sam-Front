@@ -36,6 +36,7 @@
 }
 
 .loginBox {
+    width: 100%;
     position: relative;
     background: #f7f9fc;
     padding: 30px;
@@ -101,4 +102,10 @@
 }
 .textCenter{
     text-align: center;
+}
+
+@media(max-width:769px){
+    .flex{
+        flex-direction: column;
+    }
 }

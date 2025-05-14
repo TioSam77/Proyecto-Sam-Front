@@ -15,6 +15,7 @@ export default function RootLayout({
     const isAdminSubroute = pathname.match(/^\/Administrador\/(Grupos)\/.+/);
     const isRegistroRuta = [
         "/Administrador/Grupos/Registro",
+        "/Administrador/Grupos/CrearMateria",
         "/Administrador/Alumnos/Registro",
     ].some(route => pathname.startsWith(route));
 

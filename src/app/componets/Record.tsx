@@ -1,0 +1,83 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { getDocs, collection } from 'firebase/firestore';
+import styles from '@/app/css/Table.module.css';
+import { db } from '../../../firebase/clientApp';
+
+const Record: React.FC = () => {
+  const [data, setData] = useState<Array<Record<string, any>>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMovements = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'movements'));
+        const results: Array<Record<string, any>> = [];
+        querySnapshot.forEach((doc) => {
+          results.push({ id: doc.id, ...doc.data() });
+        });
+        setData(results);
+      } catch (error) {
+        console.error('Error fetching movements:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovements();
+  }, []);
+
+  const headers = data.length > 0 ? Object.keys(data[0]) : ['Responsable','Fecha','Accion', 'Tabla', 'Detalles'];
+
+  return (
+    <div className={styles.TableContainer}>
+        <h3>Historial de modificaciones</h3>
+      <div className={styles.box}>
+        <table>
+          <thead>
+            <tr>
+              {headers.map((header, idx) => (
+                <th
+                  key={header}
+                  className={idx === 0 ? styles.fixedColRow : styles.fixedRow}
+                >
+                  {header.toUpperCase()}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.length > 0 ? (
+              data.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className={rowIndex % 2 === 0 ? styles['row-even'] : styles['row-odd']}
+                >
+                  {headers.map((key, colIndex) => (
+                    <td
+                      key={colIndex}
+                      className={colIndex === 0 ? styles.fixedCol : ''}
+                    >
+                      {typeof row[key] === 'object'
+                        ? JSON.stringify(row[key])
+                        : row[key]}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={headers.length} className={styles.noData}>
+                  No hay movimientos registrados
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default Record;

@@ -149,8 +149,9 @@ const TableCourseFinalGrade = () => {
                                         <button
                                             className={tables.tableButton}
                                             onClick={confirmGrades}
+                                            disabled={loading}
                                         >
-                                            Confirmar
+                                            Asignar
                                         </button>
                                     </div>
                                 )}

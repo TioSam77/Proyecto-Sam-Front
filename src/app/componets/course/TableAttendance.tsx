@@ -360,14 +360,16 @@ const TableAttendance = () => {
                 </table>
             </div>
 
-            <div style={{display:"flex", gap:"10px"}}>
-                <Link href={`CrearDia`}>
-                    <button className='bluebutton'>Agregar dia de clases</button>
-                </Link>
-                <Link href={`EliminarDia`}>
-                    <button className='bluebutton'>Eliminar dia de clases</button>
-                </Link>
-            </div>
+            {!isStudent &&
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Link href={`CrearDia`}>
+                        <button className='bluebutton'>Agregar dia de clases</button>
+                    </Link>
+                    <Link href={`EliminarDia`}>
+                        <button className='bluebutton'>Eliminar dia de clases</button>
+                    </Link>
+                </div>
+            }
 
         </section>
     );

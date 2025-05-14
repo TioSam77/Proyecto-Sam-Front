@@ -1,10 +1,10 @@
 import CreateCourse from "@/app/componets/course/CreateCourse";
-import Link from "next/link";
+import CreateSubject from "@/app/componets/course/CreateSubject";
 
 export default function Page() {
     return (
-        <div>
-            <CreateCourse />
+        <div >
+        <CreateSubject/>
         </div>
     )
 }

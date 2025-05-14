@@ -7,6 +7,8 @@ import stylesLogin from "@/app/css/Login.module.css";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../../firebase/clientApp";
 import { onAuthStateChanged } from "firebase/auth";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type Day =
     | "Lunes"
@@ -58,6 +60,9 @@ const CreateCourse = () => {
     const [error, setError] = useState<string | null>("");
     const [alert, setAlert] = useState("");
     const [login, setLogin] = useState<boolean>(false)
+
+    const pathname = usePathname();
+    const isStudent = pathname.includes("/Alumno");
 
     useEffect(() => {
         setLogin(true);
@@ -209,7 +214,19 @@ const CreateCourse = () => {
         <section className={create.sectionContainer}>
             <div className={create.boxWrapper}>
 
+
                 <form className={create.loginBox} onSubmit={handleSubmit}>
+
+                    {!isStudent &&
+                        <div style={{ display: "flex", gap: "10px",justifyContent:"space-evenly",marginBottom:"10px" }}>
+                            <Link href={`CrearMateria`}>
+                                <button className='bluebutton'>Crear Materia</button>
+                            </Link>
+                            <Link href={`EliminarMateria`}>
+                                <button className='bluebutton'>Eliminar Materia</button>
+                            </Link>
+                        </div>
+                    }
                     <h2 className={create.textCenter}>Creacion de Grupo</h2>
 
                     <div className={create.flex}>
