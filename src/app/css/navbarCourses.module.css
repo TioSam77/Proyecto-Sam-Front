@@ -1,0 +1,63 @@
+/* Contenedor principal de las tarjetas */
+.navbarCourseContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+/* Cada tarjeta individual */
+.courseCard {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    background-color: #f1f3f4;
+    text-decoration: none;
+    color: #202124;
+    overflow: hidden;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.courseCard:hover {
+    background-color: #e8eaed;
+    transform: scale(1.02);
+}
+
+/* Parte superior de la tarjeta (color plano) */
+.cardHeader {
+    height: 24px;
+    background-color: #5c6bc0; /* azul tipo Material Design */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Contenido del nombre del curso */
+.cardBody {
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+/* Texto del nombre del curso */
+.courseName {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Texto cuando no hay cursos */
+.emptyText {
+    font-size: 0.85rem;
+    color: #757575;
+    padding: 0.5rem;
+    text-align: center;
+}

@@ -1,9 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import NavbarCourses from "./course/NavbarCourses";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+import { db,auth } from "../../../firebase/clientApp";
+
+interface data{
+  id:string
+  name:string
+}
 
 const Header = () => {
 
@@ -20,6 +29,43 @@ const Header = () => {
   const isStudentPage = pathname?.includes("/Alumno")
   const isTeacherPage = pathname?.includes("/Profesor")
 
+  const [data, setData] = useState<data[]>([]);
+  const [login, setLogin] = useState<boolean>(false)
+  const [notFound, setNotFound] = useState(false);
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setData([]);
+        return;
+      }
+
+      try {
+        setLogin(true);
+        const q = query(collection(db, "course"), limit(9));
+        const querySnapshot = await getDocs(q);
+
+        const allData: data[] = querySnapshot.docs.map((doc) => {
+          const docData = doc.data();
+          return {
+            id: doc.id,
+            name: docData.name,
+          };
+        });
+
+        setData(allData);
+        setNotFound(allData.length === 0);
+      } catch (err) {
+        console.error("Error al obtener cursos:", err);
+        setNotFound(true);
+      } finally {
+        setLogin(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [isStudentPage]);
 
   return (
     <>
@@ -91,11 +137,15 @@ const Header = () => {
             )}
 
             {isStudentPage && (
-              <li className="nav-item">
-                <Link className="nav-link" href="/Alumno">
-                  <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Alumno
-                </Link>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" href="/Alumno">
+                    <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Alumno
+                  </Link>
+                </li>
+
+                <NavbarCourses data={data}/>
+              </>
             )}
 
 
