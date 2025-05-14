@@ -19,8 +19,6 @@ interface Student {
     grade: number;
 }
 
-const grades: (number | null)[] = [null, 5, 6, 7, 8, 9, 10];
-
 const TableCourseFinalGrade = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [students, setStudents] = useState<Student[]>([]);

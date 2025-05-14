@@ -1,6 +1,5 @@
 'use client'
 import style from "@/app/css/Teacher.module.css"
-import styles from "@/app/css/Login.module.css"
 import { usePathname } from "next/navigation";
 import TableAttendance from "@/app/componets/course/TableAttendance";
 

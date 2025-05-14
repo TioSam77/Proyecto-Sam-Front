@@ -22,15 +22,16 @@ interface course {
 }
 
 const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
-    const currentPath = usePathname();
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
-
+    
     const [error, setError] = useState<string | null>("");
-
-    const isAdmin = currentPath.includes("/Administrador");
-    const isStudent = currentPath.includes("/Alumno");
+    
+    const pathname = usePathname();
+    const segments = pathname.split('/');
+    const isAdmin = segments[1]="/Administrador";
+    const isStudent = segments[1]="/Alumno";
     const basePath = isAdmin
         ? '/Administrador/Grupos'
         : isStudent
@@ -100,7 +101,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                 <button className="bluebutton">Buscar</button>
                 {!isStudent ? (
                     isAdmin && (
-                        <Link href={`${currentPath}/Registro`}>
+                        <Link href={`${pathname}/Registro`}>
                             <button className={styleUser.button}>Nuevo Grupo</button>
                         </Link>
                     )
