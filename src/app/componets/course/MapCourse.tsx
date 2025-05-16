@@ -25,13 +25,14 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
-    
+
     const [error, setError] = useState<string | null>("");
-    
+
     const pathname = usePathname();
     const segments = pathname.split('/');
-    const isAdmin = segments[1]==="Administrador";
-    const isStudent = segments[1]==="Alumno";
+    const isAdmin = segments[1] === "Administrador";
+    const isTeacher = segments[1] === "Profesor";
+    const isStudent = segments[1] === "Alumno";
     const basePath = isAdmin
         ? '/Administrador/Grupos'
         : isStudent
@@ -99,17 +100,13 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                {!isStudent ? (
-                    isAdmin && (
-                        <Link href={`${pathname}/Registro`}>
-                            <button className={styleUser.button}>Nuevo Grupo</button>
-                        </Link>
-                    )
-                ) : (
-                    !isAdmin && (
-                        <button className={styleUser.button}>+</button>
-                    )
-                )
+                {isStudent && 
+                    <button className={styleUser.button}>+</button>
+                }
+                {isAdmin && 
+                    <Link href={`/Administrador/Grupos/Registro`}>
+                        <button className={styleUser.button}>Nuevo Grupo</button>
+                    </Link>
                 }
             </div>
             <ol className={styleCourse.containerSubjects}>

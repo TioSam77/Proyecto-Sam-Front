@@ -30,6 +30,7 @@
     text-align: left;
     overflow: hidden;
     cursor: pointer;
+    border: 1px solid #cfcfcf;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 

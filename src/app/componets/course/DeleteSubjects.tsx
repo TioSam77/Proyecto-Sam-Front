@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-// import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-// import { db } from '../../../firebase/clientApp';
-import styles from '../css/DeleteSubjects.module.css'; // Usa un estilo ya existente o reemplaza por uno nuevo
+import styles from '@/app/css/DeleteSubjects.module.css';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { db } from '../../../../firebase/clientApp';
 
 interface Subject {
   id: string;
@@ -14,25 +14,6 @@ const DeleteSubjects = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔧 Simulación temporal SIN conexión a Firebase
-  const fetchSubjects = async () => {
-    setTimeout(() => {
-      setSubjects([
-        { id: '1', name: 'Inglés' },
-        { id: '2', name: 'Matemáticas' },
-        { id: '3', name: 'Física' },
-        { id: '4', name: 'Programación' }
-      ]);
-      setLoading(false);
-    }, 500);
-  };
-
-  const handleDelete = async (id: string) => {
-    setSubjects(prev => prev.filter(subject => subject.id !== id));
-  };
-
-  // ✅ Código real (descomentar cuando Firebase esté listo)
-  /*
   const fetchSubjects = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'subject'));
@@ -56,7 +37,6 @@ const DeleteSubjects = () => {
       console.error('Error al eliminar la materia:', error);
     }
   };
-  */
 
   useEffect(() => {
     fetchSubjects();
@@ -88,7 +68,7 @@ const DeleteSubjects = () => {
                       onClick={() => handleDelete(subject.id)}
                       className={styles.deleteButton}
                     >
-                      🗑️
+                      <i className="bi bi-trash-fill"></i>
                     </button>
                   </td>
                 </tr>

@@ -3,7 +3,8 @@
 .containerDelete {
   background-color: #f7f9fc;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 4px;
+  border: 1px solid #cfcfcf;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: 0 auto;
@@ -21,7 +22,7 @@
   max-height: 300px;
   overflow-y: auto;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: white;
 }
 
@@ -53,7 +54,7 @@
   color: white;
   border: none;
   padding: 8px 14px;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s ease;

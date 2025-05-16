@@ -176,8 +176,8 @@ const TableAttendance = () => {
 
             // Paso 1: Actualiza asistencia de cada estudiante en student_course
             const updatePromises = students.map(async (student) => {
-                const attendanceValue = student.attendance[date] ?? null;
-                if (!attendanceValue) return;
+                const attendanceValue = student.attendance?.[date] ?? null;
+                if (attendanceValue === null) return;
 
                 const docRef = doc(db, "student_course", student.id);
                 await setDoc(

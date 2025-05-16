@@ -5,11 +5,8 @@ import styles from "@/app/css/Login.module.css";
 import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from "firebase/firestore";
-import Image from "next/image";
 
 const RegisterAdmin = () => {
-  const [selectedCountry, setSelectedCountry] = useState("CR");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -53,15 +50,6 @@ const RegisterAdmin = () => {
     return () => clearTimeout(timeout);
   }, [alert]);
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCountry(e.target.value);
-  };
-
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleanedInput = e.target.value.replace(/\D/g, "");
-    setPhoneNumber(cleanedInput);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -95,7 +83,6 @@ const RegisterAdmin = () => {
       setEmail("");
       setName("");
       setSurname("");
-      setPhoneNumber("");
       setPassword("");
       setConfirmPassword("");
 
@@ -177,10 +164,6 @@ const RegisterAdmin = () => {
             {loadingfirebase ? "Cargando..." : "Crear"}
           </button>
 
-          <p className={styles.register}>
-            ¿Ya tienes cuenta?
-            <a href="/Login" className={styles.registerLink}>Logearte</a>
-          </p>
         </div>
       </form>
 
