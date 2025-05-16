@@ -1,12 +1,16 @@
-'use client';
+'use client'
 
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
+import countryList from "../countries.json";
 import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from "firebase/firestore";
+import Image from "next/image";
 
 const RegisterAdmin = () => {
+  const [selectedCountry, setSelectedCountry] = useState("CR");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,8 +21,7 @@ const RegisterAdmin = () => {
   const [alert, setAlert] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [createUserWithEmailAndPassword, , loadingfirebase, firebaseError] =
-    useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword, , loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
 
   useEffect(() => {
     if (!firebaseError?.message) return;
@@ -26,16 +29,20 @@ const RegisterAdmin = () => {
     const message = firebaseError.message;
     const errorCode = message.match(/auth\/[a-zA-Z0-9-_]+/)?.[0];
 
-    const errorMap: { [key: string]: string } = {
-      "auth/email-already-in-use": "Ese correo ya está registrado.",
-      "auth/invalid-email": "Ese correo es inválido.",
-      "auth/weak-password": "La contraseña es muy débil. Usa al menos 6 caracteres.",
-      "auth/missing-password": "La contraseña es obligatoria.",
-      "auth/operation-not-allowed": "La creación de cuentas está deshabilitada temporalmente.",
-      "auth/too-many-requests": "Demasiados intentos fallidos. Intenta de nuevo más tarde.",
-    };
-
-    setError(errorMap[errorCode || ""] || "Ocurrió un error al registrar el usuario. Intenta nuevamente.");
+    switch (errorCode) {
+      case "auth/email-already-in-use":
+        setError("Ese correo ya está registrado.");
+        break;
+      case "auth/invalid-email":
+        setError("Ese correo es inválido.");
+        break;
+      case "auth/weak-password":
+        setError("La contraseña es muy débil. Usa al menos 6 caracteres.");
+        break;
+      default:
+        setError("Ocurrió un error al registrar el usuario. Intenta nuevamente.");
+        break;
+    }
   }, [firebaseError]);
 
   useEffect(() => {
@@ -49,6 +56,19 @@ const RegisterAdmin = () => {
     const timeout = setTimeout(() => setAlert(""), 4000);
     return () => clearTimeout(timeout);
   }, [alert]);
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountry(e.target.value);
+  };
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const cleanedInput = input.replace(/\D/g, "");
+    setPhoneNumber(cleanedInput);
+  };
+
+  const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);
+  const countryCode = selectedCountryData ? `+${selectedCountryData.phoneCode}` : "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,16 +93,18 @@ const RegisterAdmin = () => {
         email,
         name,
         surname,
-        role: "admin",
+        phoneNumber: `${countryCode} ${phoneNumber}`,
+        role: "2"
       };
 
       const docRef = doc(db, "admin", user.uid);
       await setDoc(docRef, userData);
 
-      setAlert("Administrador creado exitosamente.");
+      setAlert("Administrador registrado exitosamente.");
       setEmail("");
       setName("");
       setSurname("");
+      setPhoneNumber("");
       setPassword("");
       setConfirmPassword("");
 
@@ -99,11 +121,11 @@ const RegisterAdmin = () => {
 
   return (
     <section className={styles.loginContainer}>
+
       <form className={styles.boxWrapper} onSubmit={handleSubmit}>
         <div className={styles.borderGradient}></div>
-
         <div className={styles.loginBox}>
-          <h2>Creación de Cuenta de Administrador</h2>
+          <h2>Creación de Cuenta de Admin</h2>
 
           <div className={styles.separator}>
             <label>Correo Electrónico</label>
@@ -160,6 +182,40 @@ const RegisterAdmin = () => {
             />
           </div>
 
+          <div className={styles.separator}>
+            <label>Teléfono</label>
+            <div className={styles.inputField} style={{ display: 'flex' }}>
+              <div className={styles.countrySelector}>
+                <select
+                  className={styles.PhoneInputSelect}
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                  style={{ borderWidth: "0" }}
+                >
+                  {countryList.map((country) => (
+                    <option key={country.iso2} value={country.iso2}>
+                      {country.nameES}
+                    </option>
+                  ))}
+                </select>
+                <Image
+                  src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry}.svg`}
+                  alt={selectedCountry}
+                  className={styles.flagIcon}
+                  height="10"
+                  width="10"
+                />
+                <span className={styles.countryCode}>{countryCode}</span>
+              </div>
+              <input
+                type="tel"
+                className={styles.phoneInput}
+                value={phoneNumber}
+                onChange={handlePhoneNumberChange}
+              />
+            </div>
+          </div>
+
           <button className={styles.blueButton} disabled={loadingfirebase}>
             {loadingfirebase ? "Cargando..." : "Crear"}
           </button>
@@ -170,8 +226,9 @@ const RegisterAdmin = () => {
       <div className={styles.messageContainer}>
         {error && <div className={styles.errorBox}>{error}</div>}
         {alert && <div className={styles.alertBox}>{alert}</div>}
-        {loading && <div className={styles.loading}>Cargando...</div>}
+        {loading && <div className={styles.loading}>loading</div>}
       </div>
+
     </section>
   );
 };
