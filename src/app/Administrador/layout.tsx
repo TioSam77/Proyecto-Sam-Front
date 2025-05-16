@@ -16,6 +16,7 @@ export default function RootLayout({
     const isRegistroRuta = [
         "/Administrador/Grupos/Registro",
         "/Administrador/Grupos/CrearMateria",
+        "/Administrador/Grupos/Editar",
         "/Administrador/Grupos/EliminarMateria",
         "/Administrador/Alumnos/Registro",
     ].some(route => pathname.startsWith(route));

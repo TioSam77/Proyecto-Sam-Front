@@ -6,25 +6,25 @@ import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firesto
 import { db } from '../../../../firebase/clientApp';
 import { usePathname } from 'next/navigation';
 
-interface studentData{
-  id:string
-  name?:string,
-  surname?:string,
-  email?:string,
-  bio?:string,
-  matricula?:string,
-  career?:string,
-  phoneNumber?:string
+interface studentData {
+  id: string
+  name?: string,
+  surname?: string,
+  email?: string,
+  bio?: string,
+  matricula?: string,
+  career?: string,
+  phoneNumber?: string
 }
 
-interface course{
-  id:string,
-  name:string
+interface course {
+  id: string,
+  name: string
 }
 
 const ViewStudent = () => {
   const [showCourses, setShowCourses] = useState(false);
-  const [studentData, setStudentData] = useState<studentData |null>(null);
+  const [studentData, setStudentData] = useState<studentData | null>(null);
   const [courses, setCourses] = useState<course[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingCourses, setLoadingCourses] = useState(false);
@@ -99,11 +99,14 @@ const ViewStudent = () => {
 
   return (
     <div className={styleTeacher.teacherCard}>
-      <h3 className={styleTeacher.teacherName}>
-        {(studentData?.surname && studentData?.name)
-          ? `${studentData.surname} ${studentData.name}`
-          : 'Nombre del estudiante'}
-      </h3>
+      <div className={styleTeacher.headerButton}>
+        <h3 className={styleTeacher.teacherName}>
+          {(studentData?.surname && studentData?.name)
+            ? `${studentData.surname} ${studentData.name}`
+            : 'Nombre del estudiante'}
+        </h3>
+        <button className='bluebutton'>Editar</button>
+      </div>
 
       <p className={styleTeacher.teacherBio}>{studentData?.bio || 'Descripción no disponible.'}</p>
       <div className={styleTeacher.teacherDetails}>

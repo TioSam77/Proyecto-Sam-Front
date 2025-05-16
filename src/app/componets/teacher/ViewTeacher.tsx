@@ -6,25 +6,25 @@ import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firesto
 import { db } from '../../../../firebase/clientApp';
 import { usePathname } from 'next/navigation';
 
-interface data{
-  id:string
-  name:string
+interface data {
+  id: string
+  name: string
 }
 
-interface teacher{
-  id:string,
-  name?:string,
-  surname?:string,
-  email?:string,
-  phoneNumber?:string,
-  bio?:string,
-  office?:string,
-  department?:string
+interface teacher {
+  id: string,
+  name?: string,
+  surname?: string,
+  email?: string,
+  phoneNumber?: string,
+  bio?: string,
+  office?: string,
+  department?: string
 }
 
 const ViewTeacher = () => {
   const [showCourses, setShowCourses] = useState(false);
-  const [teacherData, setTeacherData] = useState<teacher|null>(null);
+  const [teacherData, setTeacherData] = useState<teacher | null>(null);
   const [data, setData] = useState<data[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -61,10 +61,10 @@ const ViewTeacher = () => {
         const courses: data[] = querySnapshot.docs.map((doc) => {
           const docData = doc.data();
           return {
-              id: doc.id,
-              name: docData.name,
+            id: doc.id,
+            name: docData.name,
           };
-      });
+        });
 
         setData(courses);
 
@@ -84,11 +84,15 @@ const ViewTeacher = () => {
 
   return (
     <div className={styleTeacher.teacherCard}>
-      <h3 className={styleTeacher.teacherName}>
-        {(teacherData?.surname && teacherData?.name)
-          ? `${teacherData.surname} ${teacherData.name}`
-          : 'Nombre del profesor'}
-      </h3>
+      <div className={styleTeacher.headerButton}>
+        <h3 className={styleTeacher.teacherName}>
+          {(teacherData?.surname && teacherData?.name)
+            ? `${teacherData.surname} ${teacherData.name}`
+            : 'Nombre del profesor'}
+        </h3>
+        <button className='bluebutton'>Editar</button>
+      </div>
+
 
       <p className={styleTeacher.teacherBio}>{teacherData?.bio || 'Descripción no disponible.'}</p>
       <div className={styleTeacher.teacherDetails}>

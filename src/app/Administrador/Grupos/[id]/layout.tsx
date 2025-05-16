@@ -15,6 +15,17 @@ export default function RootLayout({
     const segments = pathname.split("/");
     const curseId = segments[3];
 
+    const isEditingGroup = pathname === "/Administrador/Grupos/Editar";
+
+    if (isEditingGroup) {
+        return (
+            <section className="containerSection">
+                <ViewGroup />
+                {children}
+            </section>
+        );
+    }
+
     return (
         <>
             <ReturnButton />
