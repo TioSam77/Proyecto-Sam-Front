@@ -104,7 +104,6 @@ const Header = () => {
               </>
             )}
 
-
             {isAdminPage && (
               <>
                 <li className="nav-item">
@@ -137,8 +136,8 @@ const Header = () => {
               </>
             )}
 
-            <button className="nav-item containerLink nav-link" onClick={handleLogout}>
-              <i className="bi bi-gear-fill me-2 "></i>Cerrar cesion
+            <button className="  nav-link" onClick={handleLogout}>
+              <i className="bi bi-gear-fill me-2 "></i>Cerrar sesion
             </button>
 
           </ul>

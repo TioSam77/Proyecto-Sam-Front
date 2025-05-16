@@ -30,8 +30,8 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     
     const pathname = usePathname();
     const segments = pathname.split('/');
-    const isAdmin = segments[1]="/Administrador";
-    const isStudent = segments[1]="/Alumno";
+    const isAdmin = segments[1]==="Administrador";
+    const isStudent = segments[1]==="Alumno";
     const basePath = isAdmin
         ? '/Administrador/Grupos'
         : isStudent

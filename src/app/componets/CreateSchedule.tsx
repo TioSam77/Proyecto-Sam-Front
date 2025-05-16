@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
 import styles from '../css/Schedule.module.css';
 
@@ -28,7 +28,6 @@ const CreateSchedule = () => {
     e.preventDefault();
 
     try {
-      // Obtener el nombre del curso
       const courseRef = doc(db, 'course', courseId);
       const courseSnap = await getDoc(courseRef);
 
@@ -39,6 +38,19 @@ const CreateSchedule = () => {
       }
 
       const subjectName = courseSnap.data()?.subject_name || 'Sin nombre';
+
+      const q = query(
+        collection(db, 'course_schedule'),
+        where('course_id', '==', courseId),
+        where('date', '==', date)
+      );
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        setError('Ese día ya ha sido asignado si quieres cambiarle la hora de clase entra en la modificacion de dias');
+        setLoading(false);
+        return;
+      }
 
       await addDoc(collection(db, 'course_schedule'), {
         course_id: courseId,
@@ -61,7 +73,7 @@ const CreateSchedule = () => {
 
   return (
     <div className={styles.containerSchedule}>
-      <h2 className={styles.title}>Crear un de clases</h2>
+      <h2 className={styles.title}>Crear dia de clase</h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.labelSchedule}>Fecha</label>
@@ -73,7 +85,7 @@ const CreateSchedule = () => {
             required
           />
         </div>
-  
+
         <div className={styles.formGroup}>
           <label className={styles.labelSchedule}>Hora de Entrada</label>
           <input
@@ -84,7 +96,7 @@ const CreateSchedule = () => {
             required
           />
         </div>
-  
+
         <div className={styles.formGroup}>
           <label className={styles.labelSchedule}>Hora de Salida</label>
           <input
@@ -95,7 +107,7 @@ const CreateSchedule = () => {
             required
           />
         </div>
-  
+
         <div className={styles.buttonContainer}>
           <button type="submit" className={styles.bluebutton}>
             Guardar Horario
@@ -109,7 +121,7 @@ const CreateSchedule = () => {
         {loading && <div className={stylesLogin.loading}>loading</div>}
       </div>
     </div>
-  );  
+  );
 };
 
 export default CreateSchedule;

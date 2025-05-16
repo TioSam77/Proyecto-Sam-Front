@@ -1,5 +1,5 @@
 .containerSchedule {
-  width: 400px;
+  width: 100%;
   max-width: 500px;
   padding: 1.5rem;
   background-color: #f7f9fc;
@@ -76,10 +76,4 @@
   font-weight: bold;
   color: #1e3a8a;
   margin-bottom: 1rem;
-}
-
-@media(max-width:993px) {
-  .containerSchedule {
-    width: 100%;
-  }
 }

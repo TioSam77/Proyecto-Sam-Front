@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
@@ -20,6 +20,10 @@ interface Course {
     name: string;
 }
 
+interface user {
+    id:string
+}
+
 const NavbarCourses = () => {
     const [data, setData] = useState<Course[]>([]);
     const [notFound, setNotFound] = useState(false);
@@ -29,7 +33,6 @@ const NavbarCourses = () => {
 
     const isAdmin = currentPath.includes("/Administrador");
     const isStudent = currentPath.includes("/Alumno");
-    const isTeacher = !isAdmin && !isStudent;
 
     const basePath = isAdmin
         ? "/Administrador/Grupos"
@@ -37,13 +40,13 @@ const NavbarCourses = () => {
             ? "/Alumno"
             : "/Profesor";
 
-    const fetchCourses = async (user: any) => {
+    const fetchCourses = async (user:user) => {
         setLogin(true);
         try {
             if (isStudent) {
                 const relQuery = query(
                     collection(db, "student_course"),
-                    where("student_id", "==", user.uid)
+                    where("student_id", "==", user.id)
                 );
                 const relSnap = await getDocs(relQuery);
 
@@ -70,7 +73,7 @@ const NavbarCourses = () => {
             } else {
                 const q = query(
                     collection(db, "course"),
-                    where("teacher_id", "==", user.uid)
+                    where("teacher_id", "==", user.id)
                 );
                 const querySnapshot = await getDocs(q);
 
@@ -98,7 +101,7 @@ const NavbarCourses = () => {
             const next = !prev;
             if (next && data.length === 0) {
                 onAuthStateChanged(auth, (user) => {
-                    if (user) fetchCourses(user);
+                    if (user) fetchCourses({ id: user.uid });
                 });
             }
             return next;

@@ -217,6 +217,7 @@ const TableCourseFinalGrade = () => {
                                                     }
                                                 }}
                                                 style={{
+                                                    width:"50px",
                                                     textAlign: "center",
                                                     backgroundColor:
                                                         !isNaN(row.grade) ? (
