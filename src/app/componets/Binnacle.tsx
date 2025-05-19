@@ -12,7 +12,7 @@ import {
     where,
 } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
-import styles from '../css/Table.module.css';
+import styles from '../css/Binnacle.module.css';
 import { db } from '../../../firebase/clientApp';
 
 type BinnacleEntry = {
