@@ -11,20 +11,7 @@ import {
     getDoc,
     doc,
 } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
-import {
-    collection,
-    query,
-    where,
-    getDocs,
-    getDoc,
-    doc,
-} from "firebase/firestore";
 
-import style from "@/app/css/navbarCourses.module.css";
-import { auth, db } from "../../../../firebase/clientApp";
-
-interface Course {
 import style from "@/app/css/navbarCourses.module.css";
 import { auth, db } from "../../../../firebase/clientApp";
 
@@ -48,7 +35,6 @@ const NavbarCourses = () => {
     const isStudent = currentPath.includes("/Alumno");
 
     const basePath = isAdmin
-        ? "/Administrador/Grupos"
         ? "/Administrador/Grupos"
         : isStudent
             ? "/Alumno"
