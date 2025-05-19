@@ -1,23 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import NavbarCourses from "./course/NavbarCourses";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../../firebase/clientApp";
 
 const Header = () => {
-
-  const handleLogout = () => {
-
-  };
-
+  const [enrroled, setEnrroled] = useState(false)
   const pathname = usePathname();
   const firstSegment = pathname?.split("/")[1];
 
   const isAdminPage = firstSegment === "Administrador";
   const isStudentPage = firstSegment === "Alumno";
   const isTeacherPage = firstSegment === "Profesor";
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setEnrroled(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setEnrroled(false);
+  };
 
   return (
     <>
@@ -72,7 +82,7 @@ const Header = () => {
               </Link>
             </li>
 
-            {(!isStudentPage && !isTeacherPage && !isAdminPage) && (
+            {!enrroled && (
               <li className="nav-item">
                 <Link className="nav-link" href="/Login">
                   <i className="bi bi-box-arrow-in-right me-2 text-dark"></i>Acceder
@@ -87,8 +97,8 @@ const Header = () => {
                     <i className="bi bi-easel-fill me-2 text-dark"></i>Profesor
                   </Link>
                 </li>
-                
-                <NavbarCourses/>
+
+                <NavbarCourses />
               </>
             )}
 
@@ -111,34 +121,14 @@ const Header = () => {
                     <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Administrador
                   </Link>
                 </li>
-
-                <li className="nav-item containerLink">
-                  <Link className="nav-link" href="/Administrador/Alumnos">
-                    <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Alumnos
-                  </Link>
-                  <i className="bi bi-caret-down-fill"></i>
-                </li>
-
-                <li className="nav-item containerLink">
-                  <Link className="nav-link " href="/Administrador/Grupos">
-                    <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Grupos
-                  </Link>
-                  <i className="bi bi-caret-down-fill"></i>
-                </li>
-
-                <li className="nav-item containerLink">
-                  <Link className="nav-link" href="/Administrador/Profesores">
-                    <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Profesores
-                  </Link>
-                  <i className="bi bi-caret-down-fill"></i>
-                </li>
-
               </>
             )}
 
-            <button className="  nav-link" onClick={handleLogout}>
-              <i className="bi bi-gear-fill me-2 "></i>Cerrar sesion
-            </button>
+            {enrroled &&
+              <Link className="nav-link" href="/Login" onClick={handleLogout}>
+                <i className="bi bi-gear-fill me-2 "></i>Cerrar sesion
+              </Link>
+            }
 
           </ul>
         </div>

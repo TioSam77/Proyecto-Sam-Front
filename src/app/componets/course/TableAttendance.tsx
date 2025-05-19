@@ -292,8 +292,7 @@ const TableAttendance = () => {
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
                                     <td
-                                        className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]
-                                            }`}
+                                        className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}
                                     >
                                         {student.name}
                                     </td>
