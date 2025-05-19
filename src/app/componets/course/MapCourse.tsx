@@ -25,7 +25,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
-
+    
     const [error, setError] = useState<string | null>("");
 
     const pathname = usePathname();
