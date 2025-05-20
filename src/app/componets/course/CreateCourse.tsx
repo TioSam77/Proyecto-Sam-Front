@@ -137,6 +137,9 @@ const CreateCourse = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLogin(true);
+        setError("")
+        setAlert("")
 
         try {
             const parsedStartDate = new Date(startDate);
@@ -146,6 +149,7 @@ const CreateCourse = () => {
 
             if (!selectedSubjectObj || !selectedTeacherObj) {
                 setError("Error: no se pudo encontrar el profesor o la materia seleccionada.");
+                setLogin(false)
                 return;
             }
 
@@ -204,9 +208,10 @@ const CreateCourse = () => {
             setEndDate('')
             setStartDate('')
             setAlert("Curso y horarios creados correctamente.");
+            setLogin(false)
         } catch (error) {
             setError(`Error al crear el curso: ${error}`);
-            setAlert("Hubo un error al crear el curso.");
+            setLogin(false)
         }
     };
 

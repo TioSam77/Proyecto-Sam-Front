@@ -111,7 +111,6 @@ const Header = () => {
                 </li>
 
                 <NavbarCourses />
-                <NavbarCourses />
               </>
             )}
 
