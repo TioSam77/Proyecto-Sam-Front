@@ -51,11 +51,11 @@ const Record: React.FC = () => {
         ) : (
           <table>
             <thead>
-              <tr>
+              <tr className={styles.fixedRow}>
                 {headers.map((header, idx) => (
                   <th
                     key={header}
-                    className={idx === 0 ? styles.fixedColRow : styles.fixedRow}
+                    className={idx === 0 ? styles.fixedColRow : styles.noting}
                   >
                     {header.toUpperCase()}
                   </th>
@@ -67,9 +67,7 @@ const Record: React.FC = () => {
                 data.map((row, rowIndex) => (
                   <tr
                     key={row.id}
-                    className={
-                      rowIndex % 2 === 0 ? styles['row-even'] : styles['row-odd']
-                    }
+                    className={`${styles.fixedCol} ${rowIndex % 2 === 0 ? styles["row-even"] : styles["row-odd"]}`}
                   >
                     {headers.map((key, colIndex) => (
                       <td

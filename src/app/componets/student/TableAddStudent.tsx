@@ -4,7 +4,7 @@ import tables from "@/app/css/Table.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, limit, where, setDoc, doc } from "firebase/firestore";
-import { auth, db } from "../../../firebase/clientApp";
+import { auth, db } from "../../../../firebase/clientApp";
 import { usePathname } from "next/navigation";
 
 interface Student {

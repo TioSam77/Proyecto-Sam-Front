@@ -4,11 +4,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../../../firebase/clientApp";
-import GroupMessages from "./GroupMessages";
+import GroupMessages from "../componets/course/GroupMessages";
 
-interface data{
-    id:string
-    name:string
+interface data {
+    id: string
+    name: string
 }
 
 export default function Page() {
@@ -54,10 +54,7 @@ export default function Page() {
     }, []);
 
     return (
-        <>
         <MapCourse data={data} login={login} notFound={notFound} />
-        <GroupMessages/>
-        </>
     );
 
 }

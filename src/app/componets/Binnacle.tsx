@@ -12,6 +12,7 @@ import {
     where,
 } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
+import tables from "@/app/css/Table.module.css";
 import styles from '../css/Binnacle.module.css';
 import { db } from '../../../firebase/clientApp';
 
@@ -102,8 +103,8 @@ export default function Binnacle() {
     };
 
     return (
-        <div className={styles.TableContainer}>
-            <div className={styles.selectAndButton}>
+        <div className={tables.TableContainer}>
+            <div className={tables.selectAndButton}>
                 <button
                     onClick={() => {
                         if (!isFormVisible) {
@@ -141,7 +142,7 @@ export default function Binnacle() {
                                 placeholder="Tema visto"
                                 className={styles.select}
                                 required
-                                maxLength={60}
+                                maxLength={30}
                             />
                             <textarea
                                 name="activities"
@@ -149,7 +150,6 @@ export default function Binnacle() {
                                 onChange={handleChange}
                                 placeholder="Actividades realizadas"
                                 className={styles.select}
-                                maxLength={60}
                             />
                             <textarea
                                 name="observations"
@@ -157,7 +157,6 @@ export default function Binnacle() {
                                 onChange={handleChange}
                                 placeholder="Observaciones"
                                 className={styles.select}
-                                maxLength={60}
                             />
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <button type="submit" className={styles.tableButton}>
@@ -180,11 +179,11 @@ export default function Binnacle() {
                 </div>
             )}
 
-            <div className={styles.box}>
+            <div className={tables.box}>
                 <table>
                     <thead>
-                        <tr className={styles.fixedRow}>
-                            <th className={styles.fixedColRow}>Fecha</th>
+                        <tr className={tables.fixedRow}>
+                            <th className={tables.fixedColRow}>Fecha</th>
                             <th>Tema</th>
                             <th>Detalles</th>
                             <th>Acciones</th>
@@ -199,9 +198,9 @@ export default function Binnacle() {
                             </tr>
                         ) : (
                             entries.map((entry, index) => (
-                                <tr key={entry.id} className={index % 2 === 0 ? styles['row-even'] : styles['row-odd']}>
+                                <tr key={entry.id} className={index % 2 === 0 ? tables['row-even'] : tables['row-odd']}>
                                     <td
-                                        className={`${styles.fixedCol} ${index % 2 === 0 ? styles["row-even"] : styles["row-odd"]}`}
+                                        className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}
                                     >{entry.date}</td>
                                     <td>{entry.topic}</td>
                                     <td>

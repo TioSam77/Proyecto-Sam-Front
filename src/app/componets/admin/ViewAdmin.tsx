@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/ViewAdmin.module.css';
 import { usePathname } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../../firebase/clientApp';
+import { db } from '../../../../firebase/clientApp';
 
 interface Admin {
   id: string;
@@ -27,7 +27,7 @@ const ViewAdmin = () => {
     if (!pathname) return;
 
     const segments = pathname.split('/');
-    const adminId = segments[3]; // Asegúrate que tu ruta es /Administrador/[id]/ViewAdmin
+    const adminId = segments[3];
 
     if (!adminId) {
       setNotFound(true);

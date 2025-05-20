@@ -1,7 +1,7 @@
-import RegisterAdmin from "@/app/componets/admin/RegisterAdmin";
+import MapAdmin from "../../componets/admin/MapAdmin";
 
 export default function Page() {
     return (
-        <RegisterAdmin/>
+        <MapAdmin />
     )
 }

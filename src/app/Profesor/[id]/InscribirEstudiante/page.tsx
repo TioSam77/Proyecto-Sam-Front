@@ -1,4 +1,4 @@
-import TableAddStudent from "@/app/componets/TableAddStudent"
+import TableAddStudent from "@/app/componets/student/TableAddStudent"
 import style from "@/app/css/Teacher.module.css"
 
 export default function Page() {

@@ -89,27 +89,29 @@
 
 .classroomContainer {
     width: 100%;
-    box-sizing: border-box;
+    min-height: 150px;
+
     overflow-x: auto;
     scrollbar-color: #3399FF rgba(255, 255, 255, 0);
     scrollbar-width: thin;
+    margin-top: 10px;
 }
 
 .scheduleBody {
     display: flex;
     gap: 0.5rem;
     width: 100%;
-    margin-top: 10px;
+    height: 100%;
 }
 
 .dayColumn {
-    min-width: 110px;
+    min-width: 100px;
     flex: 1;
     background-color: #f5f5f5;
     border-radius: 4px;
     padding: 0.5rem;
     box-sizing: border-box;
-    min-height: 100%;
+    min-height: 150px;
     max-width: 100%;
     border: 1px solid #cfcfcf;
 }

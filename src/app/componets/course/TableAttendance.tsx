@@ -218,6 +218,18 @@ const TableAttendance = () => {
 
     return (
         <section className={tables.TableContainer}>
+
+            {!isStudent &&
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Link href={`CrearDia`}>
+                        <button className='bluebutton'>Agregar dia de clases</button>
+                    </Link>
+                    <Link href={`EliminarDia`}>
+                        <button className='bluebutton'>Eliminar dia de clases</button>
+                    </Link>
+                </div>
+            }
+
             <h3 className={styles.welcomeText}>Asistencia de Estudiantes</h3>
             <div className={style.simplebox}>
                 <h5 style={{ backgroundColor: "lightgreen", borderRadius: "4px", padding: "3px" }}>P = Present</h5>
@@ -358,17 +370,6 @@ const TableAttendance = () => {
                     </tbody>
                 </table>
             </div>
-
-            {!isStudent &&
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <Link href={`CrearDia`}>
-                        <button className='bluebutton'>Agregar dia de clases</button>
-                    </Link>
-                    <Link href={`EliminarDia`}>
-                        <button className='bluebutton'>Eliminar dia de clases</button>
-                    </Link>
-                </div>
-            }
 
         </section>
     );

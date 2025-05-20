@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { collection, addDoc, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../../../firebase/clientApp';
-import styles from '../css/Schedule.module.css';
+import { db } from '../../../../firebase/clientApp';
+import styles from '@/app/css/Schedule.module.css';
 
 import stylesLogin from "@/app/css/Login.module.css";
 

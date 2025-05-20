@@ -1,4 +1,4 @@
-import CreateSchedule from "@/app/componets/CreateSchedule"
+import CreateSchedule from "@/app/componets/course/CreateSchedule"
 import style from "@/app/css/Teacher.module.css"
 
 export default function Page() {

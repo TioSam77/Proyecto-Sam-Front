@@ -1,9 +1,9 @@
 'use client'
 import { useState, useEffect } from "react";
-import tables from "../css/Table.module.css";
+import tables from "@/app/css/Table.module.css";
 import { usePathname } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../../firebase/clientApp";
+import { db } from "../../../../firebase/clientApp";
 
 interface horario {
   dia: string,

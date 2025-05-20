@@ -111,7 +111,11 @@ const TableStudent = () => {
 
     return (
         <section className={tables.TableContainer}>
-            <h4>Estudiantes en el curso</h4>
+            <Link href={`InscribirEstudiante`}>
+                <button className='bluebutton'>Inscribir Estudiante</button>
+            </Link>
+            
+            <h4 className="welcomeText">Estudiantes en el curso</h4>
             <div className={tables.selectAndButton}>
                 <input
                     type="text"
@@ -171,10 +175,6 @@ const TableStudent = () => {
                     </tbody>
                 </table>
             </div>
-
-            <Link href={`InscribirEstudiante`}>
-                <button className='bluebutton'>Inscribir Estudiante</button>
-            </Link>
         </section>
     );
 };

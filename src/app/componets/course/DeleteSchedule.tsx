@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { collection, query, where, getDocs, deleteDoc, doc, limit } from 'firebase/firestore';
-import { db } from '../../../firebase/clientApp';
-import styles from '../css/DeleteSchedule.module.css';
+import { db } from '../../../../firebase/clientApp';
+import styles from '@/app/css/DeleteSchedule.module.css';
 
 interface Schedule {
     id: string;

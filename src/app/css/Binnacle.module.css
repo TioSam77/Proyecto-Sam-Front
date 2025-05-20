@@ -24,19 +24,28 @@
 }
 
 .modalCard {
+  display: flex;
+  flex-direction: column;
   background: #ffffff;
   padding: 2rem;
-  border-radius: 12px;
-  max-width: 500px;
+  border-radius: 4px;
+  max-width: 700px;
   width: 90%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  word-wrap: break-word;
+  white-space: normal;
+  max-height: 80%;
+  overflow-y: auto;
+  scrollbar-color: rgb(45, 88, 169) rgba(255, 255, 255, 0);
+  scrollbar-width: thin;
 }
 
 .modalCard h3 {
   font-size: 1.5rem;
+  font-weight: bold;
   margin-bottom: 1rem;
-  color: #1a1a1a;
+  color: #1e3a8a;
   text-align: center;
 }
 
@@ -44,13 +53,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  height: 100%;
+  width: 100%;
 }
 
 .select {
+  flex: 1;
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
@@ -63,13 +75,13 @@
 
 textarea.select {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
 }
 
 .tableButton {
   padding: 10px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
