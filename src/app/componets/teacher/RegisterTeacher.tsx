@@ -7,6 +7,7 @@ import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
+import { updateProfile } from "firebase/auth";
 
 const RegisterTeacher = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -81,6 +82,10 @@ const RegisterTeacher = () => {
                 setError("No se pudo crear el usuario.");
                 return;
             }
+
+            await updateProfile(newUser, {
+                displayName: `${name} ${surname}`,
+            });
 
             const userData = {
                 email: newUser.email,

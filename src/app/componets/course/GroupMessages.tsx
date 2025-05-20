@@ -3,13 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/GroupMessages.module.css';
 import { useParams } from 'next/navigation';
-import { collection, addDoc, onSnapshot, serverTimestamp, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  serverTimestamp,
+  query,
+  orderBy
+} from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../../../firebase/clientApp';
 
 interface Response {
   author: string;
   content: string;
+  date: string;
 }
 
 interface Message {
@@ -35,28 +43,59 @@ const GroupMessages = () => {
     if (!courseId) return;
 
     const messagesRef = collection(db, 'courseMessages', courseId, 'messages');
+    const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
+      const msgList: Message[] = [];
 
-    const unsubscribe = onSnapshot(messagesRef, async (snapshot) => {
-      const msgs: Message[] = await Promise.all(snapshot.docs.map(async (docSnap) => {
+      snapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        const responsesRef = collection(db, 'courseMessages', courseId, 'messages', docSnap.id, 'responses');
-        const responsesSnap = await getDocs(responsesRef);
-        const responses: Response[] = responsesSnap.docs.map(res => res.data() as Response);
+        const date = data.date?.seconds
+          ? new Date(data.date.seconds * 1000).toLocaleString('es-MX', {
+            day: '2-digit',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+          : 'Sin fecha';
 
-        return {
+        const msg: Message = {
           id: docSnap.id,
           author: data.author,
           content: data.content,
-          date: new Date(data.date?.seconds * 1000).toLocaleDateString('es-MX', {
-            day: '2-digit',
-            month: 'short',
-          }),
-          responses,
+          date,
+          responses: [],
         };
-      }));
 
-      // Ordena por fecha descendente si es necesario
-      setMessages(msgs.sort((a, b) => (a.date < b.date ? 1 : -1)));
+        // Escucha en tiempo real las respuestas
+        const responsesRef = collection(db, 'courseMessages', courseId, 'messages', docSnap.id, 'responses');
+        const q = query(responsesRef, orderBy('date', 'asc'));
+
+        onSnapshot(q, (resSnap) => {
+          const responses: Response[] = resSnap.docs.map((res) => {
+            const resData = res.data();
+            return {
+              author: resData.author,
+              content: resData.content,
+              date: resData.date?.seconds
+                ? new Date(resData.date.seconds * 1000).toLocaleString('es-MX', {
+                  day: '2-digit',
+                  month: 'short',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+                : '',
+            };
+          });
+
+          setMessages((prev) =>
+            prev.map((m) => (m.id === msg.id ? { ...m, responses } : m))
+          );
+        });
+
+        msgList.push(msg);
+      });
+
+      // Ordena mensajes más recientes arriba
+      setMessages(msgList.sort((a, b) => (a.date < b.date ? 1 : -1)));
     });
 
     return () => unsubscribe();
@@ -100,6 +139,7 @@ const GroupMessages = () => {
     const responseData = {
       author: user.displayName || user.email || 'Anónimo',
       content,
+      date: serverTimestamp(),
     };
 
     try {
@@ -138,9 +178,13 @@ const GroupMessages = () => {
             <div className={styles.comments}>
               {msg.responses.length > 0 && <strong>Respuestas:</strong>}
               {msg.responses.map((res, idx) => (
-                <p key={idx} className={styles.comment}>
-                  <strong>{res.author}:</strong> {res.content}
-                </p>
+                <div key={idx} className={styles.comment}>
+                  <p className={styles.spaceBetween}>
+                    <strong>{res.author}</strong>
+                    <em className={styles.date}>{res.date}</em>
+                  </p>
+                  {res.content}
+                </div>
               ))}
             </div>
 

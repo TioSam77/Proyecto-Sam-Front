@@ -77,13 +77,23 @@ const ViewGroup = () => {
 
                     <div></div>
                     {(!isAdmin) ?
-                        <Link href={`/${user}/${courseId}/Temario`}>
-                            <button className='bluebutton'>Abrir temario</button>
-                        </Link>
+                        <div className={stylesLogin.gap}>
+                            <Link href={`/${user}/${courseId}/Mensajes`}>
+                                <button className='bluebutton'><i className="bi bi-chat-left-text"></i></button>
+                            </Link>
+                            <Link href={`/${user}/${courseId}/Temario`}>
+                                <button className='bluebutton'>Abrir temario</button>
+                            </Link>
+                        </div>
                         :
-                        <Link href={`/Administrador/Grupos/${courseId}/Temario`}>
-                            <button className='bluebutton'>Agregar Temario</button>
-                        </Link>
+                        <div className={stylesLogin.gap}>
+                            <Link href={`/Administrador/Grupos/${courseId}/Mensajes`}>
+                                <button className='bluebutton'><i className="bi bi-chat-left-text"></i></button>
+                            </Link>
+                            <Link href={`/Administrador/Grupos/${courseId}/Temario`}>
+                                <button className='bluebutton'>Agregar Temario</button>
+                            </Link>
+                        </div>
                     }
                 </div>
             </div>

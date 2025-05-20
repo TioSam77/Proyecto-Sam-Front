@@ -7,6 +7,7 @@ import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
+import { updateProfile } from "firebase/auth";
 
 
 const RegisterStudent = () => {
@@ -97,6 +98,10 @@ const RegisterStudent = () => {
                 setError("No se pudo crear el usuario.");
                 return;
             }
+
+            await updateProfile(user, {
+                displayName: `${name} ${surname}`,
+            });
 
             const userData = {
                 email,

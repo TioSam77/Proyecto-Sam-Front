@@ -9,7 +9,7 @@
 .newPost {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: 10px;
   gap: 0.5rem;
 }
 
@@ -60,7 +60,21 @@
   font-size: 0.9rem;
   color: #555;
   margin-bottom: 0.3rem;
-  border: 2px solid #cfcfcf;
+  border: 1px solid #cfcfcf;
   border-radius: 4px;
   padding: 0.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
+
+.comment p{
+  margin: 0;
+  padding: 0;
+}
+
+.spaceBetween{
+  display: flex;
+  justify-content: space-between;
 }

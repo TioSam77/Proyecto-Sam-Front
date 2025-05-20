@@ -7,6 +7,7 @@ import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
+import { updateProfile } from "firebase/auth";
 
 const RegisterAdmin = () => {
   const [selectedCountry, setSelectedCountry] = useState("CR");
@@ -88,6 +89,10 @@ const RegisterAdmin = () => {
         setError("No se pudo crear el usuario.");
         return;
       }
+
+      await updateProfile(user, {
+        displayName: `${name} ${surname}`,
+      });
 
       const userData = {
         email,
