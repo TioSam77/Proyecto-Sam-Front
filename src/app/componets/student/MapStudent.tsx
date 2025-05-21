@@ -112,7 +112,7 @@ const MapStudent = () => {
             <ol className={styleUser.containerUsers}>
                 {filteredUsers.map((user) => (
                     <li key={user.id} className={styleUser.users}>
-                        <Link href={`${currentPath}/${user.id}`}>
+                        <Link href={`/Administrador/Alumnos/${user.id}`}>
                             <div className={styleUser.header}>
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
                             </div>
@@ -123,7 +123,9 @@ const MapStudent = () => {
 
                         {isAdmin && (
                             <div className={styleUser.containerButton}>
-                                <button className="bluebutton">Editar</button>
+                                <Link href={`/Administrador/Alumnos/${user.id}/Editar`}>
+                                    <button className="bluebutton">Editar</button>
+                                </Link>
                                 <button className="redbutton" onClick={() => handleDeleteClick(user)}><i className="bi bi-trash-fill"></i></button>
                             </div>
                         )}

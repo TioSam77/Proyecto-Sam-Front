@@ -4,7 +4,8 @@ import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
 import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
 import { db } from '@/../firebase/clientApp';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 interface studentData {
   id: string
@@ -30,9 +31,8 @@ const ViewStudent = () => {
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
-  const pathname = usePathname();
-  const segments = pathname.split('/');
-  const studentId = segments[3]; // Ajusta esto si el ID está en otra parte
+  const params = useParams();
+  const studentId = params?.id as string;
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -105,7 +105,9 @@ const ViewStudent = () => {
             ? `${studentData.surname} ${studentData.name}`
             : 'Nombre del estudiante'}
         </h3>
-        <button className='bluebutton'>Editar</button>
+        <Link href={`${studentId}/Editar`}>
+          <button className='bluebutton'>Editar</button>
+        </Link>
       </div>
 
       <p className={styleTeacher.teacherBio}>{studentData?.bio || 'Descripción no disponible.'}</p>

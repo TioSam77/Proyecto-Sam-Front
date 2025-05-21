@@ -119,7 +119,7 @@ export default function Binnacle() {
                 </button>
             </div>
 
-            <h2>Bitácora de Clase</h2>
+            <h2 className='welcomeText'>Bitácora de Clase</h2>
 
             {isFormVisible && (
                 <div className={styles.modalOverlay}>

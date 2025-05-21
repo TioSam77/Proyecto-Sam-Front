@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
+import stylesLogin from "@/app/css/Login.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, limit, where, setDoc, doc } from "firebase/firestore";
@@ -16,9 +17,11 @@ interface Student {
 const TableAddStudent = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [data, setData] = useState<Student[]>([]);
-    const [login, setLogin] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>("");
+    const [alert, setAlert] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
-    
+
     const params = useParams();
     const courseId = params?.id as string;
 
@@ -27,11 +30,12 @@ const TableAddStudent = () => {
     }, []);
 
     const handleSearch = () => {
-        setLogin(true);
+        setLoading(true);
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 setData([]);
-                setLogin(false);
+                setLoading(false);
+                setError('Estudiante no encontrado')
                 return;
             }
 
@@ -72,10 +76,10 @@ const TableAddStudent = () => {
                 setData(studentsWithStatus);
                 setNotFound(studentsWithStatus.length === 0);
             } catch (err) {
-                console.error("Error al obtener estudiantes:", err);
+                setError(`Error al obtener estudiantes: ${err}`);
                 setNotFound(true);
             } finally {
-                setLogin(false);
+                setLoading(false);
             }
         });
 
@@ -92,7 +96,7 @@ const TableAddStudent = () => {
             );
             const courseSnap = await getDocs(courseRef);
             if (courseSnap.empty) {
-                alert("El curso no existe.");
+                setError("El curso no existe.");
                 return;
             }
 
@@ -103,7 +107,7 @@ const TableAddStudent = () => {
             );
             const studentSnap = await getDocs(studentRef);
             if (studentSnap.empty) {
-                alert("El estudiante no existe.");
+                setError("El estudiante no existe.");
                 return;
             }
 
@@ -115,11 +119,10 @@ const TableAddStudent = () => {
                 course_id: courseId,
             });
 
-            alert(`Estudiante ${student.name} registrado correctamente.`);
+            setAlert(`Estudiante ${student.name} registrado correctamente.`);
             handleSearch();
         } catch (error) {
-            console.error("Error al registrar estudiante:", error);
-            alert("Ocurrió un error al registrar al estudiante.");
+            setError(`Error al registrar estudiante: ${error}`);
         }
     };
 
@@ -147,7 +150,7 @@ const TableAddStudent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {login ? (
+                        {loading ? (
                             <tr>
                                 <td colSpan={3}>Cargando...</td>
                             </tr>
@@ -182,6 +185,12 @@ const TableAddStudent = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </section>
     );

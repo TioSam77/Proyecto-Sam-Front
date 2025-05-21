@@ -3,7 +3,7 @@ import LinkCard from "@/app/componets/LinkCard";
 import ViewGroup from "@/app/componets/course/ViewGroup";
 import React from "react";
 
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import course from "@/app/css/Course.module.css"
 import ReturnButton from "@/app/componets/ReturnButton";
@@ -12,15 +12,14 @@ export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname();
-    const segments = pathname.split("/");
-    const curseId = segments[3];
+    const params = useParams();
+    const curseId = params?.id as string;
 
-    const isEditingGroup = pathname === "/Administrador/Grupos/Editar";
+    const isEditingGroup = /^\/Administrador\/Grupos\/[^\/]+\/Editar$/.test(pathname);
 
     if (isEditingGroup) {
         return (
             <section className="containerSection">
-                <ViewGroup />
                 {children}
             </section>
         );

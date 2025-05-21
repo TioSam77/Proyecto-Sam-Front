@@ -33,7 +33,6 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const pathname = usePathname();
     const segments = pathname.split('/');
     const isAdmin = segments[1] === "Administrador";
-    const isTeacher = segments[1] === "Profesor";
     const isStudent = segments[1] === "Alumno";
     const basePath = isAdmin
         ? '/Administrador/Grupos'
@@ -157,7 +156,9 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                                 <h5>Más detalles</h5>
                                 {isAdmin && (
                                     <div className={styleCourse.containerButton}>
-                                        <button className="bluebutton">Editar</button>
+                                        <Link href={`${basePath}/${course.id}/Editar`}>
+                                            <button className="bluebutton">Editar</button>
+                                        </Link>
                                         <button className="redbutton" onClick={() => handleDeleteClick(course)}><i className="bi bi-trash-fill"></i></button>
                                     </div>
                                 )}
@@ -179,7 +180,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
             )}
 
             {showSelfRegister &&
-                <SelfRegister onClose={() => setShowSelfRegister(false)}/>
+                <SelfRegister onClose={() => setShowSelfRegister(false)} />
             }
 
             <div className={stylesLogin.messageContainer}>
