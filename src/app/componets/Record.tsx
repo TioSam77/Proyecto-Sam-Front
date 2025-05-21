@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getDocs, collection } from 'firebase/firestore';
 import styles from '@/app/css/Table.module.css';
-import { db } from '../../../firebase/clientApp';
+import { db } from '@/../firebase/clientApp';
 
 interface Movement {
   id: string;

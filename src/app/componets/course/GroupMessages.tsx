@@ -12,7 +12,7 @@ import {
   orderBy
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { db } from '../../../../firebase/clientApp';
+import { db } from '@/../firebase/clientApp';
 
 interface Response {
   author: string;
@@ -42,7 +42,7 @@ const GroupMessages = () => {
   useEffect(() => {
     if (!courseId) return;
 
-    const messagesRef = collection(db, 'courseMessages', courseId, 'messages');
+    const messagesRef = collection(db, 'course_messages', courseId, 'messages');
     const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
       const msgList: Message[] = [];
 
@@ -66,7 +66,7 @@ const GroupMessages = () => {
         };
 
         // Escucha en tiempo real las respuestas
-        const responsesRef = collection(db, 'courseMessages', courseId, 'messages', docSnap.id, 'responses');
+        const responsesRef = collection(db, 'course_messages', courseId, 'messages', docSnap.id, 'responses');
         const q = query(responsesRef, orderBy('date', 'asc'));
 
         onSnapshot(q, (resSnap) => {
@@ -118,7 +118,7 @@ const GroupMessages = () => {
     };
 
     try {
-      const messagesRef = collection(db, 'courseMessages', courseId, 'messages');
+      const messagesRef = collection(db, 'course_messages', courseId, 'messages');
       await addDoc(messagesRef, messageData);
       setNewMessage('');
     } catch (error) {
@@ -143,7 +143,7 @@ const GroupMessages = () => {
     };
 
     try {
-      const responseRef = collection(db, 'courseMessages', courseId, 'messages', messageId, 'responses');
+      const responseRef = collection(db, 'course_messages', courseId, 'messages', messageId, 'responses');
       await addDoc(responseRef, responseData);
       setResponseInputs({ ...responseInputs, [messageId]: '' });
       setActiveResponseBox(null);

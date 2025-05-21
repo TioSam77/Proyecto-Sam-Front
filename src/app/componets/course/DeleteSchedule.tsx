@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { collection, query, where, getDocs, deleteDoc, doc, limit } from 'firebase/firestore';
-import { db } from '../../../../firebase/clientApp';
+import { db } from '@/../firebase/clientApp';
 import styles from '@/app/css/DeleteSchedule.module.css';
 
 interface Schedule {

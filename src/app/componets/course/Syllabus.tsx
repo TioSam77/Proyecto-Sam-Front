@@ -13,7 +13,7 @@ import {
   addDoc,
   updateDoc
 } from "firebase/firestore"
-import { db } from "../../../../firebase/clientApp"
+import { db } from '@/../firebase/clientApp';
 
 const Syllabus = () => {
   const params = useParams()
@@ -60,7 +60,15 @@ const Syllabus = () => {
     fetchSyllabus()
   }
 
-  const handleEdit = (item: any) => {
+  interface ItemProps {
+    id: string;        
+    day: string;
+    topic: string;
+    objectives: string;
+    materials: string;    
+  }
+
+  const handleEdit = (item: ItemProps) => {
     setForm({
       day: item.day,
       topic: item.topic,

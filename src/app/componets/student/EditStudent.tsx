@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import styles from '@/app/css/EditStudent.module.css';
-import styleTeacher from "@/app/css/viewTeacher.module.css";
 
 interface StudentData {
   name: string;

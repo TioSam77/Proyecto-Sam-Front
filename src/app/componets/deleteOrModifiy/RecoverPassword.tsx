@@ -1,4 +1,4 @@
-import styles from "../css/Login.module.css";
+import styles from "@/app/css/Login.module.css";
 
 const RecoverPassword = () => {
 

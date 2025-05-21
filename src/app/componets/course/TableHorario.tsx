@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import tables from "@/app/css/Table.module.css";
 import { useParams } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../../../firebase/clientApp";
+import { db } from '@/../firebase/clientApp';
 
 interface horario {
   dia: string,

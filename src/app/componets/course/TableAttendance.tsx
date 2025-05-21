@@ -13,7 +13,7 @@ import {
     where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../../../../firebase/clientApp";
+import { auth, db } from '@/../firebase/clientApp';
 import { doc, updateDoc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 

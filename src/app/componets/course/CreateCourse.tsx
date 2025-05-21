@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import create from "@/app/css/create.module.css"
 import styles from "@/app/css/aviability.module.css";
 import stylesLogin from "@/app/css/Login.module.css";
-import { addDoc, collection, getDocs } from "firebase/firestore";
-import { auth, db } from "../../../../firebase/clientApp";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from '@/../firebase/clientApp';
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -98,6 +98,30 @@ const CreateCourse = () => {
         return () => unsubscribe();
     }, []);
 
+    const generateCode = () => {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let result = "";
+        for (let i = 0; i < 6; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    };
+
+    const generateUniqueCode = async (): Promise<string> => {
+        let code = generateCode();
+        let exists = true;
+
+        while (exists) {
+            const q = query(collection(db, "course"), where("code", "==", code));
+            const snap = await getDocs(q);
+            exists = !snap.empty;
+            if (exists) code = generateCode(); // vuelve a generar
+        }
+
+        return code;
+    };
+
+
 
     const handleEdit = (day: Day) => {
         setEditingDay(day);
@@ -153,6 +177,8 @@ const CreateCourse = () => {
                 return;
             }
 
+            const courseCode = await generateUniqueCode();
+
             const courseRef = await addDoc(collection(db, "course"), {
                 name: courseName,
                 subject_name: selectedSubjectObj.name,
@@ -160,6 +186,7 @@ const CreateCourse = () => {
                 teacher_id: selectedTeacher,
                 start_date: startDate,
                 end_date: endDate,
+                code: courseCode,
             });
 
             const courseId = courseRef.id;
@@ -223,7 +250,7 @@ const CreateCourse = () => {
                 <form className={create.loginBox} onSubmit={handleSubmit}>
 
                     {!isStudent &&
-                        <div style={{ display: "flex", gap: "10px",justifyContent:"space-evenly",marginBottom:"10px" }}>
+                        <div style={{ display: "flex", gap: "10px", justifyContent: "space-evenly", marginBottom: "10px" }}>
                             <Link href={`CrearMateria`}>
                                 <button className='bluebutton'>Crear Materia</button>
                             </Link>
@@ -394,7 +421,7 @@ const CreateCourse = () => {
             <div className={stylesLogin.messageContainer}>
                 {error && <div className={stylesLogin.errorBox}>{error}</div>}
                 {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
-                {login && <div className={stylesLogin.loading}>{login}</div>}
+                {login && <div className={stylesLogin.loading}>Loading</div>}
             </div>
         </section>
     )

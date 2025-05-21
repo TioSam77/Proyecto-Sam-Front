@@ -13,8 +13,8 @@ import {
 } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
 import tables from "@/app/css/Table.module.css";
-import styles from '../css/Binnacle.module.css';
-import { db } from '../../../firebase/clientApp';
+import styles from '@/app/css/Binnacle.module.css';
+import { db } from '@/../firebase/clientApp';
 
 type BinnacleEntry = {
     id?: string;

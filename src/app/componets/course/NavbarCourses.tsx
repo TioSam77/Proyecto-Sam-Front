@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 
 import style from "@/app/css/navbarCourses.module.css";
-import { auth, db } from "../../../../firebase/clientApp";
+import { auth, db } from '@/../firebase/clientApp';
 
 interface Course {
     id: string;

@@ -4,7 +4,7 @@ import styles from '@/app/css/infoCourse.module.css';
 import { onAuthStateChanged } from "firebase/auth";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { auth, db } from "../../../../firebase/clientApp";
+import { auth, db } from '@/../firebase/clientApp';
 import { doc, getDoc } from "firebase/firestore";
 
 import stylesLogin from "@/app/css/Login.module.css";

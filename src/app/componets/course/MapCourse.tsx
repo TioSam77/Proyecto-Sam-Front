@@ -8,7 +8,8 @@ import styleUser from "@/app/css/User.module.css";
 import stylesLogin from "@/app/css/Login.module.css";
 import DeleteConfirm from "../DeleteConfirm";
 import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../../../firebase/clientApp";
+import { db } from '@/../firebase/clientApp';
+import SelfRegister from "../student/SelfRegister";
 
 interface MapCourseProps {
     data: course[];
@@ -25,7 +26,8 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
-    
+    const [showSelfRegister, setShowSelfRegister] = useState(false);
+
     const [error, setError] = useState<string | null>("");
 
     const pathname = usePathname();
@@ -72,6 +74,27 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
             );
             await Promise.all(deleteSchedules);
 
+            // 4. Eliminar registros relacionados en course_messages
+            const messagesRef = collection(db, 'course_messages', selectedCourse.id, 'messages');
+            const messagesSnapshot = await getDocs(messagesRef);
+
+            for (const msgDoc of messagesSnapshot.docs) {
+                // Borramos todas las respuestas del mensaje
+                const responsesRef = collection(db, 'course_messages', selectedCourse.id, 'messages', msgDoc.id, 'responses');
+                const responsesSnapshot = await getDocs(responsesRef);
+
+                const deleteResponsesPromises = responsesSnapshot.docs.map(resDoc =>
+                    deleteDoc(doc(db, 'course_messages', selectedCourse.id, 'messages', msgDoc.id, 'responses', resDoc.id))
+                );
+                await Promise.all(deleteResponsesPromises);
+
+                // Borramos el mensaje
+                await deleteDoc(doc(db, 'course_messages', selectedCourse.id, 'messages', msgDoc.id));
+            }
+
+            // Finalmente borramos el documento principal del curso en course_messages
+            await deleteDoc(doc(db, 'course_messages', selectedCourse.id));
+
         } catch (err) {
             setError(`Error al eliminar: ${err}`);
         } finally {
@@ -100,10 +123,16 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                {isStudent && 
-                    <button className={styleUser.button}>+</button>
-                }
-                {isAdmin && 
+                {isStudent && (
+                    <button
+                        className={styleUser.button}
+                        onClick={() => setShowSelfRegister(true)}
+                    >
+                        +
+                    </button>
+                )}
+
+                {isAdmin &&
                     <Link href={`/Administrador/Grupos/Registro`}>
                         <button className={styleUser.button}>Nuevo Grupo</button>
                     </Link>
@@ -148,6 +177,10 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                     }}
                 />
             )}
+
+            {showSelfRegister &&
+                <SelfRegister onClose={() => setShowSelfRegister(false)}/>
+            }
 
             <div className={stylesLogin.messageContainer}>
                 {error && <div className={stylesLogin.errorBox}>{error}</div>}

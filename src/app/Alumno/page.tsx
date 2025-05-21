@@ -3,7 +3,7 @@ import MapCourse from "@/app/componets/course/MapCourse";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../../firebase/clientApp";
+import { auth, db } from '@/../firebase/clientApp';
 
 interface data{
     id:string
