@@ -317,7 +317,7 @@ const EditGroup = () => {
       <h2 className={styles.title}>Editar Grupo</h2>
       {renderField('Nombre:', 'name')}
       {renderField('Materia:', 'subject_name', 'select')}
-      {renderField('Profesor:', 'teacher_id', 'select')}
+      {renderField('Profesor:', 'teacher_name', 'select')}
       {renderField('Fecha inicio:', 'start_date', 'date')}
       {renderField('Fecha fin:', 'end_date', 'date')}
       {renderField('Activo:', 'active', 'checkbox')}

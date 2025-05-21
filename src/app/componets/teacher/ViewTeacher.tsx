@@ -5,6 +5,7 @@ import MapCourse from '../course/MapCourse';
 import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
 import { db } from '@/../firebase/clientApp';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 interface data {
   id: string
@@ -90,9 +91,10 @@ const ViewTeacher = () => {
             ? `${teacherData.surname} ${teacherData.name}`
             : 'Nombre del profesor'}
         </h3>
-        <button className='bluebutton'>Editar</button>
+        <Link href={`/Administrador/Profesores/${teacherId}/Editar`}>
+          <button className="bluebutton">Editar</button>
+        </Link>
       </div>
-
 
       <p className={styleTeacher.teacherBio}>{teacherData?.bio || 'Descripción no disponible.'}</p>
       <div className={styleTeacher.teacherDetails}>
