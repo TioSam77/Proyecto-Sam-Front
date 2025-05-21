@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { collection, query, where, getDocs, deleteDoc, doc, limit } from 'firebase/firestore';
 import { db } from '../../../../firebase/clientApp';
 import styles from '@/app/css/DeleteSchedule.module.css';
@@ -12,9 +12,8 @@ interface Schedule {
 }
 
 const DeleteSchedule = () => {
-    const pathname = usePathname();
-    const pathParts = pathname.split('/');
-    const courseId = (pathParts[1] === "Profesor" ? pathParts[2] : pathParts[3]);
+    const params = useParams();
+    const courseId = params?.id as string;
 
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [loading, setLoading] = useState(true);

@@ -5,7 +5,7 @@ import tables from "@/app/css/Table.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, limit, where, setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../../../firebase/clientApp";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 interface Student {
     id: string;
@@ -18,11 +18,9 @@ const TableAddStudent = () => {
     const [data, setData] = useState<Student[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
-
-    const pathname = usePathname();
-
-    const pathParts = pathname.split("/");
-    const courseId = (pathParts[1] === "Profesor" ? pathParts[2] : pathParts[3]);
+    
+    const params = useParams();
+    const courseId = params?.id as string;
 
     useEffect(() => {
         handleSearch();

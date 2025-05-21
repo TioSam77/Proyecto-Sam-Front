@@ -5,7 +5,7 @@ import tables from "@/app/css/Table.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "@/../firebase/clientApp";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 
 interface Student {
@@ -21,9 +21,8 @@ const TableStudent = () => {
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
 
-    const pathname = usePathname();
-    const pathParts = pathname.split("/");
-    const courseId = pathParts[pathParts.length - 2];
+    const params = useParams();
+    const courseId = params?.id as string;
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {

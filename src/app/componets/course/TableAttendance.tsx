@@ -5,7 +5,7 @@ import style from "@/app/css/Teacher.module.css"
 import styles from "@/app/css/Login.module.css"
 
 import { Attendance } from "../../data/student";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import {
     collection,
     getDocs,
@@ -42,8 +42,8 @@ const TableAttendance = () => {
 
     const pathname = usePathname();
     const isStudent = pathname.includes("/Alumno");
-    const pathParts = pathname.split("/");
-    const courseId = pathParts[pathParts.length - 2];
+    const params = useParams();
+    const courseId = params?.id as string;
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {

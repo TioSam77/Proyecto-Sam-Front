@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import tables from "@/app/css/Table.module.css";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../../firebase/clientApp";
 
@@ -16,10 +16,8 @@ const TableHorario = () => {
   const [diasSemana, setDiasSemana] = useState<string[]>([]);
   const [horario, setHorario] = useState<horario[]>([]);
 
-  const pathname = usePathname();
-  const isAdmin = pathname.includes("/Administrador")
-  const segments = pathname.split('/');
-  const courseId: string = isAdmin ? segments[3] : segments[2];
+  const params = useParams();
+  const courseId = params?.id as string;
 
   useEffect(() => {
     const obtenerFechas = async () => {

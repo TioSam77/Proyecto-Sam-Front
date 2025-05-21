@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { collection, addDoc, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../../../firebase/clientApp';
 import styles from '@/app/css/Schedule.module.css';
@@ -17,9 +17,8 @@ const CreateSchedule = () => {
   const [alert, setAlert] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const pathname = usePathname();
-  const pathParts = pathname.split('/');
-  const courseId = (pathParts[1] === "Profesor" ? pathParts[2] : pathParts[3]);
+  const params = useParams();
+  const courseId = params?.id as string;
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true)
@@ -45,7 +44,7 @@ const CreateSchedule = () => {
         where('date', '==', date)
       );
       const querySnapshot = await getDocs(q);
-  
+
       if (!querySnapshot.empty) {
         setError('Ese día ya ha sido asignado si quieres cambiarle la hora de clase entra en la modificacion de dias');
         setLoading(false);

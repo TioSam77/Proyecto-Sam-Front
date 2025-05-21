@@ -2,7 +2,7 @@
 import styleCourse from "@/app/css/Course.module.css";
 import styles from '@/app/css/infoCourse.module.css';
 import { onAuthStateChanged } from "firebase/auth";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from "../../../../firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
@@ -27,7 +27,8 @@ const ViewGroup = () => {
     const isAdmin = pathname.includes("/Administrador")
     const isTeacher = pathname.includes("/Profesor")
     const segments = pathname.split('/');
-    const courseId: string = isAdmin ? segments[3] : segments[2];
+    const params = useParams();
+    const courseId = params?.id as string;
     const user: string = segments[1]
 
     useEffect(() => {

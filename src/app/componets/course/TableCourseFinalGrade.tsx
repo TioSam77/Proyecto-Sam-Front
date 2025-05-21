@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { collection, getDocs, query, where, setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../../../firebase/clientApp";
 import { Attendance } from "../../data/student";
@@ -31,8 +31,8 @@ const TableCourseFinalGrade = () => {
 
 
     const pathname = usePathname();
-    const pathParts = pathname.split("/");
-    const courseId = pathParts[pathParts.length - 2];
+    const params = useParams();
+    const courseId = params?.id as string;
 
 
     const isStudent = pathname.includes('/Alumno')
