@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { db } from "@/../firebase/clientApp";
+import styles from '@/app/css/selfRegister.module.css';
 
 export default function SelfRegister({ onClose }: { onClose: () => void }) {
     const [code, setCode] = useState("");
@@ -86,25 +87,26 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
     if (loading) return <div>Cargando...</div>;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-xl w-full max-w-md text-center shadow-lg relative">
+        <div className={styles.modalOverlay}>
+            <div className={styles.modalContainer}>
                 <button
-                    className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                    className={styles.modalCloseButton}
                     onClick={onClose}
                     aria-label="Cerrar"
                 >
                     &times;
                 </button>
-                <h2 className="text-2xl font-bold mb-4">Unirse a un grupo</h2>
-                {error && <p className="text-red-600 mb-4">{error}</p>}
+                <h2 className={styles.modalTitle}>Código de la clase</h2>
+                <p>Pidele a tu profesor el codigo de la clase y luego,ingresalo aqui</p>
+                {error && <p className={styles.modalError}>{error}</p>}
                 <input
                     type="text"
-                    placeholder="Código del grupo"
+                    placeholder="Código de la clase"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="border p-2 rounded w-full mb-4"
+                    className={styles.modalInput}
                 />
-                <button onClick={handleRegister} className="bluebutton w-full">
+                <button onClick={handleRegister} className={styles.modalButton}>
                     Unirme
                 </button>
             </div>
