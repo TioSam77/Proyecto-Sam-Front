@@ -8,11 +8,13 @@ import { auth, db } from '../../../../firebase/clientApp';
 
 type GroupData = {
   name: string;
+  subject_id: string;
   subject_name: string; // aquí guardamos el id del subject seleccionado
   teacher_name: string; // para mostrar nombre del profesor
   teacher_id: string;   // id del profesor seleccionado
   start_date: string;
   end_date: string;
+  active: boolean;
 };
 
 type Teacher = {
@@ -31,11 +33,13 @@ const EditGroup = () => {
 
   const [groupData, setGroupData] = useState<GroupData>({
     name: '',
+    subject_id: '',
     subject_name: '',
     teacher_name: '',
     teacher_id: '',
     start_date: '',
     end_date: '',
+    active: true,
   });
   const [editingField, setEditingField] = useState<null | keyof GroupData>(null);
   const [tempValue, setTempValue] = useState('');
@@ -56,11 +60,13 @@ const EditGroup = () => {
         setLoading(false);
         setGroupData({
           name: '',
+          subject_id: '',
           subject_name: '',
           teacher_name: '',
           teacher_id: '',
           start_date: '',
           end_date: '',
+          active: true,
         });
         return;
       }
@@ -74,11 +80,13 @@ const EditGroup = () => {
           const data = docSnap.data();
           setGroupData({
             name: data.name || '',
+            subject_id: data.subject_id || '',
             subject_name: data.subject_name || '',
             teacher_name: data.teacher_name || '',
             teacher_id: data.teacher_id || '',
             start_date: data.start_date || '',
             end_date: data.end_date || '',
+            active: data.active ?? true,
           });
         } else {
           setError('No se encontró el grupo.');
@@ -120,13 +128,16 @@ const EditGroup = () => {
       const selectedTeacher = teachers.find(t => t.id === tempValue);
       if (selectedTeacher) {
         updatedData.teacher_name = selectedTeacher.name;
-        updatedData.teacher_id = selectedTeacher.name;
+        updatedData.teacher_id = selectedTeacher.id;
       }
     } else if (editingField === 'subject_name') {
       const selectedSubject = subjects.find(s => s.id === tempValue);
       if (selectedSubject) {
         updatedData.subject_name = selectedSubject.name;
+        updatedData.subject_id = selectedSubject.id;
       }
+    } else if (editingField === 'active') {
+      updatedData.active = tempValue === 'true';
     } else {
       updatedData[editingField] = tempValue;
     }
@@ -170,7 +181,7 @@ const EditGroup = () => {
   const renderField = (
     label: string,
     field: keyof GroupData,
-    type: 'text' | 'date' | 'select' = 'text'
+    type: 'text' | 'date' | 'select' | 'checkbox' = 'text'
   ) => {
     if (editingField === field) {
       if (field === 'teacher_id') {
@@ -231,6 +242,30 @@ const EditGroup = () => {
         );
       }
 
+      if (field === 'active') {
+        return (
+          <div className={styles.infoRow}>
+            <span className={styles.label}>{label}</span>
+            <select
+              className={styles.input}
+              value={tempValue}
+              onChange={(e) => setTempValue(e.target.value)}
+            >
+              <option value="true">true</option>
+              <option value="false">false</option>
+            </select>
+            <div className={styles.actions}>
+              <button className={styles.saveButton} onClick={handleSave}>
+                Guardar
+              </button>
+              <button className={styles.cancelButton} onClick={handleCancel}>
+                Cancelar
+              </button>
+            </div>
+          </div>
+        );
+      }
+      
       // input text o date para los demás campos
       return (
         <div className={styles.infoRow}>
@@ -255,7 +290,7 @@ const EditGroup = () => {
 
     // Mostrar valor (para teacher_id mostramos teacher_name)
     let displayValue = groupData[field];
-    if (field === 'teacher_id') displayValue = groupData.teacher_name;
+    if (field === 'active') displayValue = groupData.active ? 'Activo' : 'Inactivo';
 
     return (
       <div className={styles.infoRow}>
@@ -265,7 +300,7 @@ const EditGroup = () => {
           className={styles.editButton}
           onClick={() => {
             setEditingField(field);
-            setTempValue(groupData[field]);
+            setTempValue(field === 'active' ? groupData[field].toString() : groupData[field]);
           }}
         >
           <i className="bi bi-pencil-square"></i>
@@ -285,6 +320,7 @@ const EditGroup = () => {
       {renderField('Profesor:', 'teacher_id', 'select')}
       {renderField('Fecha inicio:', 'start_date', 'date')}
       {renderField('Fecha fin:', 'end_date', 'date')}
+      {renderField('Activo:', 'active', 'checkbox')}
     </div>
   );
 };

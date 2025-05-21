@@ -219,9 +219,10 @@ const CreateCourse = () => {
                         await addDoc(collection(db, "course_schedule"), {
                             name: courseName,
                             course_id: courseId,
-                            date: dateString, // ya es un string, no Date ni Timestamp
+                            date: dateString,
                             entry_time: horario.start,
                             exit_time: horario.end,
+                            Active:true
                         });
                     }
                 }
