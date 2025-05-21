@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import table from "@/app/css/Table.module.css"
-import styles from "@/app/css/form.module.css"
+import styles from "@/app/css/Syllabus.module.css" // Usa Binnacle o tu nuevo CSS
 import { useParams } from "next/navigation"
 import {
   collection,
@@ -43,7 +43,6 @@ const Syllabus = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (editId) {
       const ref = doc(db, "Syllabus", editId)
       await updateDoc(ref, form)
@@ -60,15 +59,7 @@ const Syllabus = () => {
     fetchSyllabus()
   }
 
-  interface ItemProps {
-    id: string;        
-    day: string;
-    topic: string;
-    objectives: string;
-    materials: string;    
-  }
-
-  const handleEdit = (item: ItemProps) => {
+  const handleEdit = (item: any) => {
     setForm({
       day: item.day,
       topic: item.topic,
@@ -89,42 +80,52 @@ const Syllabus = () => {
   }, [courseId])
 
   return (
-    <section className={table.box}>
-      <button onClick={() => { setFormVisible(true); setEditId(null); setForm({ day: "", topic: "", objectives: "", materials: "" }) }}>
-        Crear syllabus
+    <section className={table.TableContainer}>
+      <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>Lista de Temario</h2>
+
+      <button className={styles.tableButton} onClick={() => {
+        setFormVisible(true)
+        setEditId(null)
+        setForm({ day: "", topic: "", objectives: "", materials: "" })
+      }}>
+        Crear nuevo
       </button>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Día</th>
-            <th>Tema</th>
-            <th>Objetivos</th>
-            <th>Materiales</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {syllabusList.length === 0 ? (
+      <div className={table.box}>
+        <table>
+          <thead>
             <tr>
-              <td colSpan={5}>No hay registros.</td>
+              <th>Día</th>
+              <th>Tema</th>
+              <th>Objetivos</th>
+              <th>Materiales</th>
+              <th>Acción</th>
             </tr>
-          ) : (
-            syllabusList.map(item => (
-              <tr key={item.id}>
-                <td>{item.day}</td>
-                <td>{item.topic}</td>
-                <td>{item.objectives}</td>
-                <td>{item.materials}</td>
-                <td>
-                  <button onClick={() => handleEdit(item)}>Modificar</button>
-                  <button onClick={() => deleteSyllabus(item.id)}>Eliminar</button>
+          </thead>
+          <tbody>
+            {syllabusList.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ textAlign: "center", padding: "1rem" }}>
+                  No hay registros disponibles.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              syllabusList.map(item => (
+                <tr key={item.id}>
+                  <td>{item.day}</td>
+                  <td>{item.topic}</td>
+                  <td>{item.objectives}</td>
+                  <td>{item.materials}</td>
+                  <td style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
+                    <button className={styles.blueButton} onClick={() => handleEdit(item)}>Modificar</button>
+                    <button className={styles.redButton} onClick={() => deleteSyllabus(item.id)}>Eliminar</button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {isFormVisible && (
         <div className={styles.modalOverlay}>
@@ -148,7 +149,6 @@ const Syllabus = () => {
                 placeholder="Tema"
                 className={styles.select}
                 required
-                maxLength={60}
               />
               <textarea
                 name="objectives"
@@ -156,7 +156,6 @@ const Syllabus = () => {
                 onChange={handleChange}
                 placeholder="Objetivos"
                 className={styles.select}
-                maxLength={200}
               />
               <textarea
                 name="materials"
@@ -164,21 +163,16 @@ const Syllabus = () => {
                 onChange={handleChange}
                 placeholder="Materiales"
                 className={styles.select}
-                maxLength={200}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <button type="submit" className={styles.tableButton}>
+                <button type="submit" className={styles.blueButton}>
                   {editId ? 'Guardar Cambios' : 'Guardar'}
                 </button>
-                <button
-                  type="button"
+                <button type="button" className={styles.redButton}
                   onClick={() => {
                     setFormVisible(false)
                     setEditId(null)
-                  }}
-                  className={styles.tableButton}
-                  style={{ backgroundColor: '#d9534f' }}
-                >
+                  }}>
                   Cancelar
                 </button>
               </div>
