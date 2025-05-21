@@ -11,6 +11,7 @@ import DeleteConfirm from "../DeleteConfirm";
 interface data {
     id: string,
     name: string,
+    phoneNumber :string
 }
 const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -37,6 +38,7 @@ const MapStudent = () => {
                     return {
                         id: doc.id,
                         name: docData.name,
+                        phoneNumber :docData.phoneNumber
                     };
                 });
 
@@ -117,7 +119,7 @@ const MapStudent = () => {
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
                             </div>
                             <div className={styleUser.body}>
-                                <h5>Información sobre {user.name}</h5>
+                                <p>{user.phoneNumber }</p>
                             </div>
                         </Link>
 

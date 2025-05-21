@@ -58,7 +58,11 @@ export default function RootLayout({
         "/Administrador/Grupos/Registro",
     ].some(route => pathname.startsWith(route));
 
-    if (isRegistroRuta) {
+    const isGrupoIdRuta = /^\/Administrador\/Grupos\/[^/]+$/.test(pathname);
+
+    const isRutaExcluida = /^\/Administrador\/Grupos\/[^/]+\/(Estudiantes|Temario|Asistencia|Calificaciones)$/.test(pathname);
+
+    if ((isRegistroRuta || isGrupoIdRuta) || isRutaExcluida) {
         return (
             <>
                 {children}
@@ -70,6 +74,7 @@ export default function RootLayout({
         <>
             {children}
             <MapCourse data={data} login={login} notFound={notFound} />
+
         </>
     )
 }
