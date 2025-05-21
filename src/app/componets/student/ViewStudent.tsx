@@ -7,15 +7,17 @@ import { db } from '@/../firebase/clientApp';
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-interface studentData {
-  id: string
-  name?: string,
-  surname?: string,
-  email?: string,
-  bio?: string,
-  matricula?: string,
-  career?: string,
-  phoneNumber?: string
+export interface StudentData {
+  id: string;
+  name?: string;
+  surname?: string;
+  email?: string;
+  bio?: string;
+  matricula?: string;
+  career?: string;
+  phoneNumber?: string;
+  heardFrom?: string;
+  teacherNote?: string;
 }
 
 interface course {
@@ -25,7 +27,7 @@ interface course {
 
 const ViewStudent = () => {
   const [showCourses, setShowCourses] = useState(false);
-  const [studentData, setStudentData] = useState<studentData | null>(null);
+  const [studentData, setStudentData] = useState<StudentData | null>(null);
   const [courses, setCourses] = useState<course[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingCourses, setLoadingCourses] = useState(false);
@@ -110,13 +112,13 @@ const ViewStudent = () => {
         </Link>
       </div>
 
-      <p className={styleTeacher.teacherBio}>{studentData?.bio || 'Descripción no disponible.'}</p>
       <div className={styleTeacher.teacherDetails}>
         <p><strong>Correo:</strong> {studentData?.email || '-'}</p>
-        <p><strong>Matrícula:</strong> {studentData?.matricula || '-'}</p>
         <p><strong>Teléfono:</strong> {studentData?.phoneNumber || '-'}</p>
-        <p><strong>Carrera:</strong> {studentData?.career || '-'}</p>
+        <p><strong>¿Cómo se enteró?:</strong> {studentData?.heardFrom || '-'}</p>
+        <p><strong>Nota del profesor:</strong> {studentData?.teacherNote || '-'}</p>
       </div>
+
       <hr />
       <h3 onClick={handleToggleCourses} style={{ cursor: "pointer" }}>
         Cursos inscritos {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
@@ -125,6 +127,7 @@ const ViewStudent = () => {
         <MapCourse data={courses} login={loadingCourses} notFound={notFound} />
       )}
     </div>
+
   );
 };
 
