@@ -189,25 +189,27 @@ const EditGroup = () => {
         return (
           <div className={styles.infoRow}>
             <span className={styles.label}>{label}</span>
-            <select
-              className={styles.input}
-              value={tempValue}
-              onChange={(e) => setTempValue(e.target.value)}
-            >
-              <option value="">Selecciona un profesor</option>
-              {teachers.map(t => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-            <div className={styles.actions}>
-              <button className={styles.saveButton} onClick={handleSave}>
-                Guardar
-              </button>
-              <button className={styles.cancelButton} onClick={handleCancel}>
-                Cancelar
-              </button>
+            <div className={styles.value}>
+              <select
+                className={styles.input}
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+              >
+                <option value="">Selecciona un profesor</option>
+                {teachers.map(t => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+              <div className={styles.actions}>
+                <button className={styles.saveButton} onClick={handleSave}>
+                  Guardar
+                </button>
+                <button className={styles.cancelButton} onClick={handleCancel}>
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -218,25 +220,27 @@ const EditGroup = () => {
         return (
           <div className={styles.infoRow}>
             <span className={styles.label}>{label}</span>
-            <select
-              className={styles.input}
-              value={tempValue}
-              onChange={(e) => setTempValue(e.target.value)}
-            >
-              <option value="">Selecciona una materia</option>
-              {subjects.map(s => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <div className={styles.actions}>
-              <button className={styles.saveButton} onClick={handleSave}>
-                Guardar
-              </button>
-              <button className={styles.cancelButton} onClick={handleCancel}>
-                Cancelar
-              </button>
+            <div className={styles.value}>
+              <select
+                className={styles.input}
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+              >
+                <option value="">Selecciona una materia</option>
+                {subjects.map(s => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+              <div className={styles.actions}>
+                <button className={styles.saveButton} onClick={handleSave}>
+                  Guardar
+                </button>
+                <button className={styles.cancelButton} onClick={handleCancel}>
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -246,14 +250,39 @@ const EditGroup = () => {
         return (
           <div className={styles.infoRow}>
             <span className={styles.label}>{label}</span>
-            <select
+            <div className={styles.value}>
+              <select
+                className={styles.input}
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+              >
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+              <div className={styles.actions}>
+                <button className={styles.saveButton} onClick={handleSave}>
+                  Guardar
+                </button>
+                <button className={styles.cancelButton} onClick={handleCancel}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // input text o date para los demás campos
+      return (
+        <div className={styles.infoRow}>
+          <span className={styles.label}>{label}</span>
+          <div className={styles.value}>
+            <input
               className={styles.input}
+              type={type}
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
-            >
-              <option value="true">true</option>
-              <option value="false">false</option>
-            </select>
+            />
             <div className={styles.actions}>
               <button className={styles.saveButton} onClick={handleSave}>
                 Guardar
@@ -262,27 +291,6 @@ const EditGroup = () => {
                 Cancelar
               </button>
             </div>
-          </div>
-        );
-      }
-      
-      // input text o date para los demás campos
-      return (
-        <div className={styles.infoRow}>
-          <span className={styles.label}>{label}</span>
-          <input
-            className={styles.input}
-            type={type}
-            value={tempValue}
-            onChange={(e) => setTempValue(e.target.value)}
-          />
-          <div className={styles.actions}>
-            <button className={styles.saveButton} onClick={handleSave}>
-              Guardar
-            </button>
-            <button className={styles.cancelButton} onClick={handleCancel}>
-              Cancelar
-            </button>
           </div>
         </div>
       );
@@ -295,16 +303,18 @@ const EditGroup = () => {
     return (
       <div className={styles.infoRow}>
         <span className={styles.label}>{label}</span>
-        <span className={styles.value}>{displayValue}</span>
-        <button
-          className={styles.editButton}
-          onClick={() => {
-            setEditingField(field);
-            setTempValue(field === 'active' ? groupData[field].toString() : groupData[field]);
-          }}
-        >
-          <i className="bi bi-pencil-square"></i>
-        </button>
+        <div className={styles.value}>
+          <span className={styles.value}>{displayValue}</span>
+          <button
+            className={styles.editButton}
+            onClick={() => {
+              setEditingField(field);
+              setTempValue(field === 'active' ? groupData[field].toString() : groupData[field]);
+            }}
+          >
+            <i className="bi bi-pencil-square"></i>
+          </button>
+        </div>
       </div>
     );
   };
