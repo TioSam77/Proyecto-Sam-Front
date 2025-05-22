@@ -10,6 +10,7 @@ import DeleteConfirm from "@/app/componets/DeleteConfirm";
 interface data {
     id: string,
     name: string,
+    phoneNumber: string
 }
 
 const MapTeacher = () => {
@@ -35,6 +36,7 @@ const MapTeacher = () => {
                     return {
                         id: doc.id,
                         name: docData.name,
+                        phoneNumber: docData.phoneNumber
                     };
                 });
 
@@ -116,12 +118,14 @@ const MapTeacher = () => {
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
                             </div>
                             <div className={styleUser.body}>
-                                <h5>Información sobre {user.name}</h5>
+                                <p>{user.phoneNumber}</p>
                             </div>
                         </Link>
 
                         <div className={styleUser.containerButton}>
-                            <button className="bluebutton">Editar</button>
+                            <Link href={`/Administrador/Profesores/${user.id}/Editar`}>
+                                <button className="bluebutton">Editar</button>
+                            </Link>
                             <button className="redbutton" onClick={() => handleDeleteClick(user)}><i className="bi bi-trash-fill"></i></button>
                         </div>
                     </li>

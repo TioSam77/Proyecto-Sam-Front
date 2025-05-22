@@ -6,12 +6,11 @@
   background-color: #f7f9fc;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .title {
   font-size: 1.8rem;
-  color: #2c3e50;
+  color: #1e3a8a;
   margin-bottom: 1rem;
   font-weight: bold;
 }
@@ -71,9 +70,8 @@
 
 .title {
   font-size: 1.8rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 25px;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
   text-align: left;
 }
 

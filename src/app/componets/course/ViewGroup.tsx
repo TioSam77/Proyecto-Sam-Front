@@ -14,7 +14,8 @@ interface courseData {
     id: string,
     name?: string,
     subject_name?: string,
-    teacher_name?: string
+    teacher_name?: string,
+    code?:string
 }
 
 const ViewGroup = () => {
@@ -68,8 +69,10 @@ const ViewGroup = () => {
             </section>
             <div className={styles.card}>
                 {isTeacher ?
-                    <p className={styles.welcome}>Bienvenido:</p>
-
+                    <div style={{display:"flex", justifyContent:"space-between"}}>
+                        <p className={styles.welcome}>Bienvenido:</p>
+                        <p>Codigo : {courseData?.code}</p>
+                    </div>
                     :
                     <p className={styles.welcome}>Profesor:</p>
                 }

@@ -134,9 +134,9 @@ const EditStudent = () => {
   return (
     <div className={styles.editCard}>
       {isSelf ? 
-      <h3 className='welcomeText'>Editar tus datos</h3>
+      <h3 className={styles.editTitle}>Editar tus datos</h3>
       :
-      <h3 className='welcomeText'>Editar Información del Alumno</h3>
+      <h3 className={styles.editTitle}>Editar Información del Alumno</h3>
       }
 
       {editableFields.map(([field, label]) => {
