@@ -11,7 +11,7 @@ import DeleteConfirm from "../DeleteConfirm";
 interface data {
     id: string,
     name: string,
-    phoneNumber :string
+    phoneNumber: string
 }
 const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -38,7 +38,7 @@ const MapStudent = () => {
                     return {
                         id: doc.id,
                         name: docData.name,
-                        phoneNumber :docData.phoneNumber
+                        phoneNumber: docData.phoneNumber
                     };
                 });
 

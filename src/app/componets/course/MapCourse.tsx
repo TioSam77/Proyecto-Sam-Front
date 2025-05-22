@@ -20,6 +20,7 @@ interface MapCourseProps {
 interface course {
     id: string,
     name: string
+    teacher_name: string
 }
 
 const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
@@ -150,18 +151,30 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                                 <h2 className={styleCourse.textHeader}>{course.name}</h2>
                             </Link>
                             <Link href={`${basePath}/${course.id}`} className={styleCourse.body}>
-                                <h5>Información sobre {course.name}</h5>
+                                <h5><b>Profesor:</b></h5>
+                                <h5>{course.teacher_name}</h5>
                             </Link>
                             <div className={styleCourse.footer}>
                                 <h5>Más detalles</h5>
-                                {isAdmin && (
-                                    <div className={styleCourse.containerButton}>
-                                        <Link href={`${basePath}/${course.id}/Editar`}>
-                                            <button className="bluebutton">Editar</button>
-                                        </Link>
-                                        <button className="redbutton" onClick={() => handleDeleteClick(course)}><i className="bi bi-trash-fill"></i></button>
-                                    </div>
-                                )}
+                                <div className={styleCourse.containerButton}>
+                                    {isAdmin ? (
+                                        <>
+                                            <Link href={`${basePath}/${course.id}/Editar`}>
+                                                <button className="bluebutton">Editar</button>
+                                            </Link>
+                                            <button className="redbutton" onClick={() => handleDeleteClick(course)}><i className="bi bi-trash-fill"></i></button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Link href={`${basePath}/${course.id}/Mensajes`}>
+                                                <button className='bluebutton'><i className="bi bi-chat-left-text"></i></button>
+                                            </Link>
+                                            <Link href={`${basePath}/${course.id}/Temario`}>
+                                                <button className='bluebutton'>Temario</button>
+                                            </Link>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </li>
                     ))

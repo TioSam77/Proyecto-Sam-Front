@@ -4,7 +4,7 @@ import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
 import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
 import { db } from '@/../firebase/clientApp';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
 export interface StudentData {

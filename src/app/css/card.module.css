@@ -74,7 +74,6 @@
 @media(max-width: 767px) {
 
     .containerCard {
-        grid-template-columns: repeat(auto-fit,minmax(11rem,1fr));
         margin-top: 10px;
         gap: 5px;
     }
