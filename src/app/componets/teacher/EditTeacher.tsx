@@ -10,6 +10,7 @@ import {
 
 import styles from '@/app/css/EditTeacher.module.css';
 import { db } from '../../../../firebase/clientApp';
+import { getAuth, updateEmail, updateProfile, User } from 'firebase/auth';
 
 type Teacher = {
   name: string;
@@ -27,6 +28,7 @@ const EditTeacher = () => {
   const [editingField, setEditingField] = useState<null | keyof Teacher>(null);
   const [tempValue, setTempValue] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isSelf, setIsSelf] = useState(false); // ← Solo el propietario puede editar
 
   // Cargar datos del profesor
   useEffect(() => {
@@ -40,6 +42,12 @@ const EditTeacher = () => {
         } else {
           console.error('No se encontró el profesor');
         }
+
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user && user.uid === id) {
+          setIsSelf(true);
+        }
       } catch (error) {
         console.error('Error al obtener datos:', error);
       } finally {
@@ -51,6 +59,12 @@ const EditTeacher = () => {
   }, [id]);
 
   const handleEdit = (field: keyof Teacher) => {
+    const sensitive = ['name', 'surname', 'email'].includes(field);
+    if (sensitive && !isSelf) {
+      alert("No tienes permiso para editar este campo.");
+      return;
+    }
+
     setEditingField(field);
     const value = teacherData?.[field];
     setTempValue(typeof value === 'boolean' ? value.toString() : (value || ''));
@@ -73,9 +87,29 @@ const EditTeacher = () => {
       await updateDoc(docRef, {
         [editingField]: newValue,
       });
+
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user && user.uid === id) {
+        if (editingField === 'name' || editingField === 'surname') {
+          const newName = editingField === 'name' ? tempValue : teacherData.name;
+          const newSurname = editingField === 'surname' ? tempValue : teacherData.surname;
+
+          await updateProfile(user, {
+            displayName: `${newName} ${newSurname}`,
+          });
+        }
+
+        if (editingField === 'email') {
+          await updateEmail(user, tempValue);
+        }
+      }
+
       setTeacherData(updatedData);
     } catch (error) {
       console.error('Error al guardar:', error);
+      alert('Ocurrió un error al actualizar los datos.');
     }
 
     setEditingField(null);
@@ -90,6 +124,7 @@ const EditTeacher = () => {
   const renderField = (label: string, field: keyof Teacher) => {
     if (!teacherData) return null;
     const value = teacherData[field];
+    const isSensitive = ['name', 'surname', 'email'].includes(field);
 
     return (
       <div className={styles.infoRow} key={field}>
@@ -122,9 +157,11 @@ const EditTeacher = () => {
             <span className={styles.value}>
               {typeof value === 'boolean' ? (value ? 'Sí' : 'No') : value}
             </span>
-            <button className={styles.editButton} onClick={() => handleEdit(field)}>
-              <i className="bi bi-pencil-square"></i>
-            </button>
+            {(!isSensitive || isSelf) && (
+              <button className={styles.editButton} onClick={() => handleEdit(field)}>
+                <i className="bi bi-pencil-square"></i>
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -136,7 +173,9 @@ const EditTeacher = () => {
 
   return (
     <div className={styles.card}>
-      <h2 className={styles.title}>Editar Información del Profesor</h2>
+      <h2 className={styles.title}>
+        {isSelf ? 'Editar tu información como profesor' : 'Editar Información del Profesor'}
+      </h2>
       <div className={styles.teacherInfo}>
         {renderField('Nombre:', 'name')}
         {renderField('Apellido:', 'surname')}
