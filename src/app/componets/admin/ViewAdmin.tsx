@@ -69,8 +69,8 @@ const ViewAdmin = () => {
             : 'Nombre del administrador'}
         </h3>
         <Link href={`${adminId}/Editar`}>
+          <button className='bluebutton'>Editar</button>
         </Link>
-        <button className='bluebutton'>Editar</button>
       </div>
 
       <div className={styles.adminDetails}>

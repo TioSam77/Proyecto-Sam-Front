@@ -1,7 +1,7 @@
-import EditStudent from "@/app/componets/student/EditStudent";
+import EditAdmin from "@/app/componets/admin/EditAdmin";
 
 export default function Page() {
   return (
-      <EditStudent />
+      <EditAdmin/>
   )
 }
