@@ -22,7 +22,7 @@
 .inputSchedule {
   width: 100%;
   padding: 0.6rem;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 1rem;
 }
@@ -34,7 +34,7 @@
   padding: 0.7rem 1.5rem;
   font-size: 1rem;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 4px;
   margin-top: 1rem;
 }
 

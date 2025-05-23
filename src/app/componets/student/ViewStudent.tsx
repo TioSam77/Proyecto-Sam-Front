@@ -23,6 +23,7 @@ export interface StudentData {
 interface course {
   id: string,
   name: string
+  teacher_name: string
 }
 
 const ViewStudent = () => {
@@ -83,6 +84,7 @@ const ViewStudent = () => {
             return {
               id: doc.id,
               name: docData.name,
+              teacher_name: docData.teacher_name
             };
           });
 

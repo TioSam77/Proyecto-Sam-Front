@@ -95,14 +95,14 @@ const MapTeacher = () => {
             <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
-                    placeholder="Buscar profesor..."
+                    placeholder="Buscar empleado..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
                 <Link href={`/Administrador/Profesores/Registro`}>
-                    <button className={styleUser.button}>Nuevo Profesor</button>
+                    <button className={styleUser.button}>Nuevo Empleado</button>
                 </Link>
             </div>
 

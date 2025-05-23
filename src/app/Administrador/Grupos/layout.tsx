@@ -10,6 +10,7 @@ import { collection, getDocs, limit, query } from "firebase/firestore";
 interface data {
     id: string
     name: string
+    teacher_name: string
 }
 
 export default function RootLayout({
@@ -38,6 +39,7 @@ export default function RootLayout({
                     return {
                         id: doc.id,
                         name: docData.name,
+                        teacher_name:docData.teacher_name
                     };
                 });
 

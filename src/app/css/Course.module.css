@@ -122,9 +122,10 @@
         flex-direction: column;
         align-items: center;
     }
+    
 }
 
-@media(max-width:647px) {
+@media(max-width:760px) {
     .textHeader {
         padding: 10px;
         margin: 0;

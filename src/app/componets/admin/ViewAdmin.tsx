@@ -1,9 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/ViewAdmin.module.css';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/../firebase/clientApp';
+import Link from 'next/link';
 
 interface Admin {
   id: string;
@@ -11,8 +12,6 @@ interface Admin {
   surname?: string;
   email?: string;
   phoneNumber?: string;
-  bio?: string;
-  office?: string;
   role?: string;
 }
 
@@ -23,11 +22,12 @@ const ViewAdmin = () => {
 
   const pathname = usePathname();
 
+  const params = useParams();
+  const adminId = params?.id as string;
+
+
   useEffect(() => {
     if (!pathname) return;
-
-    const segments = pathname.split('/');
-    const adminId = segments[3];
 
     if (!adminId) {
       setNotFound(true);
@@ -68,15 +68,14 @@ const ViewAdmin = () => {
             ? `${adminData.surname} ${adminData.name}`
             : 'Nombre del administrador'}
         </h3>
+        <Link href={`${adminId}/Editar`}>
+        </Link>
         <button className='bluebutton'>Editar</button>
       </div>
-
-      <p className={styles.adminBio}>{adminData?.bio || 'Descripción no disponible.'}</p>
 
       <div className={styles.adminDetails}>
         <p><strong>Correo:</strong> {adminData?.email || '-'}</p>
         <p><strong>Teléfono:</strong> {adminData?.phoneNumber || '-'}</p>
-        <p><strong>Oficina:</strong> {adminData?.office || '-'}</p>
         <p><strong>Rol:</strong> {adminData?.role || 'Administrador General'}</p>
       </div>
     </div>

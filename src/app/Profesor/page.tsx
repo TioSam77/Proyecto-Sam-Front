@@ -8,6 +8,7 @@ import { auth, db } from '@/../firebase/clientApp';
 interface data {
     id: string
     name: string
+    teacher_name: string
 }
 
 export default function Page() {
@@ -36,6 +37,7 @@ export default function Page() {
                     return {
                         id: doc.id,
                         name: docData.name,
+                        teacher_name: docData.teacher_name
                     };
                 });
 

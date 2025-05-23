@@ -130,13 +130,13 @@ const RegisterTeacher = () => {
                 <div className={styles.borderGradient}></div>
 
                 <div className={styles.loginBox}>
-                    <h2>Creación de Cuenta de Profesor(a)</h2>
+                    <h2>Creación de Cuenta de Empleado(a)</h2>
 
                     <div className={styles.separator}>
                         <label>Correo Electrónico</label>
                         <input
                             type="email"
-                            placeholder="profe@gmail.com"
+                            placeholder="ejemplo@gmail.com"
                             className={styles.inputField}
                             value={email}
                             onChange={e => setEmail(e.target.value)}
@@ -236,10 +236,6 @@ const RegisterTeacher = () => {
                         {loadingfirebase ? "Cargando..." : "Crear"}
                     </button>
 
-                    <p className={styles.register}>
-                        ¿Ya tienes una cuenta?
-                        <a href="/Login" className={styles.registerLink}>Inicia sesión</a>
-                    </p>
                 </div>
             </form>
 
