@@ -129,7 +129,7 @@ const TableCourseFinalGrade = () => {
                     className="searchBox"
                 />
                 <button
-                    className={tables.tableButton}
+                    className='bluebutton'
                     onClick={handleSearch}
                 >
                     Buscar
@@ -145,7 +145,7 @@ const TableCourseFinalGrade = () => {
                                 {!isStudent && (
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         <button
-                                            className={tables.tableButton}
+                                            className='bluebutton'
                                             onClick={confirmGrades}
                                             disabled={loading}
                                         >

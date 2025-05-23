@@ -247,7 +247,7 @@ const TableAttendance = () => {
                     className="searchBox"
                 />
                 <button
-                    className={tables.tableButton}
+                    className='bluebutton'
                     onClick={handleSearch}
                 >
                     Buscar
@@ -272,7 +272,7 @@ const TableAttendance = () => {
                                         {!isStudent && !confirmedDates[s.date] && (
                                             <div style={{ display: "flex", justifyContent: "center" }}>
                                                 <button
-                                                    className={tables.tableButton}
+                                                    className='bluebutton'
                                                     onClick={() => confirmColumn(s.date)}
                                                 >
                                                     Confirmar

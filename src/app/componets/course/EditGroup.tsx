@@ -8,6 +8,7 @@ import { auth, db } from '../../../../firebase/clientApp';
 
 type GroupData = {
   name: string;
+  type: string;
   subject_id: string;
   subject_name: string; // aquí guardamos el id del subject seleccionado
   teacher_name: string; // para mostrar nombre del profesor
@@ -33,6 +34,7 @@ const EditGroup = () => {
 
   const [groupData, setGroupData] = useState<GroupData>({
     name: '',
+    type: '',
     subject_id: '',
     subject_name: '',
     teacher_name: '',
@@ -60,6 +62,7 @@ const EditGroup = () => {
         setLoading(false);
         setGroupData({
           name: '',
+          type: '',
           subject_id: '',
           subject_name: '',
           teacher_name: '',
@@ -80,6 +83,7 @@ const EditGroup = () => {
           const data = docSnap.data();
           setGroupData({
             name: data.name || '',
+            type: data.type || '',
             subject_id: data.subject_id || '',
             subject_name: data.subject_name || '',
             teacher_name: data.teacher_name || '',
@@ -326,6 +330,7 @@ const EditGroup = () => {
     <div className={styles.groupCard}>
       <h2 className={styles.title}>Editar Grupo</h2>
       {renderField('Nombre:', 'name')}
+      {renderField('Tipo:', 'type')}
       {renderField('Materia:', 'subject_name', 'select')}
       {renderField('Profesor:', 'teacher_name', 'select')}
       {renderField('Fecha inicio:', 'start_date', 'date')}

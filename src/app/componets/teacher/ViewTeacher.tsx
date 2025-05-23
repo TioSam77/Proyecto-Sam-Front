@@ -10,6 +10,7 @@ import Link from 'next/link';
 interface data {
   id: string
   name: string
+  teacher_name: string
 }
 
 interface teacher {
@@ -18,9 +19,8 @@ interface teacher {
   surname?: string,
   email?: string,
   phoneNumber?: string,
-  bio?: string,
-  office?: string,
-  department?: string
+  position?:string,
+  rol?:string
 }
 
 const ViewTeacher = () => {
@@ -64,6 +64,7 @@ const ViewTeacher = () => {
           return {
             id: doc.id,
             name: docData.name,
+            teacher_name: docData.teacher_name
           };
         });
 
@@ -96,12 +97,11 @@ const ViewTeacher = () => {
         </Link>
       </div>
 
-      <p className={styleTeacher.teacherBio}>{teacherData?.bio || 'Descripción no disponible.'}</p>
       <div className={styleTeacher.teacherDetails}>
         <p><strong>Correo:</strong> {teacherData?.email || '-'}</p>
-        <p><strong>Departamento:</strong> {teacherData?.department || '-'}</p>
         <p><strong>Teléfono:</strong> {teacherData?.phoneNumber || '-'}</p>
-        <p><strong>Oficina:</strong> {teacherData?.office || '-'}</p>
+        <p><strong>Puesto:</strong> {teacherData?.position || '-'}</p>
+        <p><strong>Rol:</strong> {teacherData?.rol || '-'}</p>
       </div>
       <hr />
       <h3 onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>

@@ -67,7 +67,7 @@
     color: white;
     background-color: #2ac7fb;
     font-weight: bold;
-    border-radius: 8px;
+    border-radius: 4px;
     word-wrap: break-word;
     white-space: normal;
     max-width: 150px;
@@ -152,7 +152,7 @@
 .modalCard {
     background: white;
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: 4px;
     max-width: 500px;
     width: 90%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

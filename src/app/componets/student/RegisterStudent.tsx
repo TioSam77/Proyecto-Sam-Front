@@ -262,10 +262,6 @@ const RegisterStudent = () => {
                         {loadingfirebase ? "Cargando..." : "Crear"}
                     </button>
 
-                    <p className={styles.register}>
-                        ¿Ya tienes cuenta?
-                        <a href="/Login" className={styles.registerLink}>Logearte</a>
-                    </p>
                 </div>
             </form>
 

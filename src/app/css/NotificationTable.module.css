@@ -138,7 +138,7 @@
 .notificationTableContainer {
     position: relative;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 4px;
     background: white;
     overflow: hidden;
     margin: 10px 0;
@@ -148,7 +148,7 @@
 .notificationTableContainer {
     position: relative;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 4px;
     background: transparent; /* Cambiar de blanco a transparente */
     overflow: hidden;
     margin: 10px 0;
@@ -162,7 +162,7 @@
     top: -7px;
     width: calc(100% + 14px);
     height: calc(100% + 14px);
-    border-radius: 8px;
+    border-radius: 4px;
     background: linear-gradient(to bottom right, #E8E8E8, #2e83c4, #2e83c4, #30567c);
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     z-index: -1;
@@ -173,7 +173,7 @@
     width: 100%;
     border-collapse: collapse;
     background: white; /* Asegura que el contenido de la tabla sea visible */
-    border-radius: 8px; /* Aplica esquinas redondeadas */
+    border-radius: 4px; /* Aplica esquinas redondeadas */
     position: relative;
     z-index: 1;
 }
@@ -201,7 +201,7 @@
     top: -7px;
     width: calc(100% + 14px);
     height: calc(100% + 14px);
-    border-radius: 8px;
+    border-radius: 4px;
     background: linear-gradient(to bottom right, #E8E8E8, #2e83c4, #2e83c4, #30567c);
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     z-index: -1;

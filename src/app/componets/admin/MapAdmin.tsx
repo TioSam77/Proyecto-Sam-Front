@@ -15,6 +15,7 @@ import DeleteConfirm from "@/app/componets/DeleteConfirm";
 interface Admin {
   id: string;
   name: string;
+  phoneNumber:string;
 }
 
 const MapAdmin = () => {
@@ -40,6 +41,7 @@ const MapAdmin = () => {
           return {
             id: doc.id,
             name: `${docData.name || ''} ${docData.surname || ''}`.trim(),
+            phoneNumber: docData.phoneNumber
           };
         });
 
@@ -106,7 +108,7 @@ const MapAdmin = () => {
                 <h2 className={styleUser.textHeader}>{admin.name}</h2>
               </div>
               <div className={styleUser.body}>
-                <h5>Información sobre {admin.name}</h5>
+                <h5>{admin.phoneNumber}</h5>
               </div>
             </Link>
 

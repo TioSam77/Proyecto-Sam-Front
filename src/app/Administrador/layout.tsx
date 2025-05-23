@@ -37,7 +37,8 @@ export default function RootLayout({
                 <div className={card.containerCard}>
                     <LinkCard name="Alumnos" url="/Administrador/Alumnos" icon="bi bi-person-check" />
                     <LinkCard name="Grupos" url="/Administrador/Grupos" icon="bi bi-award-fill" />
-                    <LinkCard name="Profesores" url="/Administrador/Profesores" icon="bi bi-journal-text" />
+                    <LinkCard name="Empleados" url="/Administrador/Profesores" icon="bi bi-journal-text" />
+                    <LinkCard name="Adminis" url="/Administrador/Admins" icon="bi bi-journal-text" />
                 </div>
             </section>
             {children}

@@ -81,7 +81,7 @@ const Syllabus = () => {
 
   return (
     <section className={table.TableContainer}>
-      <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>Lista de Temario</h2>
+      <h2 className="welcomeText">Lista de Temario</h2>
 
       <button className={styles.tableButton} onClick={() => {
         setFormVisible(true)

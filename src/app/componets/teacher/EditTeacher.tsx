@@ -17,13 +17,13 @@ type Teacher = {
   surname: string;
   email: string;
   phoneNumber: string;
-  office: string;
-  department: string;
+  position: string;
+  rol: string;
   active: boolean;
 };
 
 const EditTeacher = () => {
-  const { id } = useParams(); // Obtiene el ID del profesor de la URL
+  const { id } = useParams();
   const [teacherData, setTeacherData] = useState<Teacher | null>(null);
   const [editingField, setEditingField] = useState<null | keyof Teacher>(null);
   const [tempValue, setTempValue] = useState('');
@@ -40,7 +40,7 @@ const EditTeacher = () => {
           const data = docSnap.data() as Teacher;
           setTeacherData(data);
         } else {
-          console.error('No se encontró el profesor');
+          console.error('No se encontró el empleado');
         }
 
         const auth = getAuth();
@@ -124,21 +124,21 @@ const EditTeacher = () => {
   const renderField = (label: string, field: keyof Teacher) => {
     if (!teacherData) return null;
     const value = teacherData[field];
-    const isSensitive = ['name', 'surname', 'email'].includes(field);
+    const isSensitive = ['name', 'surname', 'email', 'position', 'rol'].includes(field);
 
     return (
       <div className={styles.infoRow} key={field}>
         <span className={styles.label}>{label}</span>
         {editingField === field ? (
           <div className={styles.editingArea}>
-            {typeof value === 'boolean' ? (
+            {field === 'active' ? (
               <select
                 className={styles.inputField}
                 value={tempValue}
                 onChange={e => setTempValue(e.target.value)}
               >
-                <option value="true">Sí</option>
-                <option value="false">No</option>
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
               </select>
             ) : (
               <input
@@ -155,7 +155,11 @@ const EditTeacher = () => {
         ) : (
           <div className={styles.displayArea}>
             <span className={styles.value}>
-              {typeof value === 'boolean' ? (value ? 'Sí' : 'No') : value}
+              {field === 'active'
+                ? value === true || value === 'true'
+                  ? 'Activo'
+                  : 'Inactivo'
+                : value}
             </span>
             {(!isSensitive || isSelf) && (
               <button className={styles.editButton} onClick={() => handleEdit(field)}>
@@ -164,25 +168,26 @@ const EditTeacher = () => {
             )}
           </div>
         )}
+
       </div>
     );
   };
 
   if (loading) return <p className={styles.loading}>Cargando datos...</p>;
-  if (!teacherData) return <p className={styles.error}>No se encontró el profesor.</p>;
+  if (!teacherData) return <p className={styles.error}>No se encontró el empleado.</p>;
 
   return (
     <div className={styles.card}>
       <h2 className={styles.title}>
-        {isSelf ? 'Editar tu información como profesor' : 'Editar Información del Profesor'}
+        {isSelf ? 'Editar tu información de Empleado' : 'Editar Información del Empleado'}
       </h2>
       <div className={styles.teacherInfo}>
         {renderField('Nombre:', 'name')}
         {renderField('Apellido:', 'surname')}
         {renderField('Correo:', 'email')}
         {renderField('Teléfono:', 'phoneNumber')}
-        {renderField('Oficina:', 'office')}
-        {renderField('Departamento:', 'department')}
+        {renderField('Puesto:', 'position')}
+        {renderField('Rol:', 'rol')}
         {renderField('Activo:', 'active')}
       </div>
     </div>

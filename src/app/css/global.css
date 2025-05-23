@@ -52,7 +52,7 @@ footer {
     font-size: 1.1rem;
     font-weight: bold;
     padding: 10px 15px;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: all 0.3s ease;
     color: #000 !important;
 }

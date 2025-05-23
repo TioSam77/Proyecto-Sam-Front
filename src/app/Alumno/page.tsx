@@ -8,6 +8,7 @@ import { auth, db } from '@/../firebase/clientApp';
 interface data{
     id:string
     name:string
+    teacher_name: string
 }
 
 export default function Page() {
