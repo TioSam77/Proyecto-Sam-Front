@@ -95,9 +95,6 @@ const MapAdmin = () => {
           className="searchBox"
         />
         <button className="bluebutton">Buscar</button>
-        <Link href={`/Administrador/Admins/Registro`}>
-          <button className={styleUser.button}>Nuevo Admin</button>
-        </Link>
       </div>
 
       {login && (

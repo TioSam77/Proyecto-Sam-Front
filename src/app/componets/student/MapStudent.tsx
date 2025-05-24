@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/../firebase/clientApp";
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, limit, query, where } from "firebase/firestore";
 import DeleteConfirm from "../DeleteConfirm";
 
 interface data {
@@ -32,7 +32,9 @@ const MapStudent = () => {
             }
 
             try {
-                const querySnapshot = await getDocs(collection(db, "student"));
+                const studentQuery = query(collection(db, "student"), limit(15));
+                const querySnapshot = await getDocs(studentQuery);
+
                 const allData: data[] = querySnapshot.docs.map((doc) => {
                     const docData = doc.data();
                     return {
@@ -119,7 +121,7 @@ const MapStudent = () => {
                                 <h2 className={styleUser.textHeader}>{user.name}</h2>
                             </div>
                             <div className={styleUser.body}>
-                                <p>{user.phoneNumber }</p>
+                                <p>{user.phoneNumber}</p>
                             </div>
                         </Link>
 
