@@ -12,7 +12,8 @@ interface Admin {
   surname?: string;
   email?: string;
   phoneNumber?: string;
-  role?: string;
+  position?: string,
+  role?: number;
 }
 
 const ViewAdmin = () => {
@@ -37,7 +38,7 @@ const ViewAdmin = () => {
     const fetchAdmin = async () => {
       try {
         setLoading(true);
-        const adminRef = doc(db, 'admin', adminId);
+        const adminRef = doc(db, 'teacher', adminId);
         const adminSnap = await getDoc(adminRef);
 
         if (!adminSnap.exists()) {
@@ -60,6 +61,19 @@ const ViewAdmin = () => {
   if (notFound) return <p>Administrador no encontrado.</p>;
   if (loading) return <p>Cargando datos del administrador...</p>;
 
+  const getRoleName = (role?: number): string => {
+    switch (role) {
+      case 1:
+        return 'Super Administrador';
+      case 2:
+        return 'Administrador';
+      case 3:
+        return 'Profesor Inglés';
+      default:
+        return 'desconocido';
+    }
+  };
+
   return (
     <div className={styles.adminCard}>
       <div className={styles.headerButton}>
@@ -76,7 +90,8 @@ const ViewAdmin = () => {
       <div className={styles.adminDetails}>
         <p><strong>Correo:</strong> {adminData?.email || '-'}</p>
         <p><strong>Teléfono:</strong> {adminData?.phoneNumber || '-'}</p>
-        <p><strong>Rol:</strong> {adminData?.role || 'Administrador General'}</p>
+        <p><strong>Puesto:</strong> {adminData?.position || '-'}</p>
+        <p><strong>Rol:</strong> {getRoleName(adminData?.role)}</p>
       </div>
     </div>
   );

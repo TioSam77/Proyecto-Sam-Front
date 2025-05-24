@@ -19,8 +19,8 @@ interface teacher {
   surname?: string,
   email?: string,
   phoneNumber?: string,
-  position?:string,
-  rol?:string
+  position?: string,
+  role?: number
 }
 
 const ViewTeacher = () => {
@@ -84,6 +84,19 @@ const ViewTeacher = () => {
   if (notFound) return <p>Profesor no encontrado.</p>;
   if (loading) return <p>Cargando...</p>;
 
+  const getRoleName = (role?: number): string => {
+    switch (role) {
+      case 1:
+        return 'Super Administrador';
+      case 2:
+        return 'Administrador';
+      case 3:
+        return 'Profesor Inglés';
+      default:
+        return 'desconocido';
+    }
+  };
+
   return (
     <div className={styleTeacher.teacherCard}>
       <div className={styleTeacher.headerButton}>
@@ -101,7 +114,7 @@ const ViewTeacher = () => {
         <p><strong>Correo:</strong> {teacherData?.email || '-'}</p>
         <p><strong>Teléfono:</strong> {teacherData?.phoneNumber || '-'}</p>
         <p><strong>Puesto:</strong> {teacherData?.position || '-'}</p>
-        <p><strong>Rol:</strong> {teacherData?.rol || '-'}</p>
+        <p><strong>Rol:</strong> {getRoleName(teacherData?.role)}</p>
       </div>
       <hr />
       <h3 onClick={() => setShowCourses(!showCourses)} style={{ cursor: "pointer" }}>

@@ -8,14 +8,16 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDocs
+  getDocs,
+  query,
+  where
 } from "firebase/firestore";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 interface Admin {
   id: string;
   name: string;
-  phoneNumber:string;
+  phoneNumber: string;
 }
 
 const MapAdmin = () => {
@@ -35,8 +37,10 @@ const MapAdmin = () => {
       }
 
       try {
-        const querySnapshot = await getDocs(collection(db, "admin"));
-        const allData: Admin[] = querySnapshot.docs.map((doc) => {
+        // Consulta que filtra por role === 2 directamente en Firebase
+        const q = query(collection(db, "teacher"), where("role", "==", 2));
+        const querySnapshot = await getDocs(q);
+        const teachers: Admin[] = querySnapshot.docs.map((doc) => {
           const docData = doc.data();
           return {
             id: doc.id,
@@ -45,7 +49,7 @@ const MapAdmin = () => {
           };
         });
 
-        setData(allData);
+        setData(teachers);
       } catch (err) {
         console.error("Error al obtener administradores:", err);
       } finally {
