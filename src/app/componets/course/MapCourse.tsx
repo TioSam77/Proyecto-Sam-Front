@@ -106,6 +106,16 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
 
     return (
         <section className={styleUser.center}>
+            {isAdmin &&
+                <div style={{display:'flex', gap:'10px'}}>
+                    <Link href={`/Administrador/Grupos/Registro`}>
+                        <button className={styleUser.button}>Nuevo Grupo</button>
+                    </Link>
+                    <Link href={`/Administrador/Grupos/Carga`}>
+                        <button className={styleUser.button}>Carga masiva de Grupos</button>
+                    </Link>
+                </div>
+            }
             <div
                 style={{
                     display: "flex",
@@ -131,17 +141,6 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                         +
                     </button>
                 )}
-
-                {isAdmin &&
-                    <>
-                        <Link href={`/Administrador/Grupos/Registro`}>
-                            <button className={styleUser.button}>Nuevo Grupo</button>
-                        </Link>
-                        <Link href={`/Administrador/Grupos/Carga`}>
-                            <button className={styleUser.button}>Carga masiva de Grupos</button>
-                        </Link>
-                    </>
-                }
             </div>
             <ol className={styleCourse.containerSubjects}>
                 {login ? (

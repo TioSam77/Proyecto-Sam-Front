@@ -20,6 +20,8 @@ import Link from "next/link";
 interface Student {
     id: string;
     name: string;
+    surname: string;
+    surname2:string;
     attendance: {
         [date: string]: Attendance;
     };
@@ -258,6 +260,7 @@ const TableAttendance = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
+                            <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             {scheduleData.map((s) => {
                                 const [year, month, day] = s.date.split("-").map(Number);
@@ -303,6 +306,9 @@ const TableAttendance = () => {
                                     key={student.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
+                                    <td>
+                                        {student.surname} {student.surname2}
+                                    </td>
                                     <td
                                         className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}
                                     >

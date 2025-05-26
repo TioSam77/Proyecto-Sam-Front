@@ -11,6 +11,8 @@ import Link from "next/link";
 interface Student {
     id: string;
     name: string;
+    surname:string;
+    surname2:string;
     active: boolean;
     montlyPayment: boolean;
 }
@@ -113,7 +115,7 @@ const TableStudent = () => {
             <Link href={`InscribirEstudiante`}>
                 <button className='bluebutton'>Inscribir Estudiante</button>
             </Link>
-            
+
             <h4 className="welcomeText">Estudiantes en el curso</h4>
             <div className={tables.selectAndButton}>
                 <input
@@ -131,6 +133,7 @@ const TableStudent = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
+                            <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Monto</th>
                             <th>Beca</th>
@@ -154,6 +157,9 @@ const TableStudent = () => {
                                     key={row.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
+                                    <td>
+                                        {row.surname} {row.surname2}
+                                    </td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                         {row.name}
                                     </td>

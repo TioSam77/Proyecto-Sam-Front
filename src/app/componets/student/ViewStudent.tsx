@@ -10,7 +10,9 @@ import Link from 'next/link';
 export interface StudentData {
   id: string;
   name?: string;
+  name2?: string;
   surname?: string;
+  surname2?: string;
   email?: string;
   bio?: string;
   matricula?: string;
@@ -105,8 +107,10 @@ const ViewStudent = () => {
     <div className={styleTeacher.teacherCard}>
       <div className={styleTeacher.headerButton}>
         <h3 className={styleTeacher.teacherName}>
-          {(studentData?.surname && studentData?.name)
-            ? `${studentData.surname} ${studentData.name}`
+          {(studentData?.surname || studentData?.name)
+            ? [studentData?.surname, studentData?.surname2, studentData?.name, studentData?.name2]
+              .filter(Boolean)
+              .join(' ')
             : 'Nombre del estudiante'}
         </h3>
         <Link href={`${studentId}/Editar`}>

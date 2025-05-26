@@ -13,6 +13,8 @@ import stylesLogin from "@/app/css/Login.module.css";
 interface Student {
     id: string;
     name: string;
+    surname: string;
+    surname2: string;
     attendance: {
         [date: string]: Attendance;
     };
@@ -140,6 +142,7 @@ const TableCourseFinalGrade = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
+                            <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Calificación
                                 {!isStudent && (
@@ -168,6 +171,9 @@ const TableCourseFinalGrade = () => {
                         ) : (
                             students.map((row, index) => (
                                 <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
+                                    <td>
+                                        {row.surname} {row.surname2}
+                                    </td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                         {row.name}
                                     </td>
@@ -217,7 +223,7 @@ const TableCourseFinalGrade = () => {
                                                     }
                                                 }}
                                                 style={{
-                                                    width:"50px",
+                                                    width: "50px",
                                                     textAlign: "center",
                                                     backgroundColor:
                                                         !isNaN(row.grade) ? (

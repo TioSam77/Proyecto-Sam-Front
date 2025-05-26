@@ -4,13 +4,16 @@ import tables from "@/app/css/Table.module.css";
 import stylesLogin from "@/app/css/Login.module.css";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, limit, where, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, query, limit, where, setDoc, doc, getDoc } from "firebase/firestore";
 import { auth, db } from '@/../firebase/clientApp';
 import { useParams } from "next/navigation";
 
 interface Student {
     id: string;
     name: string;
+    name2: string;
+    surname: string;
+    surname2: string;
     active: boolean;
 }
 
@@ -90,23 +93,17 @@ const TableAddStudent = () => {
     const handleRegister = async (student: Student) => {
         try {
             // Verificar si el curso existe
-            const courseRef = query(
-                collection(db, "course"),
-                where("__name__", "==", courseId)
-            );
-            const courseSnap = await getDocs(courseRef);
-            if (courseSnap.empty) {
+            const courseRef = doc(db, "course", courseId);
+            const courseSnap = await getDoc(courseRef);
+            if (!courseSnap.exists()) {
                 setError("El curso no existe.");
                 return;
             }
 
             // Verificar si el estudiante existe
-            const studentRef = query(
-                collection(db, "student"),
-                where("__name__", "==", student.id)
-            );
-            const studentSnap = await getDocs(studentRef);
-            if (studentSnap.empty) {
+            const studentRef = doc(db, "student", student.id);
+            const studentSnap = await getDoc(studentRef);
+            if (!studentSnap.exists()) {
                 setError("El estudiante no existe.");
                 return;
             }
@@ -115,6 +112,9 @@ const TableAddStudent = () => {
             const customId = `${student.id}_${courseId}`;
             await setDoc(doc(db, "student_course", customId), {
                 name: student.name,
+                name2: student.name2,
+                surname: student.surname,
+                surname2: student.surname2,
                 student_id: student.id,
                 course_id: courseId,
             });
@@ -145,6 +145,7 @@ const TableAddStudent = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
+                            <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Estatus</th>
                         </tr>
@@ -164,6 +165,9 @@ const TableAddStudent = () => {
                                     key={row.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
+                                    <td>
+                                        {row.surname} {row.surname2}
+                                    </td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
                                         {row.name}
                                     </td>

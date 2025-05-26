@@ -51,7 +51,7 @@ const UploadStudents = () => {
 
       for (const entry of jsonData) {
         const student = entry as any;
-        const id = String(student.id);
+        const student_id = String(student.student_id);
         const name = student.name ?? "";
         const surname = student.surname ?? "";
         const surname2 = student.surname2 ?? "";
@@ -59,7 +59,7 @@ const UploadStudents = () => {
         const email = student.email ?? "";
         const courseId = student.course_id ?? "";
 
-        if (!id || !email) {
+        if (!student_id || !email) {
           console.warn("Estudiante con ID o email inválido:", student);
           continue;
         }
@@ -85,42 +85,47 @@ const UploadStudents = () => {
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           await updateProfile(userCredential.user, { displayName });
-        } catch (authError: any) {
-          console.warn(`No se pudo registrar usuario con email ${email}:`, authError.message);
-          authErrors++;
-          continue; // ⚠️ Saltar todo el registro si el auth falla
-        }
 
-        // Registrar en colección "student"
-        await setDoc(studentDocRef, {
-          ...student,
-          id,
-        });
+          const { uid } = userCredential.user;
 
-        inserted++;
+          // Guardar en Firestore: ID del documento = uid
+          const studentDocRef = doc(studentCollection, uid);
+          await setDoc(studentDocRef, {
+            ...student,
+            id:uid,
+          });
 
-        // Asociar con curso si existe
-        if (courseId) {
-          // Buscar documento donde el campo course_id sea igual al del Excel
-          const q = query(courseCollection, where("course_id", "==", courseId));
-          const querySnapshot = await getDocs(q);
+          inserted++;
 
-          if (!querySnapshot.empty) {
-            // Obtener el ID del primer documento que coincida
-            const courseDoc = querySnapshot.docs[0];
-            const courseDocId = courseDoc.id;
+          // Asociar con curso
+          if (courseId) {
+            const q = query(courseCollection, where("course_id", "==", courseId));
+            const querySnapshot = await getDocs(q);
 
-            await addDoc(studentCourseCollection, {
-              student_id: id,
-              name,
-              course_id: courseDocId,
-            });
+            if (!querySnapshot.empty) {
+              const courseDoc = querySnapshot.docs[0];
+
+              await addDoc(studentCourseCollection, {
+                student_id: uid,
+                name,
+                name2,
+                surname,
+                surname2,
+                course_id: courseDoc.id, // Usamos el ID real del documento
+              });
+            } else {
+              noCourse++;
+            }
           } else {
             noCourse++;
           }
-        } else {
-          noCourse++;
+
+        } catch (authError: any) {
+          console.warn(`No se pudo registrar usuario con email ${email}:`, authError.message);
+          authErrors++;
+          continue;
         }
+
       }
 
       setMessage(
