@@ -10,6 +10,9 @@ import DeleteConfirm from "@/app/componets/DeleteConfirm";
 interface data {
     id: string,
     name: string,
+    name2:string,
+    surname:string,
+    surname2:string,
     phoneNumber: string
 }
 
@@ -36,6 +39,9 @@ const MapTeacher = () => {
                     return {
                         id: doc.id,
                         name: docData.name,
+                        name2: docData.name2,
+                        surname: docData.surname,
+                        surname2: docData.surname2,
                         phoneNumber: docData.phoneNumber
                     };
                 });
@@ -92,6 +98,15 @@ const MapTeacher = () => {
     return (
         <section className={styleUser.center}>
 
+            <div style={{ display: "flex", gap: "10px" }}>
+                <Link href={`/Administrador/Profesores/Registro`}>
+                    <button className={styleUser.button}>Nuevo Empleado</button>
+                </Link>
+                <Link href={`/Administrador/Profesores/Carga`}>
+                    <button className={styleUser.button}>Carga masiva de Empleados</button>
+                </Link>
+            </div>
+
             <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
@@ -101,9 +116,6 @@ const MapTeacher = () => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                <Link href={`/Administrador/Profesores/Registro`}>
-                    <button className={styleUser.button}>Nuevo Empleado</button>
-                </Link>
             </div>
 
             {login && (
@@ -115,7 +127,10 @@ const MapTeacher = () => {
                     <li key={user.id} className={styleUser.users}>
                         <Link href={`/Administrador/Profesores/${user.id}`}>
                             <div className={styleUser.header}>
-                                <h2 className={styleUser.textHeader}>{user.name}</h2>
+                                <h2 className={styleUser.textHeader}>{user.surname} {user.surname2}</h2>
+                            </div>
+                            <div className={styleUser.header}>
+                                <h2 className={styleUser.textHeader}>{user.name} {user.name2}</h2>
                             </div>
                             <div className={styleUser.body}>
                                 <p>{user.phoneNumber}</p>

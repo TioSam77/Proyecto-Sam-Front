@@ -10,9 +10,12 @@ type GroupData = {
   name: string;
   type: string;
   subject_id: string;
-  subject_name: string; // aquí guardamos el id del subject seleccionado
-  teacher_name: string; // para mostrar nombre del profesor
-  teacher_id: string;   // id del profesor seleccionado
+  subject_name: string;
+  teacher_name2: string;
+  teacher_surname: string;
+  teacher_surname2: string;
+  teacher_name: string;
+  teacher_id: string;
   start_date: string;
   end_date: string;
   active: boolean;
@@ -21,6 +24,9 @@ type GroupData = {
 type Teacher = {
   id: string;
   name: string;
+  name2: string;
+  surname: string;
+  surname2: string;
 };
 
 type Subject = {
@@ -37,6 +43,9 @@ const EditGroup = () => {
     type: '',
     subject_id: '',
     subject_name: '',
+    teacher_name2: '',
+    teacher_surname: '',
+    teacher_surname2: '',
     teacher_name: '',
     teacher_id: '',
     start_date: '',
@@ -66,6 +75,9 @@ const EditGroup = () => {
           subject_id: '',
           subject_name: '',
           teacher_name: '',
+          teacher_name2: '',
+          teacher_surname: '',
+          teacher_surname2: '',
           teacher_id: '',
           start_date: '',
           end_date: '',
@@ -87,6 +99,9 @@ const EditGroup = () => {
             subject_id: data.subject_id || '',
             subject_name: data.subject_name || '',
             teacher_name: data.teacher_name || '',
+            teacher_name2: data.teacher_name2 || '',
+            teacher_surname: data.teacher_surname || '',
+            teacher_surname2: data.teacher_surname2 || '',
             teacher_id: data.teacher_id || '',
             start_date: data.start_date || '',
             end_date: data.end_date || '',
@@ -98,10 +113,18 @@ const EditGroup = () => {
 
         // Obtener profesores
         const queryTeachers = await getDocs(collection(db, 'teacher'));
-        const allTeachers = queryTeachers.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as { name: string }),
-        }));
+        const allTeachers = queryTeachers.docs.map(doc => {
+          const data = doc.data() as {
+            name: string;
+            name2: string;
+            surname: string;
+            surname2: string;
+          };
+          return {
+            id: doc.id,
+            ...data,
+          };
+        });
         setTeachers(allTeachers);
 
         // Obtener materias
@@ -128,10 +151,10 @@ const EditGroup = () => {
 
     let updatedData: Partial<GroupData> = {};
 
-    if (editingField === 'teacher_id') {
+    if (editingField === 'teacher_name') {
       const selectedTeacher = teachers.find(t => t.id === tempValue);
       if (selectedTeacher) {
-        updatedData.teacher_name = selectedTeacher.name;
+        updatedData.teacher_name =` ${selectedTeacher.surname} ${selectedTeacher.surname2} ${selectedTeacher.name} ${selectedTeacher.name2}`;
         updatedData.teacher_id = selectedTeacher.id;
       }
     } else if (editingField === 'subject_name') {
@@ -188,7 +211,7 @@ const EditGroup = () => {
     type: 'text' | 'date' | 'select' | 'checkbox' = 'text'
   ) => {
     if (editingField === field) {
-      if (field === 'teacher_id') {
+      if (field === 'teacher_name') {
         // Select profesor
         return (
           <div className={styles.infoRow}>
@@ -202,7 +225,7 @@ const EditGroup = () => {
                 <option value="">Selecciona un profesor</option>
                 {teachers.map(t => (
                   <option key={t.id} value={t.id}>
-                    {t.name}
+                    {t.surname} {t.surname2} {t.name} {t.name2}
                   </option>
                 ))}
               </select>
