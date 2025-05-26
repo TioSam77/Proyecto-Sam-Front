@@ -66,7 +66,7 @@
 }
 
 .image {
-    background-image: url(https://gstatic.com/classroom/themes/img_bookclub.jpg);
+    background-image: url(../../../public/img_subject.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     position: absolute;
@@ -122,7 +122,7 @@
         flex-direction: column;
         align-items: center;
     }
-    
+
 }
 
 @media(max-width:760px) {

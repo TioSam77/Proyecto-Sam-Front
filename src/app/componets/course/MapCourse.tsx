@@ -133,9 +133,14 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                 )}
 
                 {isAdmin &&
-                    <Link href={`/Administrador/Grupos/Registro`}>
-                        <button className={styleUser.button}>Nuevo Grupo</button>
-                    </Link>
+                    <>
+                        <Link href={`/Administrador/Grupos/Registro`}>
+                            <button className={styleUser.button}>Nuevo Grupo</button>
+                        </Link>
+                        <Link href={`/Administrador/Grupos/Carga`}>
+                            <button className={styleUser.button}>Carga masiva de Grupos</button>
+                        </Link>
+                    </>
                 }
             </div>
             <ol className={styleCourse.containerSubjects}>

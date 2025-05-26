@@ -9,6 +9,7 @@ export default function RootLayout({
 
     const isRegistroRuta = [
         "/Administrador/Alumnos/Registro",
+        "/Administrador/Alumnos/Carga",
       ].some(route => pathname.startsWith(route));
     
     if (isRegistroRuta) {

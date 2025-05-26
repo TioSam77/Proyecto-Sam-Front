@@ -11,6 +11,9 @@ import DeleteConfirm from "../DeleteConfirm";
 interface data {
     id: string,
     name: string,
+    name2: string,
+    surname: string,
+    surname2: string,
     phoneNumber: string
 }
 const MapStudent = () => {
@@ -40,6 +43,9 @@ const MapStudent = () => {
                     return {
                         id: doc.id,
                         name: docData.name,
+                        name2: docData.name2,
+                        surname: docData.surname,
+                        surname2: docData.surname2,
                         phoneNumber: docData.phoneNumber
                     };
                 });
@@ -70,7 +76,7 @@ const MapStudent = () => {
     const confirmDelete = async () => {
         if (!selectedStudent) return;
         try {
-            // 1. Eliminar el curso principal
+            // 1. Eliminar el student principal
             await deleteDoc(doc(db, "student", selectedStudent.id));
 
             // 2. Eliminar registros relacionados en student_course
@@ -95,6 +101,15 @@ const MapStudent = () => {
     return (
         <section className={styleUser.center}>
 
+            <div style={{ display: "flex", gap: "10px" }}>
+                <Link href={`/Administrador/Alumnos/Registro`}>
+                    <button className={styleUser.button}>Nuevo Alumno</button>
+                </Link>
+                <Link href={`/Administrador/Alumnos/Carga`}>
+                    <button className={styleUser.button}>Carga masiva de alumnos</button>
+                </Link>
+            </div>
+
             <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
                 <input
                     type="text"
@@ -104,9 +119,6 @@ const MapStudent = () => {
                     className="searchBox"
                 />
                 <button className="bluebutton">Buscar</button>
-                <Link href={`/Administrador/Alumnos/Registro`}>
-                    <button className={styleUser.button}>Nuevo Alumno</button>
-                </Link>
             </div>
 
             {login && (
@@ -118,7 +130,10 @@ const MapStudent = () => {
                     <li key={user.id} className={styleUser.users}>
                         <Link href={`/Administrador/Alumnos/${user.id}`}>
                             <div className={styleUser.header}>
-                                <h2 className={styleUser.textHeader}>{user.name}</h2>
+                                <h2 className={styleUser.textHeader}>{user.surname} {user.surname2}</h2>
+                            </div>
+                            <div className={styleUser.header}>
+                                <h2 className={styleUser.textHeader}>{user.name} {user.name2}</h2>
                             </div>
                             <div className={styleUser.body}>
                                 <p>{user.phoneNumber}</p>

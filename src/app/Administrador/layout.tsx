@@ -17,7 +17,8 @@ export default function RootLayout({
         "/Administrador/Grupos/Registro",
         "/Administrador/Grupos/CrearMateria",
         "/Administrador/Grupos/EliminarMateria",
-        "/Administrador/Alumnos/Registro"
+        "/Administrador/Alumnos/Registro",
+        "/Administrador/Grupos/Carga"
     ].some(route => pathname.startsWith(route)) || /^\/Administrador\/Grupos\/.+\/Editar$/.test(pathname);
     
     if (isAdminSubroute && !isRegistroRuta) {
