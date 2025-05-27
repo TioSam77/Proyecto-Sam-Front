@@ -54,7 +54,7 @@ footer {
     padding: 10px 15px;
     border-radius: 4px;
     transition: all 0.3s ease;
-    color: #000 !important;
+    color: #000;
 }
 
 .navbar-nav .nav-link:hover {
@@ -202,4 +202,8 @@ a {
     font-weight: bold;
     margin: 10px;
     color: #1e3a8a;
+}
+
+.red{
+    color: red !important;
 }

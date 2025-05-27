@@ -3,11 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "@/app/data/countries.json";
-import { auth, db } from "@/../firebase/clientApp";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
-import { updateProfile } from "firebase/auth";
 
 const RegisterTeacher = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -18,42 +14,13 @@ const RegisterTeacher = () => {
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
 
+    const [puesto, setPuesto] = useState("");
+    const [rol, setRol] = useState(2); // valor por defecto 2 = Administrador
+
+
     const [error, setError] = useState<string>("");
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-
-    const [createUserWithEmailAndPassword, , loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
-
-    useEffect(() => {
-        if (!firebaseError?.message) return;
-
-        const message = firebaseError.message;
-        const errorCode = message.match(/auth\/[a-zA-Z0-9-_]+/)?.[0];
-
-        switch (errorCode) {
-            case "auth/email-already-in-use":
-                setError("Ese correo ya está registrado. Intenta iniciar sesión.");
-                break;
-            case "auth/invalid-email":
-                setError("Ese correo es inválido.");
-                break;
-            case "auth/weak-password":
-                setError("La contraseña es muy débil. Usa al menos 6 caracteres.");
-                break;
-            case "auth/missing-password":
-                setError("La contraseña es obligatoria.");
-                break;
-            case "auth/operation-not-allowed":
-                setError("La creación de cuentas está deshabilitada temporalmente.");
-                break;
-            case "auth/too-many-requests":
-                setError("Demasiados intentos fallidos. Intenta de nuevo más tarde.");
-                break;
-            default:
-                setError("Ocurrió un error al registrar el usuario. Intenta nuevamente.");
-                break;
-        }
-    }, [firebaseError]);
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(e.target.value);
@@ -67,43 +34,67 @@ const RegisterTeacher = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError("");
+        setAlert("");
+
+        const [firstName, secondName = ""] = name.trim().split(" ");
+        const [firstSurname, secondSurname = ""] = surname.trim().split(" ");
+
 
         if (password !== confirmPassword) {
             setError("Las contraseñas no coinciden.");
             return;
         }
 
+        if (!email || !password || !name || !surname) {
+            setError("Por favor llena todos los campos requeridos.");
+            return;
+        }
+
+        if (![2, 3].includes(rol)) {
+            setError("Selecciona un rol válido.");
+            return;
+        }
+
+        setLoading(true);
+
         try {
-            setLoading(true);
-            const usercredential = await createUserWithEmailAndPassword(email, password);
-            const newUser = usercredential?.user
+            const countryCode = countryList.find(c => c.iso2 === selectedCountry)?.phoneCode || "";
 
-            if (!newUser?.uid) {
-                setError("No se pudo crear el usuario.");
-                return;
-            }
-
-            await updateProfile(newUser, {
-                displayName: `${name} ${surname}`,
+            const res = await fetch('http://localhost:4000/register-employee', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    name: `${firstName}`.trim(),
+                    name2: `${secondName}`.trim(),
+                    surname: `${firstSurname}`.trim(),
+                    surname2: `${secondSurname}`.trim(),
+                    phoneNumber: `+${countryCode} ${phoneNumber}`,
+                    puesto,
+                    rol,
+                })
             });
 
-            const userData = {
-                email: newUser.email,
-                name: name,
-                surname: surname,
-                phoneNumber: `${countryCode} ${phoneNumber}`,
-            }
+            const data = await res.json();
 
-            const docRef = doc(db, "teacher", newUser.uid);
-            setDoc(docRef, userData)
-
-            setAlert("Profesor registrado exitosamente.");
-        } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
+            if (!res.ok) {
+                setError(data.error || "Error al crear el empleado.");
             } else {
-                setError("Ocurrió un error desconocido");
+                setAlert("Empleado registrado exitosamente.");
+                // Limpiar formulario
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+                setName("");
+                setSurname("");
+                setPhoneNumber("");
+                setPuesto("");
+                setRol(2);
             }
+        } catch (err) {
+            setError("Error de red o servidor. Intenta más tarde.");
         } finally {
             setLoading(false);
         }
@@ -222,18 +213,32 @@ const RegisterTeacher = () => {
                     </div>
 
                     <div className={styles.separator}>
-                        <label>Materia(s) que imparte</label>
-                        <input type="text" placeholder="Ej. Matemáticas, Física..." className={styles.inputField} />
+                        <label>Puesto</label>
+                        <input
+                            type="text"
+                            placeholder="Ej. Gerente"
+                            className={styles.inputField}
+                            value={puesto}
+                            onChange={e => setPuesto(e.target.value)}
+                        />
                     </div>
 
+                    {/* NUEVO selector Rol */}
                     <div className={styles.separator}>
-                        <label>Nivel educativo que enseña</label>
-                        <input type="text" placeholder="Ej. Secundaria, Universidad..." className={styles.inputField} />
+                        <label>Rol</label>
+                        <select
+                            className={styles.inputField}
+                            value={rol}
+                            onChange={e => setRol(Number(e.target.value))}
+                        >
+                            <option value={2}>Administrador</option>
+                            <option value={3}>Profesor Inglés</option>
+                        </select>
                     </div>
 
                     <button className={styles.blueButton}
-                        disabled={loadingfirebase}>
-                        {loadingfirebase ? "Cargando..." : "Crear"}
+                        disabled={loading}>
+                        {loading ? "Cargando..." : "Crear"}
                     </button>
 
                 </div>

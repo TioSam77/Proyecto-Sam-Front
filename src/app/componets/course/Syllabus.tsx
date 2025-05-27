@@ -147,7 +147,7 @@ const Syllabus = () => {
       {isFormVisible && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalCard}>
-            <h3>{editId ? 'Modificar Syllabus' : 'Crear Syllabus'}</h3>
+            <h3>{editId ? 'Modificar Temario' : 'Crear Temario'}</h3>
             <form onSubmit={handleSubmit} className={styles.classList}>
               <input
                 type="number"

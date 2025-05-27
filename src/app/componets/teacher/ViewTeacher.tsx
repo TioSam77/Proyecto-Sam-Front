@@ -54,7 +54,6 @@ const ViewTeacher = () => {
           ...teacherSnap.data(),
         };
         setTeacherData(teacher);
-        console.log(teacher)
 
         // 2. Traer cursos donde teacher_id == teacherId
         const q = query(collection(db, 'course'), where('teacher_id', '==', teacherId));

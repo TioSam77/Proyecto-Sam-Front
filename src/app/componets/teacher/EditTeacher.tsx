@@ -29,12 +29,12 @@ const EditTeacher = () => {
   const [tempValue, setTempValue] = useState('');
   const [loading, setLoading] = useState(true);
   const [isSelf, setIsSelf] = useState(false); // ← Solo el propietario puede editar
+  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null); // <-- Guardamos el rol del usuario actual
 
-  // Cargar datos del profesor
   useEffect(() => {
     const fetchTeacher = async () => {
       try {
-        const docRef = doc(db, 'teacher', id as string);
+        const docRef = doc(db, 'teacher', id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data() as Teacher;
@@ -45,8 +45,18 @@ const EditTeacher = () => {
 
         const auth = getAuth();
         const user = auth.currentUser;
-        if (user && user.uid === id) {
-          setIsSelf(true);
+
+        if (user) {
+          setIsSelf(user.uid === id);
+
+          const tokenResult = await user.getIdTokenResult();
+          const roleFromToken = tokenResult.claims.role;
+
+          if (typeof roleFromToken === 'string') {
+            setCurrentUserRole(roleFromToken);
+          } else {
+            setCurrentUserRole(null);
+          }
         }
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -62,6 +72,11 @@ const EditTeacher = () => {
     const sensitive = ['name', 'surname', 'email'].includes(field);
     if (sensitive && !isSelf) {
       alert("No tienes permiso para editar este campo.");
+      return;
+    }
+
+    if (field === 'role' && currentUserRole !== 'superAdmin') {
+      alert('No tienes permiso para modificar el rol.');
       return;
     }
 
@@ -136,7 +151,6 @@ const EditTeacher = () => {
     const isSensitive = ['name', 'surname', 'email'].includes(field);
 
     if (field === 'role') {
-      // Mapear valores numéricos a nombres legibles
       const roleName = value === 1
         ? 'Super Administrador'
         : value === 2
@@ -168,7 +182,7 @@ const EditTeacher = () => {
           ) : (
             <div className={styles.displayArea}>
               <span className={styles.value}>{roleName}</span>
-              {(!isSensitive || isSelf) && (
+              {currentUserRole === 'superAdmin' && (
                 <button className={styles.editButton} onClick={() => handleEdit(field)}>
                   <i className="bi bi-pencil-square"></i>
                 </button>
@@ -178,6 +192,7 @@ const EditTeacher = () => {
         </div>
       );
     }
+
 
     // Resto del render para otros campos (igual que antes)...
     const displayValue = field === 'active'

@@ -5,8 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import NavbarCourses from "./course/NavbarCourses";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, db } from "../../../firebase/clientApp";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "../../../firebase/clientApp";
 
 const Header = () => {
   const [enrroled, setEnrroled] = useState(false)
@@ -16,18 +15,26 @@ const Header = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const teacherRef = doc(db, "teacher", user.uid);
-        const teacherSnap = await getDoc(teacherRef);
+        const tokenResult = await user.getIdTokenResult();
+        const roleClaim = tokenResult.claims.role;
 
-        if (teacherSnap.exists()) {
-          const role = teacherSnap.data().role;
-          if (role === 1) setUserRole("superAdmin");
-          else if (role === 2) setUserRole("admin");
-          else if (role === 3) setUserRole("teacher");
-          else setUserRole("student");
-        } else {
-          setUserRole("student");
+        switch (roleClaim) {
+          case "superAdmin":
+            setUserRole("superAdmin");
+            break;
+          case "admin":
+            setUserRole("admin");
+            break;
+          case "teacher":
+            setUserRole("teacher");
+            break;
+          case "student":
+            setUserRole("student");
+            break;
+          default:
+            setUserRole(null);
         }
+
         setEnrroled(true);
       } else {
         setUserRole(null);
@@ -41,7 +48,7 @@ const Header = () => {
   const isAdmin = userRole === "admin" || userRole === "superAdmin";
   const isTeacher = userRole === "teacher";
   const isStudent = userRole === "student";
-  
+
   const handleLogout = async () => {
     await signOut(auth);
     setEnrroled(false);
@@ -143,9 +150,15 @@ const Header = () => {
             )}
 
             {enrroled &&
-              <Link className="nav-link" href="/Login" onClick={handleLogout}>
-                <i className="bi bi-box-arrow-right me-2 text-danger"></i>Cerrar sesión
-              </Link>
+              <li className="nav-item">
+                <Link
+                  className="nav-link red"
+                  href="/Login"
+                  onClick={handleLogout}
+                >
+                  <i className="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+                </Link>
+              </li>
             }
 
           </ul>

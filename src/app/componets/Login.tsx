@@ -136,7 +136,7 @@ const Login: React.FC<LoginProps> = ({
       <div className={styles.boxWrapper}>
         <div className={styles.borderGradient}></div> {/* Borde degradado */}
 
-        <form className={styles.loginBox}>
+        <div className={styles.loginBox}>
           <h2>Iniciar Sesión</h2>
 
           {/* Switch de usuario */}
@@ -183,7 +183,7 @@ const Login: React.FC<LoginProps> = ({
             ¿Perdiste tu contraseña?
             <a href="/Recuperar" className={styles.recoverLink}>Recuperar</a>
           </p>
-        </form>
+        </div>
       </div>
 
       <div className={styles.messageContainer}>

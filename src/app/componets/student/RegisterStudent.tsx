@@ -3,12 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "@/app/data/countries.json";
-import { auth, db } from "@/../firebase/clientApp";
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
-import { updateProfile } from "firebase/auth";
-
 
 const RegisterStudent = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -24,39 +19,6 @@ const RegisterStudent = () => {
     const [error, setError] = useState<string | null>("");
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-
-    const [createUserWithEmailAndPassword, , loadingfirebase, firebaseError] = useCreateUserWithEmailAndPassword(auth);
-
-    useEffect(() => {
-        if (!firebaseError?.message) return;
-
-        const message = firebaseError.message;
-        const errorCode = message.match(/auth\/[a-zA-Z0-9-_]+/)?.[0];
-
-        switch (errorCode) {
-            case "auth/email-already-in-use":
-                setError("Ese correo ya está registrado.");
-                break;
-            case "auth/invalid-email":
-                setError("Ese correo es inválido.");
-                break;
-            case "auth/weak-password":
-                setError("La contraseña es muy débil. Usa al menos 6 caracteres.");
-                break;
-            case "auth/missing-password":
-                setError("La contraseña es obligatoria.");
-                break;
-            case "auth/operation-not-allowed":
-                setError("La creación de cuentas está deshabilitada temporalmente.");
-                break;
-            case "auth/too-many-requests":
-                setError("Demasiados intentos fallidos. Intenta de nuevo más tarde.");
-                break;
-            default:
-                setError("Ocurrió un error al registrar el usuario. Intenta nuevamente.");
-                break;
-        }
-    }, [firebaseError]);
 
     useEffect(() => {
         if (!error) return;
@@ -83,37 +45,41 @@ const RegisterStudent = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        const [firstName, secondName = ""] = name.trim().split(" ");
+        const [firstSurname, secondSurname = ""] = surname.trim().split(" ");
+
         if (password !== confirmPassword) {
             setError("Las contraseñas no coinciden.");
             return;
         }
 
         setLoading(true);
+        setError("");
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(email, password);
-            const user = userCredential?.user;
-
-            if (!user?.uid) {
-                setError("No se pudo crear el usuario.");
-                return;
-            }
-
-            await updateProfile(user, {
-                displayName: `${name} ${surname}`,
+            const response = await fetch("http://localhost:4000/register-student", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    name: `${firstName}`.trim(),
+                    name2: `${secondName}`.trim(),
+                    surname: `${firstSurname}`.trim(),
+                    surname2: `${secondSurname}`.trim(),
+                    phoneNumber: `${countryCode} ${phoneNumber}`,
+                    teacherNote,
+                    heardFrom
+                })
             });
 
-            const userData = {
-                email,
-                name,
-                surname,
-                phoneNumber: `${countryCode} ${phoneNumber}`,
-                teacherNote,
-                heardFrom
-            };
+            const data = await response.json();
 
-            const docRef = doc(db, "student", user.uid);
-            await setDoc(docRef, userData);
+            if (!response.ok) {
+                throw new Error(data.error || "Error al registrar el alumno.");
+            }
 
             setAlert("Alumno registrado exitosamente.");
             setEmail("");
@@ -124,18 +90,16 @@ const RegisterStudent = () => {
             setConfirmPassword("");
             setTeacherNote("");
             setHeardFrom("");
-
         } catch (err) {
             if (err instanceof Error) {
-                setError(err.message); // ✅ Guarda el objeto Error
+                setError(err.message);
             } else {
-                setError("Ocurrió un error desconocido");
+                setError("Ocurrió un error desconocido.");
             }
         } finally {
             setLoading(false);
         }
     };
-
 
     // Buscar el código de país seleccionado
     const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);
@@ -258,8 +222,8 @@ const RegisterStudent = () => {
                     </div>
 
                     <button className={styles.blueButton}
-                        disabled={loadingfirebase} >
-                        {loadingfirebase ? "Cargando..." : "Crear"}
+                        disabled={loading} >
+                        {loading ? "Cargando..." : "Crear"}
                     </button>
 
                 </div>
