@@ -41,8 +41,7 @@ const Header = () => {
   const isAdmin = userRole === "admin" || userRole === "superAdmin";
   const isTeacher = userRole === "teacher";
   const isStudent = userRole === "student";
-  const isSuperAdmin = userRole === "superAdmin";
-
+  
   const handleLogout = async () => {
     await signOut(auth);
     setEnrroled(false);

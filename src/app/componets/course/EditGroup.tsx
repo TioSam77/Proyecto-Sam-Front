@@ -149,7 +149,7 @@ const EditGroup = () => {
   const handleSave = async () => {
     if (!editingField) return;
 
-    let updatedData: Partial<GroupData> = {};
+    const updatedData: Partial<GroupData> = {};
 
     if (editingField === 'teacher_name') {
       const selectedTeacher = teachers.find(t => t.id === tempValue);

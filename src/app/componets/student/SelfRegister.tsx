@@ -6,9 +6,14 @@ import { collection, query, where, getDocs, setDoc, doc } from "firebase/firesto
 import { db } from "@/../firebase/clientApp";
 import styles from '@/app/css/selfRegister.module.css';
 
+interface student{
+    id:string;
+    name?:string;
+}
+
 export default function SelfRegister({ onClose }: { onClose: () => void }) {
     const [code, setCode] = useState("");
-    const [student, setStudent] = useState<any>(null);
+    const [student, setStudent] = useState<student>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 

@@ -10,7 +10,7 @@ import {
 
 import styles from '@/app/css/EditTeacher.module.css';
 import { db } from '../../../../firebase/clientApp';
-import { getAuth, updateEmail, updateProfile, User } from 'firebase/auth';
+import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
 
 type Teacher = {
   name: string;

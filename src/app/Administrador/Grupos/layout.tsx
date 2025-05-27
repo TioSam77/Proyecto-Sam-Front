@@ -1,6 +1,5 @@
 'use client'
 import MapCourse from "@/app/componets/course/MapCourse";
-import MapStudent from "@/app/componets/student/MapStudent";
 import { onAuthStateChanged } from "firebase/auth";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";

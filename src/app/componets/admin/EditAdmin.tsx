@@ -122,7 +122,7 @@ const EditAdmin = () => {
 
       setAdminData(updatedData as AdminData);
     } catch (err) {
-      alert("Ocurrió un error al actualizar los datos.");
+      alert(`Ocurrió un error al actualizar los datos. ${err}`);
     } finally {
       setEditingField(null);
     }
