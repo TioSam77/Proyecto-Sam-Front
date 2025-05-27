@@ -15,11 +15,19 @@ import {
 } from "firebase/firestore"
 import { db } from '@/../firebase/clientApp';
 
+interface SyllabusItem {
+  id: string;
+  day: string;
+  topic: string;
+  objectives: string;
+  materials: string;
+}
+
 const Syllabus = () => {
   const params = useParams()
   const courseId = params?.id as string
 
-  const [syllabusList, setSyllabusList] = useState<any[]>([])
+  const [syllabusList, setSyllabusList] = useState<SyllabusItem[]>([])
   const [isFormVisible, setFormVisible] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
 
@@ -33,7 +41,16 @@ const Syllabus = () => {
   const fetchSyllabus = async () => {
     const q = query(collection(db, "Syllabus"), where("id_course", "==", courseId))
     const querySnapshot = await getDocs(q)
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    const data: SyllabusItem[] = querySnapshot.docs.map(doc => {
+      const d = doc.data();
+      return {
+        id: doc.id,
+        day: String(d.day ?? ""),
+        topic: String(d.topic ?? ""),
+        objectives: String(d.objectives ?? ""),
+        materials: String(d.materials ?? "")
+      };
+    });
     setSyllabusList(data)
   }
 
@@ -59,7 +76,7 @@ const Syllabus = () => {
     fetchSyllabus()
   }
 
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: SyllabusItem) => {
     setForm({
       day: item.day,
       topic: item.topic,

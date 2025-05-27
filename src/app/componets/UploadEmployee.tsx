@@ -15,14 +15,27 @@ import {
 import { db } from "../../../firebase/clientApp";
 import styles from '@/app/css/uploadStudents.module.css';
 
+// Interfaz para los datos del Excel
+interface TeacherExcelEntry {
+    employee_id: string | number;
+    name?: string;
+    name2?: string;
+    surname?: string;
+    surname2?: string;
+    position?: string;
+    role?: string;
+    email?: string;
+}
+
 const UploadEmployee = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const handleFile = async (e: any) => {
-        const file = e.target.files[0];
-        if (!file) return;
+    const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const fileList = e.target.files;
+        if (!fileList || fileList.length === 0) return;
 
+        const file = fileList[0];
         setLoading(true);
         setMessage("");
 
@@ -33,7 +46,7 @@ const UploadEmployee = () => {
             const workbook = XLSX.read(data);
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            const jsonData = XLSX.utils.sheet_to_json<TeacherExcelEntry>(worksheet);
 
             const teacherCollection = collection(db, "teacher");
 
@@ -42,30 +55,29 @@ const UploadEmployee = () => {
             let skipped = 0;
 
             for (const entry of jsonData) {
-                const teacher = entry as any;
-                const employee_id = String(teacher.employee_id);
-                const name = teacher.name ?? "";
-                const name2 = teacher.name2 ?? "";
-                const surname = teacher.surname ?? "";
-                const surname2 = teacher.surname2 ?? "";
-                const position = teacher.position ?? "";
-                const roleText = (teacher.role ?? "").toLowerCase();
-                const email = teacher.email ?? "";
+                const {
+                    employee_id,
+                    name = "",
+                    name2 = "",
+                    surname = "",
+                    surname2 = "",
+                    position = "",
+                    role = "",
+                    email = "",
+                } = entry;
 
                 if (!employee_id || !email) {
-                    console.warn("Empleado con ID o email inválido:", teacher);
+                    console.warn("Empleado con ID o email inválido:", entry);
                     skipped++;
                     continue;
                 }
 
-                let role = 0;
-                if (roleText === "ingles") {
-                    role = 3;
-                } else if (roleText === "administración") {
-                    role = 2;
-                }
+                let roleValue = 0;
+                const roleText = role.toLowerCase();
+                if (roleText === "ingles") roleValue = 3;
+                else if (roleText === "administración") roleValue = 2;
 
-                // Crear contraseña
+                // Crear contraseña segura
                 let password = (name + surname).replace(/\s/g, "").toLowerCase();
                 if (password.length < 6) {
                     const fill = "123456".slice(0, 6 - password.length);
@@ -75,29 +87,31 @@ const UploadEmployee = () => {
                 const displayName = `${surname} ${surname2} ${name} ${name2}`.trim();
 
                 try {
-                    // Crear usuario en Authentication
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(userCredential.user, { displayName });
 
                     const { uid } = userCredential.user;
 
-                    // Guardar en Firestore
                     const teacherDocRef = doc(teacherCollection, uid);
                     await setDoc(teacherDocRef, {
                         id: uid,
-                        employee_id,
+                        employee_id: String(employee_id),
                         name,
                         name2,
                         surname,
                         surname2,
                         position,
-                        role,
+                        role: roleValue,
                         email,
                     });
 
                     inserted++;
-                } catch (authError: any) {
-                    console.warn(`No se pudo registrar usuario con email ${email}:`, authError.message);
+                } catch (authError) {
+                    if (authError instanceof Error) {
+                        console.warn(`No se pudo registrar usuario con email ${email}:`, authError.message);
+                    } else {
+                        console.warn(`Error desconocido al crear usuario con email ${email}.`);
+                    }
                     authErrors++;
                 }
             }
@@ -124,7 +138,6 @@ const UploadEmployee = () => {
                 onChange={handleFile}
                 className={styles.fileInput}
             />
-
             {loading && <p className={styles.loading}>Cargando...</p>}
             {message && <p className={styles.message}>{message}</p>}
         </div>

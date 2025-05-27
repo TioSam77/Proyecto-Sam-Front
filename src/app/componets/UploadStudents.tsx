@@ -61,7 +61,7 @@ const UploadStudents = () => {
       let inserted = 0;
       let duplicates = 0;
       let noCourse = 0;
-      let authErrors = 0;
+      const authErrors = 0;
 
       for (const entry of jsonData) {
         const student = entry as StudentExcelEntry;

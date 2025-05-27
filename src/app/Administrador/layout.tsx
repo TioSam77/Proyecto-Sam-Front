@@ -6,7 +6,7 @@ import card from "@/app/css/card.module.css"
 import { usePathname, useRouter } from "next/navigation";
 import ReturnButton from "../componets/ReturnButton";
 import Header from "../componets/Header";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
 

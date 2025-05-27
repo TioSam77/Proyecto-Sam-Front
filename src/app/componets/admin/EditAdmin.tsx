@@ -89,11 +89,11 @@ const EditAdmin = () => {
   const handleSave = async () => {
     if (!editingField) return;
 
-    let value: any = tempValue;
+    let value: string | number | boolean = tempValue;
     if (editingField === 'active') {
       value = tempValue === 'true';
     } else if (editingField === 'role') {
-      value = parseInt(tempValue); // convierte el rol a número
+      value = parseInt(tempValue);
     }
 
     const updatedData = { ...adminData, [editingField]: value };
