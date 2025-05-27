@@ -1,28 +1,47 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import NavbarCourses from "./course/NavbarCourses";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../../firebase/clientApp";
+import { auth, db } from "../../../firebase/clientApp";
+import { doc, getDoc } from "firebase/firestore";
 
 const Header = () => {
   const [enrroled, setEnrroled] = useState(false)
-  const pathname = usePathname();
-  const firstSegment = pathname?.split("/")[1];
 
-  const isAdminPage = firstSegment === "Administrador";
-  const isStudentPage = firstSegment === "Alumno";
-  const isTeacherPage = firstSegment === "Profesor";
+  const [userRole, setUserRole] = useState<"superAdmin" | "admin" | "teacher" | "student" | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      setEnrroled(!!user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const teacherRef = doc(db, "teacher", user.uid);
+        const teacherSnap = await getDoc(teacherRef);
+
+        if (teacherSnap.exists()) {
+          const role = teacherSnap.data().role;
+          if (role === 1) setUserRole("superAdmin");
+          else if (role === 2) setUserRole("admin");
+          else if (role === 3) setUserRole("teacher");
+          else setUserRole("student");
+        } else {
+          setUserRole("student");
+        }
+        setEnrroled(true);
+      } else {
+        setUserRole(null);
+        setEnrroled(false);
+      }
     });
+
     return () => unsubscribe();
   }, []);
+
+  const isAdmin = userRole === "admin" || userRole === "superAdmin";
+  const isTeacher = userRole === "teacher";
+  const isStudent = userRole === "student";
+  const isSuperAdmin = userRole === "superAdmin";
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -90,7 +109,7 @@ const Header = () => {
               </li>
             )}
 
-            {isTeacherPage && (
+            {isTeacher && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" href="/Profesor">
@@ -102,7 +121,7 @@ const Header = () => {
               </>
             )}
 
-            {isStudentPage && (
+            {isStudent && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" href="/Alumno">
@@ -114,7 +133,7 @@ const Header = () => {
               </>
             )}
 
-            {isAdminPage && (
+            {isAdmin && (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" href="/Administrador">

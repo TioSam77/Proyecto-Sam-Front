@@ -93,8 +93,6 @@ const MapTeacher = () => {
         }
     };
 
-
-
     return (
         <section className={styleUser.center}>
 
