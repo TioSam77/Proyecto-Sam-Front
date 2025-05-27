@@ -20,13 +20,27 @@ import {
 import { db } from "../../../firebase/clientApp";
 import styles from '@/app/css/uploadStudents.module.css';
 
+interface StudentExcelEntry {
+  student_id: string | number;
+  name?: string;
+  name2?: string;
+  surname?: string;
+  surname2?: string;
+  email: string;
+  course_id?: string;
+  [key: string]: unknown;
+}
+
+
 const UploadStudents = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleFile = async (e: any) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+
+    const file = fileList[0];
 
     setLoading(true);
     setMessage("");
@@ -50,7 +64,7 @@ const UploadStudents = () => {
       let authErrors = 0;
 
       for (const entry of jsonData) {
-        const student = entry as any;
+        const student = entry as StudentExcelEntry;
         const student_id = String(student.student_id);
         const name = student.name ?? "";
         const surname = student.surname ?? "";
@@ -92,7 +106,7 @@ const UploadStudents = () => {
           const studentDocRef = doc(studentCollection, uid);
           await setDoc(studentDocRef, {
             ...student,
-            id:uid,
+            id: uid,
           });
 
           inserted++;
@@ -120,10 +134,17 @@ const UploadStudents = () => {
             noCourse++;
           }
 
-        } catch (authError: any) {
-          console.warn(`No se pudo registrar usuario con email ${email}:`, authError.message);
-          authErrors++;
-          continue;
+        } catch (authError: unknown) {
+          if (
+            authError &&
+            typeof authError === "object" &&
+            "message" in authError
+          ) {
+            console.warn(`No se pudo registrar usuario con email ${email}:`, (authError as { message: string }).message);
+          } else {
+            console.warn(`No se pudo registrar usuario con email ${email}:`, authError);
+          }
+
         }
 
       }

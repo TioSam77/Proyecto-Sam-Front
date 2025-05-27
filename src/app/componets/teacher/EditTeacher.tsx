@@ -23,7 +23,7 @@ type Teacher = {
 };
 
 const EditTeacher = () => {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const [teacherData, setTeacherData] = useState<Teacher | null>(null);
   const [editingField, setEditingField] = useState<null | keyof Teacher>(null);
   const [tempValue, setTempValue] = useState('');
@@ -73,16 +73,17 @@ const EditTeacher = () => {
   const handleSave = async () => {
     if (!editingField || !teacherData) return;
 
-    let newValue: any = tempValue;
+    let newValue: string | number | boolean = tempValue;
 
-    if (typeof teacherData[editingField] === 'boolean') {
+    if (editingField === 'active') {
       newValue = tempValue === 'true';
     } else if (editingField === 'role') {
-      newValue = Number(tempValue);
-      if (isNaN(newValue)) {
+      const parsed = Number(tempValue);
+      if (isNaN(parsed)) {
         alert('El valor del rol debe ser un número válido.');
         return;
       }
+      newValue = parsed;
     }
 
     const updatedData = {
