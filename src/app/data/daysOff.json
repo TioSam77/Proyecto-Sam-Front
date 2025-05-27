@@ -1,0 +1,65 @@
+[
+  {
+    "nombre": "Año Nuevo",
+    "mes": 1,
+    "dia": 1,
+    "tipo": "feriado pago"
+  },
+  {
+    "nombre": "Jueves Santo",
+    "tipo": "feriado pago",
+    "movil": true,
+    "descripcion": "Fecha variable en marzo o abril según Semana Santa"
+  },
+  {
+    "nombre": "Viernes Santo",
+    "tipo": "feriado pago",
+    "movil": true,
+    "descripcion": "Fecha variable en marzo o abril según Semana Santa"
+  },
+  {
+    "nombre": "Día del Trabajador",
+    "mes": 5,
+    "dia": 1,
+    "tipo": "feriado pago"
+  },
+  {
+    "nombre": "Anexión del Partido de Nicoya",
+    "mes": 7,
+    "dia": 25,
+    "tipo": "feriado pago trasladable",
+    "trasladable": true
+  },
+  {
+    "nombre": "Virgen de los Ángeles",
+    "mes": 8,
+    "dia": 2,
+    "tipo": "feriado no obligatorio"
+  },
+  {
+    "nombre": "Día de la Madre y Asunción de la Virgen",
+    "mes": 8,
+    "dia": 15,
+    "tipo": "feriado pago trasladable",
+    "trasladable": true
+  },
+  {
+    "nombre": "Día de la Independencia",
+    "mes": 9,
+    "dia": 15,
+    "tipo": "feriado pago"
+  },
+  {
+    "nombre": "Día de las Culturas",
+    "mes": 10,
+    "dia": 12,
+    "tipo": "feriado pago trasladable",
+    "trasladable": true
+  },
+  {
+    "nombre": "Navidad",
+    "mes": 12,
+    "dia": 25,
+    "tipo": "feriado pago"
+  }
+]

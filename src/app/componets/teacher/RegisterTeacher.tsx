@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
-import countryList from "../countries.json";
+import countryList from "@/app/data/countries.json";
 import { auth, db } from "@/../firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { doc, setDoc } from "firebase/firestore";

@@ -7,7 +7,6 @@ import { auth, db } from "@/../firebase/clientApp"
 import { useRouter } from "next/navigation";
 import { getDoc, doc } from "firebase/firestore";
 import { setCookie } from 'cookies-next';
-import Link from "next/link";
 
 interface LoginProps {
   userType: string;
@@ -137,7 +136,7 @@ const Login: React.FC<LoginProps> = ({
       <div className={styles.boxWrapper}>
         <div className={styles.borderGradient}></div> {/* Borde degradado */}
 
-        <div className={styles.loginBox}>
+        <form className={styles.loginBox}>
           <h2>Iniciar Sesión</h2>
 
           {/* Switch de usuario */}
@@ -175,6 +174,7 @@ const Login: React.FC<LoginProps> = ({
             className={styles.blueButton}
             onClick={handleSignIn}
             disabled={loadingfirebase}
+            type="submit"
           >
             {loadingfirebase ? "Cargando..." : "Acceder"}
           </button>
@@ -183,11 +183,7 @@ const Login: React.FC<LoginProps> = ({
             ¿Perdiste tu contraseña?
             <a href="/Recuperar" className={styles.recoverLink}>Recuperar</a>
           </p>
-          <p className={styles.register}>
-            ¿No tienes cuenta?
-            <Link href="/" className={styles.registerLink}>Solicita el registro de tu cuenta</Link>
-          </p>
-        </div>
+        </form>
       </div>
 
       <div className={styles.messageContainer}>

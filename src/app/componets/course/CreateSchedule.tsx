@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { collection, addDoc, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/../firebase/clientApp';
+import { isHoliday } from '@/app/hooks/isHoliday';
 import styles from '@/app/css/Schedule.module.css';
-
 import stylesLogin from "@/app/css/Login.module.css";
 
 const CreateSchedule = () => {
@@ -25,6 +25,13 @@ const CreateSchedule = () => {
     setAlert("")
     setError("")
     e.preventDefault();
+
+    const feriado = isHoliday(date);
+    if (feriado) {
+      setError(`No se pueden agregar días feriados: ${feriado}`);
+      setLoading(false);
+      return;
+    }
 
     try {
       const courseRef = doc(db, 'course', courseId);
