@@ -109,30 +109,31 @@ const NavbarCourses = () => {
     };
 
     return (
-        <div className={style.navbarCourseContainer}>
-            <button className=" nav-link" onClick={handleToggleGroups}>
-                Grupos
-            </button>
+    <div className={style.navbarCourseContainer}>
+        <button className="nav-link d-flex align-items-center gap-2" onClick={handleToggleGroups}>
+        <i className="bi bi-people-fill text-dark"></i>
+        Grupos
+        </button>
 
-            {showGroups && (
-                login ? (
-                    <p className={style.emptyText}>Cargando cursos...</p>
-                ) : notFound || data.length === 0 ? (
-                    <p className={style.emptyText}>No hay cursos</p>
-                ) : (
-                    data.map((course) => (
-                        <Link key={course.id} href={`${basePath}/${course.id}`} className={style.courseCard}>
-                            <div className={style.cardBody}>
-                                <div className={style.courseCircle}>
-                                    {course.name.charAt(0).toUpperCase()}
-                                </div>
-                                <p className={style.courseName}>{course.name}</p>
-                            </div>
-                        </Link>
-                    ))
-                )
-            )}
-        </div>
+        {showGroups && (
+        login ? (
+            <p className={style.emptyText}>Cargando cursos...</p>
+        ) : notFound || data.length === 0 ? (
+            <p className={style.emptyText}>No hay cursos</p>
+        ) : (
+            data.map((course) => (
+            <Link key={course.id} href={`${basePath}/${course.id}`} className={style.courseCard}>
+                <div className={style.cardBody}>
+                <div className={style.courseCircle}>
+                    {course.name.charAt(0).toUpperCase()}
+                </div>
+                <p className={style.courseName}>{course.name}</p>
+                </div>
+            </Link>
+            ))
+        )
+        )}
+    </div>
     );
 };
 

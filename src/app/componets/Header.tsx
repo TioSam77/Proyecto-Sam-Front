@@ -144,7 +144,7 @@ const Header = () => {
 
             {enrroled &&
               <Link className="nav-link" href="/Login" onClick={handleLogout}>
-                <i className="bi bi-gear-fill me-2 "></i>Cerrar sesion
+                <i className="bi bi-box-arrow-right me-2 text-danger"></i>Cerrar sesión
               </Link>
             }
 
