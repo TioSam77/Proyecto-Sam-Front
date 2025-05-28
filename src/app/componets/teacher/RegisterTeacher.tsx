@@ -15,8 +15,7 @@ const RegisterTeacher = () => {
     const [surname, setSurname] = useState("");
 
     const [puesto, setPuesto] = useState("");
-    const [rol, setRol] = useState(2); // valor por defecto 2 = Administrador
-
+    const [rol, setRol] = useState(3); // valor por defecto 2 = Administrador
 
     const [error, setError] = useState<string>("");
     const [alert, setAlert] = useState<string>("");
@@ -91,7 +90,7 @@ const RegisterTeacher = () => {
                 setSurname("");
                 setPhoneNumber("");
                 setPuesto("");
-                setRol(2);
+                setRol(3);
             }
         } catch (err) {
             setError("Error de red o servidor. Intenta más tarde.");

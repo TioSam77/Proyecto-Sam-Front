@@ -7,6 +7,7 @@ import { auth, db } from "@/../firebase/clientApp"
 import { useRouter } from "next/navigation";
 import { getDoc, doc } from "firebase/firestore";
 import { setCookie } from 'cookies-next';
+import Link from "next/link";
 
 interface LoginProps {
   userType: string;
@@ -181,7 +182,7 @@ const Login: React.FC<LoginProps> = ({
 
           <p className={styles.forgotPassword}>
             ¿Perdiste tu contraseña?
-            <a href="/Recuperar" className={styles.recoverLink}>Recuperar</a>
+            <Link href="/Recuperar" className={styles.recoverLink}>Recuperar</Link>
           </p>
         </div>
       </div>

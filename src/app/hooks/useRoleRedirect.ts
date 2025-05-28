@@ -10,7 +10,7 @@ export default function useRoleRedirect() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const publicRoutes = ["/Login", "/"];
+    const publicRoutes = ["/Login", "/",'/Recuperar'];
 
     // No aplicar redirección si estás en una ruta pública
     if (publicRoutes.includes(pathname)) return;

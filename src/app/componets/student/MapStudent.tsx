@@ -75,20 +75,18 @@ const MapStudent = () => {
 
     const confirmDelete = async () => {
         if (!selectedStudent) return;
+
         try {
-            // 1. Eliminar el student principal
-            await deleteDoc(doc(db, "student", selectedStudent.id));
+            const res = await fetch(`http://localhost:4000/delete-student/${selectedStudent.id}`, {
+                method: "DELETE",
+            });
 
-            // 2. Eliminar registros relacionados en student_course
-            const studentCoursesSnapshot = await getDocs(
-                query(collection(db, "student_course"), where("student_id", "==", selectedStudent.id))
-            );
-            const deleteStudentCourses = studentCoursesSnapshot.docs.map(docu =>
-                deleteDoc(doc(db, "student_course", docu.id))
-            );
-            await Promise.all(deleteStudentCourses);
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || "Error eliminando estudiante");
+            }
 
-            // 4. Actualizar estado local
+            // Actualizar estado local
             setData(prev => prev.filter(user => user.id !== selectedStudent.id));
         } catch (err) {
             console.error("Error al eliminar:", err);
