@@ -1,5 +1,5 @@
 import Record from "../componets/Record";
-import EditSchedule from "./EditSchedule";
+import EditSchedule from "../componets/course/EditSchedule";
 
 export default function Page() {
     return (
