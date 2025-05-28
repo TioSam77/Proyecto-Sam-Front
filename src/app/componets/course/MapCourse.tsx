@@ -103,7 +103,6 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
         }
     };
 
-
     return (
         <section className={styleUser.center}>
             {isAdmin &&
