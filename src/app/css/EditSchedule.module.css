@@ -1,0 +1,97 @@
+.containerEdit {
+  background-color: #f7f9fc;
+  padding: 20px;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 700px;
+  margin: 10px auto;
+}
+
+.titleEdit {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #1e3a8a;
+}
+
+.message {
+  text-align: center;
+  color: #374151;
+  font-size: 16px;
+  margin-top: 1rem;
+}
+
+.tableContainer {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.scheduleTable thead {
+  background-color: #e9effc;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.scheduleTable tr:hover {
+  background-color: #f0f4ff;
+}
+
+.inputDate {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.editButton {
+  background-color: #3399ff;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.editButton:hover {
+  background-color: #2c80d3;
+}
+
+.saveButton {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.saveButton:hover {
+  background-color: #218838;
+}
+
+.inputDate {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 180px;
+}
