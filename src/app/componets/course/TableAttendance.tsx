@@ -16,12 +16,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from '@/../firebase/clientApp';
 import { doc, updateDoc, setDoc } from "firebase/firestore";
 import Link from "next/link";
+import Recommendation from "./Recommendation";
 
 interface Student {
     id: string;
     name: string;
+    name2: string;
     surname: string;
-    surname2:string;
+    surname2: string;
     attendance: {
         [date: string]: Attendance;
     };
@@ -41,6 +43,8 @@ const TableAttendance = () => {
     const [students, setStudents] = useState<Student[]>([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
     const [loadingStudents, setLoadingStudents] = useState(true);
+
+    const [showModal, setShowModal] = useState(false)
 
     const pathname = usePathname();
     const isStudent = pathname.includes("/Alumno");
@@ -218,6 +222,10 @@ const TableAttendance = () => {
         }
     };
 
+    const handleRecommendation = () => {
+        setShowModal(true)
+    }
+
     return (
         <section className={tables.TableContainer}>
 
@@ -260,6 +268,7 @@ const TableAttendance = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
+                            <th>Recomendacion</th>
                             <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             {scheduleData.map((s) => {
@@ -307,12 +316,18 @@ const TableAttendance = () => {
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
                                     <td>
+                                        <button
+                                            className="bluebutton"
+                                            onClick={handleRecommendation}
+                                        >Revisar</button>
+                                    </td>
+                                    <td>
                                         {student.surname} {student.surname2}
                                     </td>
                                     <td
                                         className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}
                                     >
-                                        {student.name}
+                                        {student.name} {student.name2}
                                     </td>
                                     {scheduleData.map((s) => {
                                         const date = s.date;
@@ -377,6 +392,19 @@ const TableAttendance = () => {
                 </table>
             </div>
 
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-4 rounded-lg max-w-lg w-full relative">
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                        >
+                            ✕
+                        </button>
+                        <Recommendation student_id="el_id_del_estudiante" />
+                    </div>
+                </div>
+            )}
         </section>
     );
 };
