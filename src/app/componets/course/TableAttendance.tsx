@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 import style from "@/app/css/Teacher.module.css"
 import styles from "@/app/css/Login.module.css"
+import stylesR from"@/app/css/ModalRecommendation.module.css"
 
 import { Attendance } from "../../data/student";
 import { useParams, usePathname } from "next/navigation";
@@ -393,15 +394,16 @@ const TableAttendance = () => {
             </div>
 
             {showModal && (//arregal esto
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-4 rounded-lg max-w-lg w-full relative">
+                <div className={stylesR.overlay}>
+                    <div className={stylesR.modal}>
                         <button
-                            onClick={() => setShowModal(false)}
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                        onClick={() => setShowModal(false)}
+                        className={stylesR.closeButton}
+                        aria-label="Cerrar modal"
                         >
-                            ✕
+                        &times;
                         </button>
-                        <Recommendation student_id="el_id_del_estudiante" />
+                        <Recommendation student_id="id" />
                     </div>
                 </div>
             )}
