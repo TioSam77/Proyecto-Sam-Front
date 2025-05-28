@@ -34,9 +34,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <main className="container ">
           <section style={{ display: 'flex', flexDirection: 'column', alignItems: "center", width: "100%" }}>
-            <AuthRedirectWrapper>
+
               {children}
-            </AuthRedirectWrapper>
+
           </section>
           <Footer />
         </main>
