@@ -14,7 +14,9 @@ import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
 
 type Teacher = {
   name: string;
+  name2: string;
   surname: string;
+  surname2: string;
   email: string;
   phoneNumber: string;
   position: string;
@@ -25,11 +27,11 @@ type Teacher = {
 const EditTeacher = () => {
   const { id } = useParams() as { id: string };
   const [teacherData, setTeacherData] = useState<Teacher | null>(null);
-  const [editingField, setEditingField] = useState<null | keyof Teacher>(null);
+  const [editingField, setEditingField] = useState<keyof Teacher | null>(null);
   const [tempValue, setTempValue] = useState('');
   const [loading, setLoading] = useState(true);
-  const [isSelf, setIsSelf] = useState(false); // ← Solo el propietario puede editar
-  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null); // <-- Guardamos el rol del usuario actual
+  const [isSelf, setIsSelf] = useState(false);
+  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTeacher = async () => {
@@ -52,11 +54,7 @@ const EditTeacher = () => {
           const tokenResult = await user.getIdTokenResult();
           const roleFromToken = tokenResult.claims.role;
 
-          if (typeof roleFromToken === 'string') {
-            setCurrentUserRole(roleFromToken);
-          } else {
-            setCurrentUserRole(null);
-          }
+          setCurrentUserRole(typeof roleFromToken === 'string' ? roleFromToken : null);
         }
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -67,7 +65,7 @@ const EditTeacher = () => {
 
     fetchTeacher();
   }, [id]);
-
+  
   const handleEdit = (field: keyof Teacher) => {
     const sensitive = ['name', 'surname', 'email'].includes(field);
     if (sensitive && !isSelf) {
@@ -88,49 +86,62 @@ const EditTeacher = () => {
   const handleSave = async () => {
     if (!editingField || !teacherData) return;
 
-    let newValue: string | number | boolean = tempValue;
+    let updates: Partial<Teacher> = {};
 
-    if (editingField === 'active') {
-      newValue = tempValue === 'true';
-    } else if (editingField === 'role') {
-      const parsed = Number(tempValue);
-      if (isNaN(parsed)) {
-        alert('El valor del rol debe ser un número válido.');
-        return;
+    switch (editingField) {
+      case 'name': {
+        const [name, ...name2Parts] = tempValue.trim().split(' ');
+        updates.name = name;
+        updates.name2 = name2Parts.join(' ');
+        break;
       }
-      newValue = parsed;
+      case 'surname': {
+        const [surname, ...surname2Parts] = tempValue.trim().split(' ');
+        updates.surname = surname;
+        updates.surname2 = surname2Parts.join(' ');
+        break;
+      }
+      case 'active': {
+        updates.active = tempValue === 'true';
+        break;
+      }
+      case 'role': {
+        const parsed = Number(tempValue);
+        if (isNaN(parsed)) {
+          alert('El valor del rol debe ser un número válido.');
+          return;
+        }
+        updates.role = parsed;
+        break;
+      }
+      default: {
+        // Aquí TS infiere que es una clave que no sea name/surname/active/role
+        updates[editingField] = tempValue as string;
+        break;
+      }
     }
 
-    const updatedData = {
-      ...teacherData,
-      [editingField]: newValue,
-    };
-
     try {
-      const docRef = doc(db, 'teacher', id as string);
-      await updateDoc(docRef, {
-        [editingField]: newValue,
-      });
+      const docRef = doc(db, 'teacher', id);
+      await updateDoc(docRef, updates);
 
       const auth = getAuth();
       const user = auth.currentUser;
 
       if (user && user.uid === id) {
         if (editingField === 'name' || editingField === 'surname') {
-          const newName = editingField === 'name' ? tempValue : teacherData.name;
-          const newSurname = editingField === 'surname' ? tempValue : teacherData.surname;
-
+          const newName = updates.name ?? teacherData.name;
+          const newSurname = updates.surname ?? teacherData.surname;
           await updateProfile(user, {
-            displayName: `${newName} ${newSurname}`,
+            displayName: `${newSurname} ${newName}`,
           });
         }
-
         if (editingField === 'email') {
           await updateEmail(user, tempValue);
         }
       }
 
-      setTeacherData(updatedData);
+      setTeacherData({ ...teacherData, ...updates });
     } catch (error) {
       console.error('Error al guardar:', error);
       alert('Ocurrió un error al actualizar los datos.');
@@ -140,6 +151,7 @@ const EditTeacher = () => {
     setTempValue('');
   };
 
+
   const handleCancel = () => {
     setEditingField(null);
     setTempValue('');
@@ -147,71 +159,53 @@ const EditTeacher = () => {
 
   const renderField = (label: string, field: keyof Teacher) => {
     if (!teacherData) return null;
-    const value = teacherData[field];
-    const isSensitive = ['name', 'surname', 'email'].includes(field);
 
-    if (field === 'role') {
-      const roleName = value === 1
+    let value: string | number | boolean = teacherData[field];
+    let displayValue: string;
+
+    if (field === 'name') {
+      displayValue = `${teacherData.name} ${teacherData.name2}`.trim();
+    } else if (field === 'surname') {
+      displayValue = `${teacherData.surname} ${teacherData.surname2}`.trim();
+    } else if (field === 'active') {
+      displayValue = value === true || value === 'true' ? 'Activo' : 'Inactivo';
+    } else if (field === 'role') {
+      displayValue = value === 1
         ? 'Super Administrador'
         : value === 2
           ? 'Administrador'
           : value === 3
             ? 'Profesor Inglés'
             : 'Rol desconocido';
-
-      return (
-        <div className={styles.infoRow} key={field}>
-          <span className={styles.label}>{label}</span>
-          {editingField === field ? (
-            <div className={styles.editingArea}>
-              <select
-                className={styles.inputField}
-                value={tempValue}
-                onChange={e => setTempValue(e.target.value)}
-              >
-                <option value="0" disabled>Seleccione un rol</option>
-                <option value="1">Super Administrador</option>
-                <option value="2">Administrador</option>
-                <option value="3">Profesor Inglés</option>
-              </select>
-              <div className={styles.actions}>
-                <button className={styles.saveButton} onClick={handleSave}>Guardar</button>
-                <button className={styles.cancelButton} onClick={handleCancel}>Cancelar</button>
-              </div>
-            </div>
-          ) : (
-            <div className={styles.displayArea}>
-              <span className={styles.value}>{roleName}</span>
-              {currentUserRole === 'superAdmin' && (
-                <button className={styles.editButton} onClick={() => handleEdit(field)}>
-                  <i className="bi bi-pencil-square"></i>
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      );
+    } else {
+      displayValue = String(value);
     }
 
-
-    // Resto del render para otros campos (igual que antes)...
-    const displayValue = field === 'active'
-      ? (value === true || value === 'true' ? 'Activo' : 'Inactivo')
-      : String(value);
+    const isSensitive = ['name', 'surname', 'email'].includes(field);
 
     return (
       <div className={styles.infoRow} key={field}>
         <span className={styles.label}>{label}</span>
         {editingField === field ? (
           <div className={styles.editingArea}>
-            {field === 'active' ? (
+            {field === 'active' || field === 'role' ? (
               <select
                 className={styles.inputField}
                 value={tempValue}
                 onChange={e => setTempValue(e.target.value)}
               >
-                <option value="true">Activo</option>
-                <option value="false">Inactivo</option>
+                {field === 'active' ? (
+                  <>
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="1">Super Administrador</option>
+                    <option value="2">Administrador</option>
+                    <option value="3">Profesor Inglés</option>
+                  </>
+                )}
               </select>
             ) : (
               <input
@@ -228,17 +222,18 @@ const EditTeacher = () => {
         ) : (
           <div className={styles.displayArea}>
             <span className={styles.value}>{displayValue}</span>
-            {(!isSensitive || isSelf) && (
-              <button className={styles.editButton} onClick={() => handleEdit(field)}>
-                <i className="bi bi-pencil-square"></i>
-              </button>
-            )}
+            {(field === 'role'
+              ? currentUserRole === 'superAdmin'
+              : (!isSensitive || isSelf)) && (
+                <button className={styles.editButton} onClick={() => handleEdit(field)}>
+                  <i className="bi bi-pencil-square"></i>
+                </button>
+              )}
           </div>
         )}
       </div>
     );
   };
-
 
   if (loading) return <p className={styles.loading}>Cargando datos...</p>;
   if (!teacherData) return <p className={styles.error}>No se encontró el empleado.</p>;
@@ -249,8 +244,8 @@ const EditTeacher = () => {
         {isSelf ? 'Editar tu información de Empleado' : 'Editar Información del Empleado'}
       </h2>
       <div className={styles.teacherInfo}>
-        {renderField('Nombre:', 'name')}
-        {renderField('Apellido:', 'surname')}
+        {renderField('Nombre completo:', 'name')}
+        {renderField('Apellidos completos:', 'surname')}
         {renderField('Correo:', 'email')}
         {renderField('Teléfono:', 'phoneNumber')}
         {renderField('Puesto:', 'position')}

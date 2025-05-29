@@ -52,48 +52,16 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
 
     const confirmDelete = async () => {
         if (!selectedCourse) return;
+
         try {
-            // 1. Eliminar el curso principal
-            await deleteDoc(doc(db, "course", selectedCourse.id));
+            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-course/${selectedCourse.id}`, {
+                method: "DELETE"
+            });
 
-            // 2. Eliminar registros relacionados en student_course
-            const studentCoursesSnapshot = await getDocs(
-                query(collection(db, "student_course"), where("course_id", "==", selectedCourse.id))
-            );
-            const deleteStudentCourses = studentCoursesSnapshot.docs.map(docu =>
-                deleteDoc(doc(db, "student_course", docu.id))
-            );
-            await Promise.all(deleteStudentCourses);
-
-            // 3. Eliminar registros relacionados en course_schedule
-            const scheduleSnapshot = await getDocs(
-                query(collection(db, "course_schedule"), where("course_id", "==", selectedCourse.id))
-            );
-            const deleteSchedules = scheduleSnapshot.docs.map(docu =>
-                deleteDoc(doc(db, "course_schedule", docu.id))
-            );
-            await Promise.all(deleteSchedules);
-
-            // 4. Eliminar registros relacionados en course_messages
-            const messagesRef = collection(db, 'course_messages', selectedCourse.id, 'messages');
-            const messagesSnapshot = await getDocs(messagesRef);
-
-            for (const msgDoc of messagesSnapshot.docs) {
-                // Borramos todas las respuestas del mensaje
-                const responsesRef = collection(db, 'course_messages', selectedCourse.id, 'messages', msgDoc.id, 'responses');
-                const responsesSnapshot = await getDocs(responsesRef);
-
-                const deleteResponsesPromises = responsesSnapshot.docs.map(resDoc =>
-                    deleteDoc(doc(db, 'course_messages', selectedCourse.id, 'messages', msgDoc.id, 'responses', resDoc.id))
-                );
-                await Promise.all(deleteResponsesPromises);
-
-                // Borramos el mensaje
-                await deleteDoc(doc(db, 'course_messages', selectedCourse.id, 'messages', msgDoc.id));
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || "Error desconocido");
             }
-
-            // Finalmente borramos el documento principal del curso en course_messages
-            await deleteDoc(doc(db, 'course_messages', selectedCourse.id));
 
         } catch (err) {
             setError(`Error al eliminar: ${err}`);
@@ -106,7 +74,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
     return (
         <section className={styleUser.center}>
             {isAdmin &&
-                <div style={{display:'flex', gap:'10px'}}>
+                <div style={{ display: 'flex', gap: '10px' }}>
                     <Link href={`/Administrador/Grupos/Registro`}>
                         <button className={styleUser.button}>Nuevo Grupo</button>
                     </Link>

@@ -57,7 +57,7 @@ const RegisterStudent = () => {
         setError("");
 
         try {
-            const response = await fetch("http://localhost:4000/register-student", {
+            const response = await fetch("https://api-uj4mkoe42a-uc.a.run.app/register-student", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

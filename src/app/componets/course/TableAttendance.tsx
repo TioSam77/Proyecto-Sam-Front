@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 import style from "@/app/css/Teacher.module.css"
 import styles from "@/app/css/Login.module.css"
-import stylesR from"@/app/css/ModalRecommendation.module.css"
+import stylesR from "@/app/css/ModalRecommendation.module.css"
 
 import { Attendance } from "../../data/student";
 import { useParams, usePathname } from "next/navigation";
@@ -53,68 +53,42 @@ const TableAttendance = () => {
     const courseId = params?.id as string;
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                setScheduleData([]);
-                return;
-            }
-
+        const getSchedule = async () => {
             try {
                 setLoadingSchedule(true);
                 setLogin(true);
 
-                // Obtener los días del curso
-                const q = query(
-                    collection(db, "course_schedule"),
-                    where("course_id", "==", courseId));
-                const querySnapshot = await getDocs(q);
+                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/course-schedule/${courseId}`);
+                const result = await res.json();
 
-                const schedule = querySnapshot.docs
-                    .map((doc) => {
-                        const data = doc.data();
-                        const dateStr = data.date;
-                        const dateObj = new Date(dateStr);
+                if (!res.ok) {
+                    console.error(result.error);
+                    return;
+                }
 
-                        return {
-                            id: doc.id,
-                            date: dateStr,
-                            entry_time: data.entry_time,
-                            exit_time: data.exit_time,
-                            confirmed: data.confirm === true,
-                            dateObj,
-                        };
-                    })
-                    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
-                    .map(({ id, date, entry_time, exit_time, confirmed }) => ({
-                        id,
-                        date,
-                        entry_time,
-                        exit_time,
-                        confirmed,
-                    }));
-
+                const schedule = result.schedule;
 
                 setScheduleData(schedule);
 
                 const datesMap: { [key: string]: boolean } = {};
-
-                schedule.forEach((s) => {
+                schedule.forEach((s: any) => {
                     datesMap[s.date] = s.confirmed;
                 });
 
                 setConfirmedDates(datesMap);
-
             } catch (err) {
                 console.error("Error al obtener los días del curso:", err);
             } finally {
                 setLoadingSchedule(false);
                 setLogin(false);
             }
-        });
+        };
 
+        getSchedule();
         handleSearch();
-        return () => unsubscribe();
+
     }, [courseId]);
+
 
     const handleSearch = () => {
         setLoadingStudents(true);
@@ -397,11 +371,11 @@ const TableAttendance = () => {
                 <div className={stylesR.overlay}>
                     <div className={stylesR.modal}>
                         <button
-                        onClick={() => setShowModal(false)}
-                        className={stylesR.closeButton}
-                        aria-label="Cerrar modal"
+                            onClick={() => setShowModal(false)}
+                            className={stylesR.closeButton}
+                            aria-label="Cerrar modal"
                         >
-                        &times;
+                            &times;
                         </button>
                         <Recommendation student_id="id" />
                     </div>

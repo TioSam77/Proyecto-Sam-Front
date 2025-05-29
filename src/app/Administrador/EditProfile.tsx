@@ -26,58 +26,20 @@ const EditProfile = ({ role }: Props) => {
   const userId = params?.id as string;
 
   const [userData, setUserData] = useState<UserData>({
-    name: '',
-    surname: '',
-    email: '',
-    phoneNumber: '',
-    heardFrom: '',
-    teacherNote: '',
+    name: 'Sam',
+    surname: 'Mariche',
+    email: 'sam@ejemplo.com',
+    phoneNumber: '+506 8888 9999',
+    heardFrom: 'Redes sociales',
+    teacherNote: 'Alumno puntual y participativo',
     role,
   });
 
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [isSelf, setIsSelf] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const ref = doc(db, role, userId);
-        const snap = await getDoc(ref);
-
-        if (!snap.exists()) {
-          setNotFound(true);
-          return;
-        }
-
-        const data = snap.data();
-        setUserData({
-          name: data.name || '',
-          surname: data.surname || '',
-          email: data.email || '',
-          phoneNumber: data.phoneNumber || '',
-          heardFrom: data.heardFrom || '',
-          teacherNote: data.teacherNote || '',
-          role,
-        });
-
-        const auth = getAuth();
-        const currentUser = auth.currentUser;
-        if (currentUser && currentUser.uid === userId) {
-          setIsSelf(true);
-        }
-      } catch (err) {
-        console.error('Error al obtener datos:', err);
-        setNotFound(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId) fetchData();
-  }, [userId, role]);
+  const [isSelf, setIsSelf] = useState(true); // activado para pruebas con fake data
 
   const handleEdit = (field: keyof UserData) => {
     setEditingField(field);
@@ -94,6 +56,9 @@ const EditProfile = ({ role }: Props) => {
 
     try {
       const updated = { ...userData, [editingField]: tempValue };
+
+      // 🔧 Para conexión real, descomenta esta sección:
+      /*
       const ref = doc(db, role, userId);
       await updateDoc(ref, { [editingField]: tempValue });
 
@@ -105,12 +70,14 @@ const EditProfile = ({ role }: Props) => {
           await updateEmail(user, tempValue);
         } else if (editingField === 'name' || editingField === 'surname') {
           await updateProfile(user, {
-            displayName: `${updated.name} ${updated.surname}`,
+            displayName: ${updated.name} ${updated.surname},
           });
         }
       }
+      */
 
       setUserData(updated);
+      alert('Cambios guardados (fake mode). Firebase no conectado aún.');
     } catch (error) {
       alert('Error al guardar los cambios.');
     } finally {
@@ -158,16 +125,14 @@ const EditProfile = ({ role }: Props) => {
                 value={tempValue}
                 onChange={(e) => setTempValue(e.target.value)}
               />
-              <button onClick={handleSave} className={styles.save}>
-                Guardar
-              </button>
-              <button onClick={handleCancel} className={styles.cancel}>
-                Cancelar
-              </button>
+              <div className={styles.actionGroup}>
+                <button onClick={handleSave} className={styles.save}>Guardar</button>
+                <button onClick={handleCancel} className={styles.cancel}>Cancelar</button>
+              </div>
             </div>
           ) : (
             <div className={styles.display}>
-              <span>{userData[field]}</span>
+              <div className={styles.displayText}>{userData[field]}</div>
               <button onClick={() => handleEdit(field)} className={styles.editBtn}>
                 <i className="bi bi-pencil-square"></i>
               </button>

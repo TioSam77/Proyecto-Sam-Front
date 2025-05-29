@@ -65,7 +65,7 @@ const MapStudent = () => {
         if (!selectedStudent) return;
 
         try {
-            const res = await fetch(`http://localhost:4000/delete-student/${selectedStudent.id}`, {
+            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-student/${selectedStudent.id}`, {
                 method: "DELETE",
             });
 
