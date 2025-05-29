@@ -79,7 +79,7 @@ const Login: React.FC<LoginProps> = ({
           redirectPath = "/Profesor";
           break;
         case "Administrador":
-          roleCollection = "admin";
+          roleCollection = "teacher";
           redirectPath = "/Administrador";
           break;
         default:

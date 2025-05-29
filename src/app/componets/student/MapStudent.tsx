@@ -24,9 +24,9 @@ const MapStudent = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
 
-
     useEffect(() => {
         setLogin(true);
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 setData([]);
@@ -35,21 +35,10 @@ const MapStudent = () => {
             }
 
             try {
-                const studentQuery = query(collection(db, "student"), limit(15));
-                const querySnapshot = await getDocs(studentQuery);
+                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-student");
+                if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
-                const allData: data[] = querySnapshot.docs.map((doc) => {
-                    const docData = doc.data();
-                    return {
-                        id: doc.id,
-                        name: docData.name,
-                        name2: docData.name2,
-                        surname: docData.surname,
-                        surname2: docData.surname2,
-                        phoneNumber: docData.phoneNumber
-                    };
-                });
-
+                const allData: data[] = await res.json();
                 setData(allData);
             } catch (err) {
                 console.error("Error al obtener estudiantes:", err);
@@ -60,7 +49,6 @@ const MapStudent = () => {
 
         return () => unsubscribe();
     }, []);
-
 
     const isAdmin = currentPath.includes('/Administrador')
 
