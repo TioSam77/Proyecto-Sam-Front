@@ -66,84 +66,30 @@ const EditGroup = () => {
     if (!courseId) return;
 
     setLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        setLoading(false);
-        setGroupData({
-          name: '',
-          type: '',
-          subject_id: '',
-          subject_name: '',
-          teacher_name: '',
-          teacher_name2: '',
-          teacher_surname: '',
-          teacher_surname2: '',
-          teacher_id: '',
-          start_date: '',
-          end_date: '',
-          active: true,
-        });
-        return;
-      }
+    setError(null);
 
-      try {
-        // Obtener grupo
-        const docRef = doc(db, 'course', courseId);
-        const docSnap = await getDoc(docRef);
+    const fetchGroupData = fetch(`https://api-uj4mkoe42a-uc.a.run.app/course/${courseId}`)
+      .then(res => {
+        if (!res.ok) throw new Error("No se pudo obtener grupo");
+        return res.json();
+      });
 
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setGroupData({
-            name: data.name || '',
-            type: data.type || '',
-            subject_id: data.subject_id || '',
-            subject_name: data.subject_name || '',
-            teacher_name: data.teacher_name || '',
-            teacher_name2: data.teacher_name2 || '',
-            teacher_surname: data.teacher_surname || '',
-            teacher_surname2: data.teacher_surname2 || '',
-            teacher_id: data.teacher_id || '',
-            start_date: data.start_date || '',
-            end_date: data.end_date || '',
-            active: data.active ?? true,
-          });
-        } else {
-          setError('No se encontró el grupo.');
-        }
+    const fetchTeachersSubjects = fetch("https://api-uj4mkoe42a-uc.a.run.app/teachers-subjects")
+      .then(res => {
+        if (!res.ok) throw new Error("No se pudo obtener profesores o materias");
+        return res.json();
+      });
 
-        // Obtener profesores
-        const queryTeachers = await getDocs(collection(db, 'teacher'));
-        const allTeachers = queryTeachers.docs.map(doc => {
-          const data = doc.data() as {
-            name: string;
-            name2: string;
-            surname: string;
-            surname2: string;
-          };
-          return {
-            id: doc.id,
-            ...data,
-          };
-        });
-        setTeachers(allTeachers);
-
-        // Obtener materias
-        const querySubjects = await getDocs(collection(db, 'subject'));
-        const allSubjects = querySubjects.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as { name: string }),
-        }));
-        setSubjects(allSubjects);
-
-      } catch (err) {
-        setError(`Error al obtener datos: ${err}`);
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
+    Promise.all([fetchGroupData, fetchTeachersSubjects])
+      .then(([groupData, { teachers, subjects }]) => {
+        setGroupData(groupData);
+        setTeachers(teachers);
+        setSubjects(subjects);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
   }, [courseId]);
+
 
   // Guardar cambios
   const handleSave = async () => {
@@ -154,7 +100,7 @@ const EditGroup = () => {
     if (editingField === 'teacher_name') {
       const selectedTeacher = teachers.find(t => t.id === tempValue);
       if (selectedTeacher) {
-        updatedData.teacher_name =` ${selectedTeacher.surname} ${selectedTeacher.surname2} ${selectedTeacher.name} ${selectedTeacher.name2}`;
+        updatedData.teacher_name = ` ${selectedTeacher.surname} ${selectedTeacher.surname2} ${selectedTeacher.name} ${selectedTeacher.name2}`;
         updatedData.teacher_id = selectedTeacher.id;
       }
     } else if (editingField === 'subject_name') {

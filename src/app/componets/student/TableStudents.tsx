@@ -11,8 +11,9 @@ import Link from "next/link";
 interface Student {
     id: string;
     name: string;
-    surname:string;
-    surname2:string;
+    name2: string;
+    surname: string;
+    surname2: string;
     active: boolean;
     montlyPayment: boolean;
 }
@@ -35,30 +36,23 @@ const TableStudent = () => {
 
             try {
                 setLogin(true);
-                const q = query(
-                    collection(db, "student_course"),
-                    where("course_id", "==", courseId)
-                );
-                const querySnapshot = await getDocs(q);
+                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${courseId}`, {
+                    headers: {
+                        // Agrega token de autenticación si usas Firebase Auth y validas en backend
+                        // Authorization: `Bearer ${await user.getIdToken()}`,
+                    },
+                });
 
-                const studentIds = querySnapshot.docs.map(doc => doc.data().student_id);
-
-                const students: Student[] = [];
-                for (const studentId of studentIds) {
-                    const studentDoc = await getDoc(doc(db, "student", studentId));
-
-                    if (studentDoc.exists()) {
-                        students.push({
-                            id: studentDoc.id,
-                            ...studentDoc.data(),
-                        } as Student);
-                    }
+                if (!res.ok) {
+                    throw new Error("Error al obtener estudiantes");
                 }
 
-                setData(students);
-                setNotFound(students.length === 0);
+                const json = await res.json();
+
+                setData(json.students);
+                setNotFound(json.students.length === 0);
             } catch (err) {
-                console.error("Error al obtener estudiantes:", err);
+                console.error(err);
                 setNotFound(true);
             } finally {
                 setLogin(false);
@@ -66,7 +60,7 @@ const TableStudent = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [courseId]);
 
     const handleSearch = () => {
         setLogin(true);
@@ -161,7 +155,7 @@ const TableStudent = () => {
                                         {row.surname} {row.surname2}
                                     </td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
-                                        {row.name}
+                                        {row.name} {row.name2}
                                     </td>
                                     <td>
                                     </td>

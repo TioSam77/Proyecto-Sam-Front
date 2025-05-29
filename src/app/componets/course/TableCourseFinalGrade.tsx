@@ -13,6 +13,7 @@ import stylesLogin from "@/app/css/Login.module.css";
 interface Student {
     id: string;
     name: string;
+    name2: string;
     surname: string;
     surname2: string;
     attendance: {
@@ -175,7 +176,7 @@ const TableCourseFinalGrade = () => {
                                         {row.surname} {row.surname2}
                                     </td>
                                     <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
-                                        {row.name}
+                                        {row.name} {row.name2}
                                     </td>
                                     <td style={{
                                         display: 'flex',

@@ -36,14 +36,14 @@ const EditTeacher = () => {
   useEffect(() => {
     const fetchTeacher = async () => {
       try {
-        const docRef = doc(db, 'teacher', id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data() as Teacher;
-          setTeacherData(data);
-        } else {
-          console.error('No se encontró el empleado');
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/teacher/${id}`);
+        if (!res.ok) {
+          console.error("No se encontró el empleado");
+          return;
         }
+
+        const data: Teacher = await res.json();
+        setTeacherData(data);
 
         const auth = getAuth();
         const user = auth.currentUser;
@@ -53,11 +53,10 @@ const EditTeacher = () => {
 
           const tokenResult = await user.getIdTokenResult();
           const roleFromToken = tokenResult.claims.role;
-
-          setCurrentUserRole(typeof roleFromToken === 'string' ? roleFromToken : null);
+          setCurrentUserRole(typeof roleFromToken === "string" ? roleFromToken : null);
         }
       } catch (error) {
-        console.error('Error al obtener datos:', error);
+        console.error("Error al obtener datos:", error);
       } finally {
         setLoading(false);
       }
@@ -65,7 +64,8 @@ const EditTeacher = () => {
 
     fetchTeacher();
   }, [id]);
-  
+
+
   const handleEdit = (field: keyof Teacher) => {
     const sensitive = ['name', 'surname', 'email'].includes(field);
     if (sensitive && !isSelf) {

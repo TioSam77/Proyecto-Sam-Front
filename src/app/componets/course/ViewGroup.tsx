@@ -5,7 +5,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from '@/../firebase/clientApp';
-import { doc, getDoc } from "firebase/firestore";
 
 import stylesLogin from "@/app/css/Login.module.css";
 import Link from "next/link";
@@ -15,7 +14,7 @@ interface courseData {
     name?: string,
     subject_name?: string,
     teacher_name?: string,
-    code?:string
+    code?: string
 }
 
 const ViewGroup = () => {
@@ -33,30 +32,35 @@ const ViewGroup = () => {
     const user: string = segments[1]
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                setCourseData(null);
-                return;
-            }
-
-            try {
-                setLoading(true);
-                const docRef = doc(db, "course", courseId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    setCourseData({ id: docSnap.id, ...docSnap.data() });
-                } else {
+        const fetchCourse = async () => {
+            const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    setCourseData(null);
+                    return;
                 }
-            } catch (err) {
-                setError(`Error al obtener el curso:${err}`);
-            } finally {
-                setLoading(false);
-            }
-        });
 
-        return () => unsubscribe();
+                try {
+                    setLoading(true);
+                    const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/course/${courseId}`);
+                    if (!res.ok) {
+                        throw new Error("Curso no encontrado");
+                    }
+
+                    const data = await res.json();
+                    setCourseData(data);
+                } catch (err) {
+                    setError(`Error al obtener el curso: ${err}`);
+                } finally {
+                    setLoading(false);
+                }
+            });
+
+            return () => unsubscribe();
+        };
+
+        fetchCourse();
     }, [courseId]);
+
 
     return (
         <>
@@ -69,7 +73,7 @@ const ViewGroup = () => {
             </section>
             <div className={styles.card}>
                 {isTeacher ?
-                    <div style={{display:"flex", justifyContent:"space-between"}}>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <p className={styles.welcome}>Bienvenido:</p>
                         <p>Codigo : {courseData?.code}</p>
                     </div>
