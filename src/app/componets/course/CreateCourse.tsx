@@ -66,30 +66,23 @@ const CreateCourse = () => {
 
     useEffect(() => {
         setLogin(true);
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 setData([]);
+                setSubject([]);
                 setLogin(false);
                 return;
             }
 
             try {
-                const querySnapshot = await getDocs(collection(db, "teacher"));
-                const allData = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                setData(allData);
-
-                const querySnapshotSubject = await getDocs(collection(db, "subject"));
-                const allDataSubjects = querySnapshotSubject.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                setSubject(allDataSubjects);
-
+                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/teachers-subjects");
+                if (!res.ok) throw new Error("Error en el servidor");
+                const json = await res.json();
+                setData(json.teachers);
+                setSubject(json.subjects);
             } catch (err) {
-                setError(`Error al obtener datos:${err}`);
+                setError(`Error al obtener datos: ${err}`);
             } finally {
                 setLogin(false);
             }
@@ -120,8 +113,6 @@ const CreateCourse = () => {
 
         return code;
     };
-
-
 
     const handleEdit = (day: Day) => {
         setEditingDay(day);
@@ -162,84 +153,57 @@ const CreateCourse = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLogin(true);
-        setError("")
-        setAlert("")
+        setError("");
+        setAlert("");
 
         try {
             const parsedStartDate = new Date(startDate);
             const parsedEndDate = new Date(endDate);
+
             const selectedSubjectObj = subject.find((s) => s.id === selectedSubject);
             const selectedTeacherObj = data.find((t) => t.id === selectedTeacher);
 
             if (!selectedSubjectObj || !selectedTeacherObj) {
                 setError("Error: no se pudo encontrar el profesor o la materia seleccionada.");
-                setLogin(false)
+                setLogin(false);
                 return;
             }
 
+            // Aquí generas el código único en frontend
             const courseCode = await generateUniqueCode();
 
-            const courseRef = await addDoc(collection(db, "course"), {
+            const body = {
                 name: courseName,
                 subject_name: selectedSubjectObj.name,
                 teacher_name: `${selectedTeacherObj.surname} ${selectedTeacherObj.name}`,
                 teacher_id: selectedTeacher,
                 start_date: startDate,
                 end_date: endDate,
-                code: courseCode,
-            });
-
-            const courseId = courseRef.id;
-
-            // 2. Recorrer días seleccionados con horario
-            const dayIndexMap: Record<Day, number> = {
-                Lunes: 1,
-                Martes: 2,
-                Miércoles: 3,
-                Jueves: 4,
-                Viernes: 5,
-                Sábado: 6,
+                availability,
+                code: courseCode, // código generado aquí y enviado al backend
             };
 
-            const currentDate = new Date(parsedStartDate);
+            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/register-course", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            });
 
-            while (currentDate <= parsedEndDate) {
-                currentDate.setHours(12, 0, 0, 0); // Establece hora para evitar desfaces por zona horaria
-
-                const currentDayIndex = currentDate.getDay(); // 0 = Domingo, 1 = Lunes, ...
-
-                const matchingDay = Object.entries(dayIndexMap).find(
-                    ([, index]) => index === currentDayIndex
-                )?.[0] as Day | undefined;
-
-                if (matchingDay) {
-                    const horario = availability[matchingDay];
-                    if (horario?.start && horario?.end) {
-                        const dateString = currentDate.toISOString().slice(0, 10); // "YYYY-MM-DD"
-                        await addDoc(collection(db, "course_schedule"), {
-                            name: courseName,
-                            course_id: courseId,
-                            date: dateString,
-                            entry_time: horario.start,
-                            exit_time: horario.end,
-                            Active:true
-                        });
-                    }
-                }
-
-                currentDate.setDate(currentDate.getDate() + 1);
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || "Error desconocido al crear curso");
             }
 
-            setSelectedSubject('')
-            setSelectedTeacher('')
-            setCourseName('')
-            setEndDate('')
-            setStartDate('')
+            setSelectedSubject("");
+            setSelectedTeacher("");
+            setCourseName("");
+            setEndDate("");
+            setStartDate("");
             setAlert("Curso y horarios creados correctamente.");
-            setLogin(false)
         } catch (error) {
             setError(`Error al crear el curso: ${error}`);
-            setLogin(false)
+        } finally {
+            setLogin(false);
         }
     };
 

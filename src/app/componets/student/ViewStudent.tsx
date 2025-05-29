@@ -39,29 +39,32 @@ const ViewStudent = () => {
   const params = useParams();
   const studentId = params?.id as string;
 
-  useEffect(() => {
-    const fetchStudent = async () => {
-      try {
-        setLoading(true);
-        const studentRef = doc(db, 'student', studentId);
-        const studentSnap = await getDoc(studentRef);
+useEffect(() => {
+  const fetchStudent = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `https://api-uj4mkoe42a-uc.a.run.app/student/${studentId}`
+      );
 
-        if (!studentSnap.exists()) {
-          setNotFound(true);
-          return;
-        }
-
-        setStudentData({ id: studentSnap.id, ...studentSnap.data() });
-      } catch (err) {
-        console.error("Error al obtener datos del estudiante:", err);
+      if (!res.ok) {
         setNotFound(true);
-      } finally {
-        setLoading(false);
+        return;
       }
-    };
 
-    fetchStudent();
-  }, [studentId]);
+      const data = await res.json();
+      setStudentData(data);
+    } catch (err) {
+      console.error("Error al obtener datos del estudiante:", err);
+      setNotFound(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchStudent();
+}, [studentId]);
+
 
   const handleToggleCourses = async () => {
     setShowCourses(prev => !prev);
