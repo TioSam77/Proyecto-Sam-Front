@@ -3,16 +3,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "@/../firebase/clientApp";
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 interface data {
     id: string,
     name: string,
-    name2:string,
-    surname:string,
-    surname2:string,
+    name2: string,
+    surname: string,
+    surname2: string,
     phoneNumber: string
 }
 
@@ -25,6 +24,7 @@ const MapTeacher = () => {
 
     useEffect(() => {
         setLogin(true);
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 setData([]);
@@ -33,22 +33,13 @@ const MapTeacher = () => {
             }
 
             try {
-                const querySnapshot = await getDocs(collection(db, "teacher"));
-                const allData: data[] = querySnapshot.docs.map((doc) => {
-                    const docData = doc.data();
-                    return {
-                        id: doc.id,
-                        name: docData.name,
-                        name2: docData.name2,
-                        surname: docData.surname,
-                        surname2: docData.surname2,
-                        phoneNumber: docData.phoneNumber
-                    };
-                });
+                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-employee");
+                if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
+                const allData: data[] = await res.json();
                 setData(allData);
             } catch (err) {
-                console.error("Error al obtener estudiantes:", err);
+                console.error("Error al obtener profesores:", err);
             } finally {
                 setLogin(false);
             }
@@ -70,20 +61,20 @@ const MapTeacher = () => {
         if (!selectedTeacher) return;
 
         try {
-            // Verificar si hay algún curso con ese teacher_id
-            const courseQuery = query(
-                collection(db, "course"),
-                where("teacher_id", "==", selectedTeacher.id)
+            const res = await fetch(
+                `https://api-uj4mkoe42a-uc.a.run.app/delete-teacher/${selectedTeacher.id}`,
+                {
+                    method: "DELETE",
+                }
             );
-            const courseSnapshot = await getDocs(courseQuery);
 
-            if (!courseSnapshot.empty) {
-                alert("No se puede eliminar al profesor porque está asignado a uno o más cursos.");
+            const result = await res.json();
+
+            if (!res.ok) {
+                alert(result.error || "Error al eliminar al profesor.");
                 return;
             }
 
-            // Si no tiene cursos, se puede eliminar
-            await deleteDoc(doc(db, "teacher", selectedTeacher.id));
             setData(prev => prev.filter(user => user.id !== selectedTeacher.id));
         } catch (err) {
             console.error("Error al eliminar:", err);
@@ -92,6 +83,7 @@ const MapTeacher = () => {
             setSelectedTeacher(null);
         }
     };
+
 
     return (
         <section className={styleUser.center}>

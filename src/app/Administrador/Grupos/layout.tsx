@@ -30,18 +30,11 @@ export default function RootLayout({
 
             try {
                 setLogin(true);
-                const q = query(collection(db, "course"), limit(9));
-                const querySnapshot = await getDocs(q);
 
-                const allData: data[] = querySnapshot.docs.map((doc) => {
-                    const docData = doc.data();
-                    return {
-                        id: doc.id,
-                        name: docData.name,
-                        teacher_name:docData.teacher_name
-                    };
-                });
+                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-course");
+                if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
+                const allData: data[] = await res.json();
                 setData(allData);
                 setNotFound(allData.length === 0);
             } catch (err) {

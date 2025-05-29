@@ -60,7 +60,7 @@ const RegisterTeacher = () => {
         try {
             const countryCode = countryList.find(c => c.iso2 === selectedCountry)?.phoneCode || "";
 
-            const res = await fetch('http://localhost:4000/register-employee', {
+            const res = await fetch('https://api-uj4mkoe42a-uc.a.run.app/register-employee', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

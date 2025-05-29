@@ -29,6 +29,7 @@ const MapAdmin = () => {
 
   useEffect(() => {
     setLogin(true);
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         setData([]);
@@ -37,18 +38,13 @@ const MapAdmin = () => {
       }
 
       try {
-        // Consulta que filtra por role === 2 directamente en Firebase
-        const q = query(collection(db, "teacher"), where("role", "==", 2));
-        const querySnapshot = await getDocs(q);
-        const teachers: Admin[] = querySnapshot.docs.map((doc) => {
-          const docData = doc.data();
-          return {
-            id: doc.id,
-            name: `${docData.name || ''} ${docData.surname || ''}`.trim(),
-            phoneNumber: docData.phoneNumber
-          };
-        });
+        const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-admin");
 
+        if (!res.ok) {
+          throw new Error("Error en la respuesta del servidor");
+        }
+
+        const teachers: Admin[] = await res.json();
         setData(teachers);
       } catch (err) {
         console.error("Error al obtener administradores:", err);

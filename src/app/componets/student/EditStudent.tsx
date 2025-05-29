@@ -9,7 +9,9 @@ import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
 
 interface StudentData {
   name: string;
+  name2: string;
   surname: string;
+  surname2: string;
   email: string;
   phoneNumber: string;
   heardFrom: string;
@@ -22,7 +24,9 @@ const EditStudent = () => {
 
   const [studentData, setStudentData] = useState<StudentData>({
     name: '',
+    name2: '',
     surname: '',
+    surname2: '',
     email: '',
     phoneNumber: '',
     heardFrom: '',
@@ -35,27 +39,27 @@ const EditStudent = () => {
   const [notFound, setNotFound] = useState(false);
   const [isSelf, setIsSelf] = useState(false); // ← para verificar si el usuario autenticado es el mismo
 
+  const combineNames = (name: string, name2: string) => [name, name2].filter(Boolean).join(' ');
+  const splitNames = (fullName: string): [string, string] => {
+    const [first, ...rest] = fullName.trim().split(' ');
+    return [first || '', rest.join(' ') || ''];
+  };
+
   useEffect(() => {
     const fetchStudent = async () => {
       try {
         setLoading(true);
-        const studentRef = doc(db, 'student', studentId);
-        const studentSnap = await getDoc(studentRef);
+        const res = await fetch(
+          `https://api-uj4mkoe42a-uc.a.run.app/student/${studentId}`
+        );
 
-        if (!studentSnap.exists()) {
+        if (!res.ok) {
           setNotFound(true);
           return;
         }
 
-        const data = studentSnap.data();
-        setStudentData({
-          name: data.name || '',
-          surname: data.surname || '',
-          email: data.email || '',
-          phoneNumber: data.phoneNumber || '',
-          heardFrom: data.heardFrom || '',
-          teacherNote: data.teacherNote || '',
-        });
+        const data = await res.json();
+        setStudentData(data);
 
         const auth = getAuth();
         const user = auth.currentUser;
@@ -70,13 +74,21 @@ const EditStudent = () => {
       }
     };
 
-    if (studentId) fetchStudent();
+    fetchStudent();
   }, [studentId]);
 
   const handleEdit = (field: keyof StudentData) => {
     setEditingField(field);
-    setTempValue(studentData[field]);
+
+    if (field === 'name') {
+      setTempValue(combineNames(studentData.name, studentData.name2));
+    } else if (field === 'surname') {
+      setTempValue(combineNames(studentData.surname, studentData.surname2));
+    } else {
+      setTempValue(studentData[field]);
+    }
   };
+
 
   const handleCancel = () => {
     setEditingField(null);
@@ -86,22 +98,38 @@ const EditStudent = () => {
   const handleSave = async () => {
     if (!editingField) return;
 
-    const updatedData = { ...studentData, [editingField]: tempValue };
+    let updatedFields: Partial<StudentData> = {};
+
+    if (editingField === 'name') {
+      const [name, name2] = splitNames(tempValue);
+      updatedFields = { name, name2 };
+    } else if (editingField === 'surname') {
+      const [surname, surname2] = splitNames(tempValue);
+      updatedFields = { surname, surname2 };
+    } else {
+      updatedFields = { [editingField]: tempValue };
+    }
 
     try {
       const studentRef = doc(db, 'student', studentId);
-      await updateDoc(studentRef, { [editingField]: tempValue });
+      await updateDoc(studentRef, updatedFields);
 
       const auth = getAuth();
       const user = auth.currentUser;
 
       if (user && user.uid === studentId) {
         if (editingField === 'name' || editingField === 'surname') {
-          const newName = editingField === 'name' ? tempValue : studentData.name;
-          const newSurname = editingField === 'surname' ? tempValue : studentData.surname;
+          const fullName = combineNames(
+            editingField === 'name' ? splitNames(tempValue)[0] : studentData.name,
+            editingField === 'name' ? splitNames(tempValue)[1] : studentData.name2
+          );
+          const fullSurname = combineNames(
+            editingField === 'surname' ? splitNames(tempValue)[0] : studentData.surname,
+            editingField === 'surname' ? splitNames(tempValue)[1] : studentData.surname2
+          );
 
           await updateProfile(user, {
-            displayName: `${newName} ${newSurname}`,
+            displayName: `${fullSurname} ${fullName}`,
           });
         }
 
@@ -110,14 +138,15 @@ const EditStudent = () => {
         }
       }
 
-      setStudentData(updatedData);
+      setStudentData(prev => ({ ...prev, ...updatedFields }));
     } catch (err) {
-      console.error("Error al actualizar el estudiante o el perfil de autenticación:", err);
+      console.error("Error al actualizar:", err);
       alert("Ocurrió un error al actualizar los datos.");
     } finally {
       setEditingField(null);
     }
   };
+
 
   if (loading) return <p>Cargando...</p>;
   if (notFound) return <p>Estudiante no encontrado.</p>;
@@ -133,10 +162,10 @@ const EditStudent = () => {
 
   return (
     <div className={styles.editCard}>
-      {isSelf ? 
-      <h3 className={styles.editTitle}>Editar tus datos</h3>
-      :
-      <h3 className={styles.editTitle}>Editar Información del Alumno</h3>
+      {isSelf ?
+        <h3 className={styles.editTitle}>Editar tus datos</h3>
+        :
+        <h3 className={styles.editTitle}>Editar Información del Alumno</h3>
       }
 
       {editableFields.map(([field, label]) => {
@@ -146,7 +175,14 @@ const EditStudent = () => {
             <div key={field} className={styles.infoRow}>
               <span className={styles.label}>{label}:</span>
               <div className={styles.value}>
-                <span>{studentData[field]}</span>
+                <span>
+                  {field === 'name'
+                    ? combineNames(studentData.name, studentData.name2)
+                    : field === 'surname'
+                      ? combineNames(studentData.surname, studentData.surname2)
+                      : studentData[field]
+                  }
+                </span>
               </div>
             </div>
           );
