@@ -42,63 +42,19 @@ const GroupMessages = () => {
   useEffect(() => {
     if (!courseId) return;
 
-    const messagesRef = collection(db, 'course_messages', courseId, 'messages');
-    const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
-      const msgList: Message[] = [];
+    const fetchMessages = async () => {
+      try {
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-messages/${courseId}`);
+        if (!res.ok) throw new Error("No se pudieron obtener los mensajes");
 
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const date = data.date?.seconds
-          ? new Date(data.date.seconds * 1000).toLocaleString('es-MX', {
-            day: '2-digit',
-            month: 'short',
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-          : 'Sin fecha';
+        const json = await res.json();
+        setMessages(json.messages);
+      } catch (err) {
+        console.error("Error al obtener mensajes:", err);
+      }
+    };
 
-        const msg: Message = {
-          id: docSnap.id,
-          author: data.author,
-          content: data.content,
-          date,
-          responses: [],
-        };
-
-        // Escucha en tiempo real las respuestas
-        const responsesRef = collection(db, 'course_messages', courseId, 'messages', docSnap.id, 'responses');
-        const q = query(responsesRef, orderBy('date', 'asc'));
-
-        onSnapshot(q, (resSnap) => {
-          const responses: Response[] = resSnap.docs.map((res) => {
-            const resData = res.data();
-            return {
-              author: resData.author,
-              content: resData.content,
-              date: resData.date?.seconds
-                ? new Date(resData.date.seconds * 1000).toLocaleString('es-MX', {
-                  day: '2-digit',
-                  month: 'short',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })
-                : '',
-            };
-          });
-
-          setMessages((prev) =>
-            prev.map((m) => (m.id === msg.id ? { ...m, responses } : m))
-          );
-        });
-
-        msgList.push(msg);
-      });
-
-      // Ordena mensajes más recientes arriba
-      setMessages(msgList.sort((a, b) => (a.date < b.date ? 1 : -1)));
-    });
-
-    return () => unsubscribe();
+    fetchMessages();
   }, [courseId]);
 
   const handlePost = async () => {

@@ -103,7 +103,6 @@ const TableStudent = () => {
         return () => unsubscribe();
     };
 
-
     return (
         <section className={tables.TableContainer}>
             <Link href={`InscribirEstudiante`}>
