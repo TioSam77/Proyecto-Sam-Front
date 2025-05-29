@@ -40,21 +40,20 @@ export default function Binnacle() {
     });
     const [editId, setEditId] = useState<string | null>(null);
     const [isFormVisible, setFormVisible] = useState(false);
-
-    const binnacleRef = collection(db, 'binnacle');
     const closeDetails = () => setSelectedEntry(null);
 
-    const fetchEntries = async () => {
-        const q = query(binnacleRef, where('id_course', '==', courseId));
-        const snapshot = await getDocs(q);
-        const docs = snapshot.docs
-            .map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            } as BinnacleEntry))
-            .sort((a, b) => b.date.localeCompare(a.date)); // Orden descendente por fecha
+    const binnacleRef = collection(db, 'binnacle');
 
-        setEntries(docs);
+    const fetchEntries = async () => {
+        try {
+            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-binnacle/${courseId}`);
+            if (!res.ok) throw new Error("No se pudieron obtener las entradas");
+
+            const data = await res.json();
+            setEntries(data.entries);
+        } catch (error) {
+            console.error("Error al obtener las entradas de bitácora:", error);
+        }
     };
 
     useEffect(() => {
@@ -67,21 +66,46 @@ export default function Binnacle() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const createEntry = async (data: any) => {
+        const res = await fetch("/api/binnacle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        if (!res.ok) throw new Error("Error al crear la entrada");
+        return await res.json();
+    };
+
+    const editEntry = async (id: string, data: any) => {
+        const res = await fetch(`/api/binnacle/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        if (!res.ok) throw new Error("Error al actualizar la entrada");
+        return await res.json();
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.date || !form.topic) return;
 
-        if (editId) {
-            const ref = doc(db, 'binnacle', editId);
-            await updateDoc(ref, form);
-            setEditId(null);
-        } else {
-            await addDoc(binnacleRef, { ...form, id_course: courseId });
-        }
+        try {
+            if (editId) {
+                await editEntry(editId, form);
+                setEditId(null);
+            } else {
+                await createEntry({ ...form, id_course: courseId });
+            }
 
-        setForm({ date: '', topic: '', activities: '', observations: '', id_course: courseId });
-        setFormVisible(false);
-        fetchEntries();
+            setForm({ date: "", topic: "", activities: "", observations: "", id_course: courseId });
+            setFormVisible(false);
+            fetchEntries();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleEdit = (entry: BinnacleEntry) => {

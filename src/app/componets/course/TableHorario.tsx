@@ -2,8 +2,6 @@
 import { useState, useEffect } from "react";
 import tables from "@/app/css/Table.module.css";
 import { useParams } from "next/navigation";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from '@/../firebase/clientApp';
 
 interface horario {
   dia: string,
@@ -21,29 +19,20 @@ const TableHorario = () => {
 
   useEffect(() => {
     const obtenerFechas = async () => {
-      const q = query(
-        collection(db, "course_schedule"), // o el nombre que tengas para esa colección
-        where("course_id", "==", courseId),
-      );
+      try {
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-courseSchedule/${courseId}`);
+        if (!res.ok) throw new Error("Error al obtener horarios");
 
-      const snapshot = await getDocs(q);
-
-      const datos = snapshot.docs.map(doc => {
-        const data = doc.data();
-        const fecha = data.date;
-
-        return {
-          dia: fecha,
-          horaInicio: data.entry_time,
-          horaFin: data.exit_time,
-          clase: data.name,
-        };
-      });
-
-      setHorario(datos);
+        const datos = await res.json();
+        setHorario(datos);
+      } catch (error) {
+        console.error("Error al obtener fechas:", error);
+      }
     };
 
-    obtenerFechas();
+    if (courseId) {
+      obtenerFechas();
+    }
   }, [courseId]);
 
   const formatearFechaLocal = (fecha: Date) => {

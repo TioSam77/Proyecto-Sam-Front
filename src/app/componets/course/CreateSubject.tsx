@@ -12,24 +12,36 @@ export default function CreateSubject() {
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
-
     const handleSubmit = async () => {
-        setAlert("")
-        setError("")
+        setAlert("");
+        setError("");
         if (!subjectName.trim()) return;
         setLoading(true);
+
         try {
-            await addDoc(collection(db, "subject"), {
-                name: subjectName.trim(),
+            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-subject", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name: subjectName.trim() }),
             });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Error al registrar materia");
+            }
+
             setAlert("Materia registrada");
             setSubjectName("");
         } catch (error) {
-            setError(`Error adding subject: ${error}`);
+            setError(`Error al registrar materia: ${error}`);
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <section className={style.sectionContainer}>

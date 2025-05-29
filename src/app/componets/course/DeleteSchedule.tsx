@@ -20,28 +20,18 @@ const DeleteSchedule = () => {
 
     const fetchSchedules = async () => {
         try {
-            const q = query(
-                collection(db, 'course_schedule'),
-                where('course_id', '==', courseId),
-                limit(10)
-            );
-            const querySnapshot = await getDocs(q);
+            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-schedule/${courseId}`);
+            if (!res.ok) throw new Error("No se pudo obtener el horario");
 
-            const data = querySnapshot.docs.map((docSnap) => {
-                const d = docSnap.data();
-                const dateStr = d.date;
-                const dateObj = new Date(dateStr);
+            const json = await res.json();
 
-                return {
-                    id: docSnap.id,
-                    date: dateStr,
-                    dateObj,
-                };
-            })
-                .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
+            const sorted: Schedule[] = json.schedules.map((s: { id: string; date: string }) => ({
+                id: s.id,
+                date: s.date,
+                dateObj: new Date(s.date),
+            }));
 
-
-            setSchedules(data);
+            setSchedules(sorted);
         } catch (error) {
             console.error('Error al obtener los horarios:', error);
         } finally {
@@ -51,12 +41,21 @@ const DeleteSchedule = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await deleteDoc(doc(db, 'course_schedule', id));
+            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-schedule/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) {
+                const { error } = await res.json();
+                throw new Error(error || "Error al eliminar el horario");
+            }
+
             setSchedules((prev) => prev.filter((s) => s.id !== id));
         } catch (error) {
-            console.error('Error al eliminar el horario:', error);
+            console.error("Error al eliminar el horario:", error);
         }
     };
+
 
     useEffect(() => {
         fetchSchedules();

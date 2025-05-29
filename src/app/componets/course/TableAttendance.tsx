@@ -152,45 +152,22 @@ const TableAttendance = () => {
 
     const confirmColumn = async (date: string) => {
         try {
-            // Actualiza el estado local para bloquear la columna
             setConfirmedDates((prev) => ({ ...prev, [date]: true }));
 
-            // Paso 1: Actualiza asistencia de cada estudiante en student_course
-            const updatePromises = students.map(async (student) => {
-                const attendanceValue = student.attendance?.[date] ?? null;
-                if (attendanceValue === null) return;
-
-                const docRef = doc(db, "student_course", student.id);
-                await setDoc(
-                    docRef,
-                    {
-                        attendance: {
-                            [date]: attendanceValue,
-                        },
-                    },
-                    { merge: true }
-                );
+            const res = await fetch("/api/confirm-attendance", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    courseId,
+                    date,
+                    students,
+                }),
             });
 
-            // Paso 2: Actualiza el documento correspondiente en course_schedule
-            const qSchedule = query(
-                collection(db, "course_schedule"),
-                where("course_id", "==", courseId)
-            );
-            const querySnapshot = await getDocs(qSchedule);
-            const matchDoc = querySnapshot.docs.find((docSnap) => {
-                const data = docSnap.data();
-                const docDate = data.date; // ya es string, no necesitas convertir
-                return docDate === date;
-            });
+            if (!res.ok) throw new Error("Error al confirmar asistencia");
 
-            if (matchDoc) {
-                await updateDoc(doc(db, "course_schedule", matchDoc.id), {
-                    confirm: true,
-                });
-            }
-
-            await Promise.all(updatePromises);
             console.log(`Asistencia del ${date} confirmada correctamente`);
         } catch (err) {
             console.error("Error al confirmar asistencia:", err);
