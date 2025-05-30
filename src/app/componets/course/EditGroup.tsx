@@ -2,9 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/app/css/EditGroup.module.css';
 import { useParams } from 'next/navigation';
-import { doc, getDoc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from '../../../../firebase/clientApp';
 
 type GroupData = {
   name: string;
@@ -90,52 +87,32 @@ const EditGroup = () => {
       .finally(() => setLoading(false));
   }, [courseId]);
 
-
-  // Guardar cambios
   const handleSave = async () => {
     if (!editingField) return;
 
-    const updatedData: Partial<GroupData> = {};
-
-    if (editingField === 'teacher_name') {
-      const selectedTeacher = teachers.find(t => t.id === tempValue);
-      if (selectedTeacher) {
-        updatedData.teacher_name = ` ${selectedTeacher.surname} ${selectedTeacher.surname2} ${selectedTeacher.name} ${selectedTeacher.name2}`;
-        updatedData.teacher_id = selectedTeacher.id;
-      }
-    } else if (editingField === 'subject_name') {
-      const selectedSubject = subjects.find(s => s.id === tempValue);
-      if (selectedSubject) {
-        updatedData.subject_name = selectedSubject.name;
-        updatedData.subject_id = selectedSubject.id;
-      }
-    } else if (editingField === 'active') {
-      updatedData.active = tempValue === 'true';
-    } else {
-      updatedData[editingField] = tempValue;
-    }
-
     try {
       setLoading(true);
-      const docRef = doc(db, 'course', courseId);
-      await updateDoc(docRef, updatedData);
 
-      // Si cambió el nombre, actualizar course_schedule.name
-      if (editingField === 'name') {
-        const scheduleQuery = query(
-          collection(db, "course_schedule"),
-          where("course_id", "==", courseId)
-        );
-        const querySnapshot = await getDocs(scheduleQuery);
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-course/${courseId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          field: editingField,
+          value: tempValue,
+          teachers,
+          subjects,
+        }),
+      });
 
-        // Para cada schedule que tenga ese course_id, actualizar el campo name
-        const promises = querySnapshot.docs.map(docSchedule =>
-          updateDoc(doc(db, "course_schedule", docSchedule.id), { name: tempValue })
-        );
-        await Promise.all(promises);
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Error al actualizar grupo");
       }
 
-      setGroupData(prev => ({ ...prev, ...updatedData }));
+      const { updates } = await res.json();
+      setGroupData((prev) => ({ ...prev, ...updates }));
       setEditingField(null);
       setTempValue('');
     } catch (err) {

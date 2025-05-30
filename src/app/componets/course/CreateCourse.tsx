@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import create from "@/app/css/create.module.css"
 import styles from "@/app/css/aviability.module.css";
 import stylesLogin from "@/app/css/Login.module.css";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from '@/../firebase/clientApp';
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
@@ -157,9 +157,6 @@ const CreateCourse = () => {
         setAlert("");
 
         try {
-            const parsedStartDate = new Date(startDate);
-            const parsedEndDate = new Date(endDate);
-
             const selectedSubjectObj = subject.find((s) => s.id === selectedSubject);
             const selectedTeacherObj = data.find((t) => t.id === selectedTeacher);
 

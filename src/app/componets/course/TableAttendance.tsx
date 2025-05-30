@@ -32,6 +32,10 @@ interface Student {
 interface scheduleData {
     date: string
 }
+interface date{
+    date:string,
+    confirmed:boolean
+}
 
 const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
 
@@ -70,7 +74,7 @@ const TableAttendance = () => {
                 setScheduleData(schedule);
 
                 const datesMap: { [key: string]: boolean } = {};
-                schedule.forEach((s: any) => {
+                schedule.forEach((s: date) => {
                     datesMap[s.date] = s.confirmed;
                 });
 

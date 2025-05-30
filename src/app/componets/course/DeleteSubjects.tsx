@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/DeleteSubjects.module.css';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { db } from '@/../firebase/clientApp';
 
 interface Subject {
   id: string;

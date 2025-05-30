@@ -2,14 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import {
-    addDoc,
-    collection,
     deleteDoc,
     doc,
-    getDocs,
-    updateDoc,
-    query,
-    where,
 } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
 import tables from "@/app/css/Table.module.css";
@@ -24,6 +18,15 @@ type BinnacleEntry = {
     observations: string;
     id_course: string;
 };
+
+interface Data {
+    date: string;
+    topic: string;
+    activities: string;
+    observations: string;
+    id_course: string;
+}
+
 
 export default function Binnacle() {
     const params = useParams();
@@ -41,8 +44,6 @@ export default function Binnacle() {
     const [editId, setEditId] = useState<string | null>(null);
     const [isFormVisible, setFormVisible] = useState(false);
     const closeDetails = () => setSelectedEntry(null);
-
-    const binnacleRef = collection(db, 'binnacle');
 
     const fetchEntries = async () => {
         try {
@@ -66,7 +67,7 @@ export default function Binnacle() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const createEntry = async (data: any) => {
+    const createEntry = async (data: Data) => {
         const res = await fetch("/api/binnacle", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -77,7 +78,7 @@ export default function Binnacle() {
         return await res.json();
     };
 
-    const editEntry = async (id: string, data: any) => {
+    const editEntry = async (id: string, data: Data) => {
         const res = await fetch(`/api/binnacle/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

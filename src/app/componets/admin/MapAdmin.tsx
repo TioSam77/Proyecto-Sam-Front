@@ -5,12 +5,8 @@ import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/../firebase/clientApp";
 import {
-  collection,
   deleteDoc,
   doc,
-  getDocs,
-  query,
-  where
 } from "firebase/firestore";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
 

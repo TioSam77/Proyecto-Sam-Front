@@ -6,7 +6,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@/app/css/global.css";
 import Footer from "../app/componets/Footer";
 import BootstrapClient from "./componets/bootstrap-client";
-import AuthRedirectWrapper from "./componets/AuthRedirectWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

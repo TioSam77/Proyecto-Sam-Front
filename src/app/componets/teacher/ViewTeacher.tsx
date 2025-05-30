@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
-import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
-import { db } from '@/../firebase/clientApp';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 

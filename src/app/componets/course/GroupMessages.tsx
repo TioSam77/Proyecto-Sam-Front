@@ -6,10 +6,7 @@ import { useParams } from 'next/navigation';
 import {
   collection,
   addDoc,
-  onSnapshot,
   serverTimestamp,
-  query,
-  orderBy
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '@/../firebase/clientApp';

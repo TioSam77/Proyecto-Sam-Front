@@ -3,17 +3,6 @@ import { useEffect, useState } from "react"
 import table from "@/app/css/Table.module.css"
 import styles from "@/app/css/Syllabus.module.css" // Usa Binnacle o tu nuevo CSS
 import { useParams } from "next/navigation"
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  deleteDoc,
-  doc,
-  addDoc,
-  updateDoc
-} from "firebase/firestore"
-import { db } from '@/../firebase/clientApp';
 
 interface SyllabusItem {
   id: string;

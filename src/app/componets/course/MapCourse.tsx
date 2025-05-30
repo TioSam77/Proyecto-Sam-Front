@@ -7,8 +7,6 @@ import styleCourse from "@/app/css/Course.module.css";
 import styleUser from "@/app/css/User.module.css";
 import stylesLogin from "@/app/css/Login.module.css";
 import DeleteConfirm from "../DeleteConfirm";
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
-import { db } from '@/../firebase/clientApp';
 import SelfRegister from "../student/SelfRegister";
 
 interface MapCourseProps {

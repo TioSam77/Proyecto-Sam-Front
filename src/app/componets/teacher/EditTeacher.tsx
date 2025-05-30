@@ -2,15 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import {
-  doc,
-  getDoc,
-  updateDoc,
-} from 'firebase/firestore';
-
 import styles from '@/app/css/EditTeacher.module.css';
-import { db } from '../../../../firebase/clientApp';
-import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 type Teacher = {
   name: string;
@@ -86,65 +79,29 @@ const EditTeacher = () => {
   const handleSave = async () => {
     if (!editingField || !teacherData) return;
 
-    let updates: Partial<Teacher> = {};
-
-    switch (editingField) {
-      case 'name': {
-        const [name, ...name2Parts] = tempValue.trim().split(' ');
-        updates.name = name;
-        updates.name2 = name2Parts.join(' ');
-        break;
-      }
-      case 'surname': {
-        const [surname, ...surname2Parts] = tempValue.trim().split(' ');
-        updates.surname = surname;
-        updates.surname2 = surname2Parts.join(' ');
-        break;
-      }
-      case 'active': {
-        updates.active = tempValue === 'true';
-        break;
-      }
-      case 'role': {
-        const parsed = Number(tempValue);
-        if (isNaN(parsed)) {
-          alert('El valor del rol debe ser un número válido.');
-          return;
-        }
-        updates.role = parsed;
-        break;
-      }
-      default: {
-        // Aquí TS infiere que es una clave que no sea name/surname/active/role
-        updates[editingField] = tempValue as string;
-        break;
-      }
-    }
-
     try {
-      const docRef = doc(db, 'teacher', id);
-      await updateDoc(docRef, updates);
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-teacher/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          field: editingField,
+          value: tempValue,
+          currentData: teacherData,
+        }),
+      });
 
-      const auth = getAuth();
-      const user = auth.currentUser;
-
-      if (user && user.uid === id) {
-        if (editingField === 'name' || editingField === 'surname') {
-          const newName = updates.name ?? teacherData.name;
-          const newSurname = updates.surname ?? teacherData.surname;
-          await updateProfile(user, {
-            displayName: `${newSurname} ${newName}`,
-          });
-        }
-        if (editingField === 'email') {
-          await updateEmail(user, tempValue);
-        }
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Error al actualizar");
       }
 
-      setTeacherData({ ...teacherData, ...updates });
+      const { updates } = await res.json();
+      setTeacherData((prev) => ({ ...prev, ...updates }));
     } catch (error) {
-      console.error('Error al guardar:', error);
-      alert('Ocurrió un error al actualizar los datos.');
+      console.error("Error al guardar:", error);
+      alert("Ocurrió un error al actualizar los datos.");
     }
 
     setEditingField(null);
@@ -160,7 +117,7 @@ const EditTeacher = () => {
   const renderField = (label: string, field: keyof Teacher) => {
     if (!teacherData) return null;
 
-    let value: string | number | boolean = teacherData[field];
+    const value: string | number | boolean = teacherData[field];
     let displayValue: string;
 
     if (field === 'name') {

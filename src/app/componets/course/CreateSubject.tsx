@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from '@/../firebase/clientApp';
 import style from "@/app/css/create.module.css"
 import stylesLogin from "@/app/css/Login.module.css";
 

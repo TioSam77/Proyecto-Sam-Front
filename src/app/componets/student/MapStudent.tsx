@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "@/../firebase/clientApp";
-import { collection, deleteDoc, doc, getDocs, limit, query, where } from "firebase/firestore";
+import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "../DeleteConfirm";
 
 interface data {

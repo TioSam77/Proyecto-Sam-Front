@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import tables from "@/app/css/Table.module.css";
 import { useParams, usePathname } from "next/navigation";
-import { collection, getDocs, query, where, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from '@/../firebase/clientApp';
 import { Attendance } from "../../data/student";
 import { onAuthStateChanged } from "firebase/auth";

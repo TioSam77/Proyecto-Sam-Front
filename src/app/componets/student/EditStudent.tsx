@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import styles from '@/app/css/EditStudent.module.css';
-import { db } from '../../../../firebase/clientApp';
 import { useParams } from 'next/navigation';
-import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 interface StudentData {
   name: string;
@@ -40,10 +38,6 @@ const EditStudent = () => {
   const [isSelf, setIsSelf] = useState(false); // ← para verificar si el usuario autenticado es el mismo
 
   const combineNames = (name: string, name2: string) => [name, name2].filter(Boolean).join(' ');
-  const splitNames = (fullName: string): [string, string] => {
-    const [first, ...rest] = fullName.trim().split(' ');
-    return [first || '', rest.join(' ') || ''];
-  };
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -98,47 +92,25 @@ const EditStudent = () => {
   const handleSave = async () => {
     if (!editingField) return;
 
-    let updatedFields: Partial<StudentData> = {};
-
-    if (editingField === 'name') {
-      const [name, name2] = splitNames(tempValue);
-      updatedFields = { name, name2 };
-    } else if (editingField === 'surname') {
-      const [surname, surname2] = splitNames(tempValue);
-      updatedFields = { surname, surname2 };
-    } else {
-      updatedFields = { [editingField]: tempValue };
-    }
-
     try {
-      const studentRef = doc(db, 'student', studentId);
-      await updateDoc(studentRef, updatedFields);
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-student/${studentId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          field: editingField,
+          value: tempValue,
+          currentData: studentData, // para usar en el backend si se necesita
+        }),
+      });
 
-      const auth = getAuth();
-      const user = auth.currentUser;
-
-      if (user && user.uid === studentId) {
-        if (editingField === 'name' || editingField === 'surname') {
-          const fullName = combineNames(
-            editingField === 'name' ? splitNames(tempValue)[0] : studentData.name,
-            editingField === 'name' ? splitNames(tempValue)[1] : studentData.name2
-          );
-          const fullSurname = combineNames(
-            editingField === 'surname' ? splitNames(tempValue)[0] : studentData.surname,
-            editingField === 'surname' ? splitNames(tempValue)[1] : studentData.surname2
-          );
-
-          await updateProfile(user, {
-            displayName: `${fullSurname} ${fullName}`,
-          });
-        }
-
-        if (editingField === 'email') {
-          await updateEmail(user, tempValue);
-        }
+      if (!res.ok) {
+        console.log("Error al actualizar");
       }
 
-      setStudentData(prev => ({ ...prev, ...updatedFields }));
+      const { updatedFields } = await res.json();
+      setStudentData((prev) => ({ ...prev, ...updatedFields }));
     } catch (err) {
       console.error("Error al actualizar:", err);
       alert("Ocurrió un error al actualizar los datos.");

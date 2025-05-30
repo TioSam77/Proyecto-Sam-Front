@@ -3,8 +3,7 @@ import MapCourse from "@/app/componets/course/MapCourse";
 import { onAuthStateChanged } from "firebase/auth";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../../../../firebase/clientApp";
-import { collection, getDocs, limit, query } from "firebase/firestore";
+import { auth } from "../../../../firebase/clientApp";
 
 interface data {
     id: string
