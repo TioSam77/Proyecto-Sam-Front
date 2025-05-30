@@ -30,6 +30,7 @@ const ViewTeacher = () => {
   const [teacherData, setTeacherData] = useState<teacher | null>(null);
   const [data, setData] = useState<data[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingCourses, setLoadingCourses] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
   const pathname = usePathname();
@@ -37,50 +38,50 @@ const ViewTeacher = () => {
   const teacherId = segments[3]; // Ajusta esto según tu estructura de URL
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTeacherData = async () => {
       try {
         setLoading(true);
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/teacher/${teacherId}`);
+        if (!res.ok) throw new Error("No se pudo obtener el profesor");
 
-        // 1. Traer datos del profesor
-        const teacherRef = doc(db, 'teacher', teacherId);
-        const teacherSnap = await getDoc(teacherRef);
-
-        if (!teacherSnap.exists()) {
-          setNotFound(true);
-          setLoading(false);
-          return;
-        }
-
-        const teacher = {
-          id: teacherSnap.id,
-          ...teacherSnap.data(),
-        };
-        setTeacherData(teacher);
-
-        // 2. Traer cursos donde teacher_id == teacherId
-        const q = query(collection(db, 'course'), where('teacher_id', '==', teacherId));
-        const querySnapshot = await getDocs(q);
-        const courses: data[] = querySnapshot.docs.map((doc) => {
-          const docData = doc.data();
-          return {
-            id: doc.id,
-            name: docData.name,
-            teacher_name: docData.teacher_name
-          };
-        });
-
-        setData(courses);
-
+        const data = await res.json();
+        setTeacherData(data);
       } catch (err) {
-        console.error("Error al obtener datos:", err);
+        console.error("Error al obtener datos del profesor:", err);
         setNotFound(true);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    if (teacherId) {
+      fetchTeacherData();
+    }
   }, [teacherId]);
+
+
+  // Cargar cursos solo cuando se muestra la sección
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (!showCourses || data.length > 0) return;
+
+      try {
+        setLoadingCourses(true);
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-teacherCourse/${teacherId}`);
+        if (!res.ok) throw new Error("No se pudieron obtener los cursos");
+
+        const courses = await res.json();
+        setData(courses);
+      } catch (err) {
+        console.error("Error al obtener cursos:", err);
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    fetchCourses();
+  }, [showCourses, teacherId, data.length]);
+
 
   if (notFound) return <p>Profesor no encontrado.</p>;
   if (loading) return <p>Cargando...</p>;
@@ -122,7 +123,7 @@ const ViewTeacher = () => {
         Cursos asignados {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
       </h3>
       {showCourses && (
-        <MapCourse data={data} login={loading} notFound={notFound} />
+        <MapCourse data={data} login={loadingCourses} notFound={notFound} />
       )}
     </div>
   );

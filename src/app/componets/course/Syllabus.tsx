@@ -39,42 +39,71 @@ const Syllabus = () => {
   })
 
   const fetchSyllabus = async () => {
-    const q = query(collection(db, "Syllabus"), where("id_course", "==", courseId))
-    const querySnapshot = await getDocs(q)
-    const data: SyllabusItem[] = querySnapshot.docs.map(doc => {
-      const d = doc.data();
-      return {
-        id: doc.id,
-        day: String(d.day ?? ""),
-        topic: String(d.topic ?? ""),
-        objectives: String(d.objectives ?? ""),
-        materials: String(d.materials ?? "")
-      };
-    });
-    setSyllabusList(data)
-  }
+    try {
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-syllabus/${courseId}`);
+      if (!res.ok) throw new Error("Error al obtener el syllabus");
+
+      const data: SyllabusItem[] = await res.json();
+      setSyllabusList(data);
+    } catch (error) {
+      console.error("Error al obtener el syllabus:", error);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (editId) {
-      const ref = doc(db, "Syllabus", editId)
-      await updateDoc(ref, form)
-    } else {
-      await addDoc(collection(db, "Syllabus"), {
-        ...form,
-        id_course: courseId
-      })
-    }
+  const handleCreateSyllabus = async () => {
+    try {
+      const res = await fetch('https://api-uj4mkoe42a-uc.a.run.app/post-syllabus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...form, id_course: courseId }),
+      });
 
-    setForm({ day: "", topic: "", objectives: "", materials: "" })
-    setEditId(null)
-    setFormVisible(false)
-    fetchSyllabus()
-  }
+      if (!res.ok) throw new Error('Error al crear syllabus');
+
+      // Limpiar estado
+      setForm({ day: '', topic: '', objectives: '', materials: '' });
+      setFormVisible(false);
+      fetchSyllabus();
+    } catch (err) {
+      console.error('Error al crear syllabus:', err);
+    }
+  };
+
+  const handleEditSyllabus = async () => {
+    try {
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-syllabus/${editId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...form, id: editId }),
+      });
+
+      if (!res.ok) throw new Error('Error al editar syllabus');
+
+      setForm({ day: '', topic: '', objectives: '', materials: '' });
+      setEditId(null);
+      setFormVisible(false);
+      fetchSyllabus();
+    } catch (err) {
+      console.error('Error al editar syllabus:', err);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editId) {
+      handleEditSyllabus();
+    } else {
+      handleCreateSyllabus();
+    }
+  };
 
   const handleEdit = (item: SyllabusItem) => {
     setForm({
@@ -88,9 +117,20 @@ const Syllabus = () => {
   }
 
   const deleteSyllabus = async (id: string) => {
-    await deleteDoc(doc(db, "Syllabus", id))
-    fetchSyllabus()
-  }
+    try {
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-syllabus/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Error al eliminar el syllabus");
+      }
+
+      fetchSyllabus(); // Recargar la lista tras borrar
+    } catch (error) {
+      console.error("Error al eliminar el syllabus:", error);
+    }
+  };
 
   useEffect(() => {
     if (courseId) fetchSyllabus()
@@ -98,16 +138,16 @@ const Syllabus = () => {
 
   return (
     <section className={table.TableContainer}>
-      <h2 className="welcomeText">Lista de Temario</h2>
 
-      <button className={styles.tableButton} onClick={() => {
+      <button className='bluebutton' onClick={() => {
         setFormVisible(true)
         setEditId(null)
         setForm({ day: "", topic: "", objectives: "", materials: "" })
       }}>
-        Crear nuevo
+        Agregar Tema del dia
       </button>
 
+      <h2 className="welcomeText">Lista de Temario</h2>
       <div className={table.box}>
         <table>
           <thead>
@@ -150,11 +190,10 @@ const Syllabus = () => {
             <h3>{editId ? 'Modificar Temario' : 'Crear Temario'}</h3>
             <form onSubmit={handleSubmit} className={styles.classList}>
               <input
-                type="number"
+                type="date"
                 name="day"
                 value={form.day}
                 onChange={handleChange}
-                placeholder="Día"
                 className={styles.select}
                 required
               />

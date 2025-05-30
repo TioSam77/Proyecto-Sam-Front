@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
-import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
-import { db } from '@/../firebase/clientApp';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -39,32 +37,31 @@ const ViewStudent = () => {
   const params = useParams();
   const studentId = params?.id as string;
 
-useEffect(() => {
-  const fetchStudent = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        `https://api-uj4mkoe42a-uc.a.run.app/student/${studentId}`
-      );
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `https://api-uj4mkoe42a-uc.a.run.app/student/${studentId}`
+        );
 
-      if (!res.ok) {
+        if (!res.ok) {
+          setNotFound(true);
+          return;
+        }
+
+        const data = await res.json();
+        setStudentData(data);
+      } catch (err) {
+        console.error("Error al obtener datos del estudiante:", err);
         setNotFound(true);
-        return;
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const data = await res.json();
-      setStudentData(data);
-    } catch (err) {
-      console.error("Error al obtener datos del estudiante:", err);
-      setNotFound(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchStudent();
-}, [studentId]);
-
+    fetchStudent();
+  }, [studentId]);
 
   const handleToggleCourses = async () => {
     setShowCourses(prev => !prev);
@@ -73,27 +70,11 @@ useEffect(() => {
       try {
         setLoadingCourses(true);
 
-        // 1. Buscar inscripciones del alumno
-        const q = query(collection(db, 'student_course'), where('student_id', '==', studentId));
-        const scSnapshot = await getDocs(q);
-        const courseIds = scSnapshot.docs.map(doc => doc.data().course_id);
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${studentId}`);
+        if (!res.ok) throw new Error("No se pudieron obtener los cursos");
 
-        // 2. Traer datos de cada curso
-        const coursePromises = courseIds.map(id => getDoc(doc(db, 'course', id)));
-        const courseDocs = await Promise.all(coursePromises);
-
-        const fullCourses = courseDocs
-          .filter(doc => doc.exists())
-          .map(doc => {
-            const docData = doc.data();
-            return {
-              id: doc.id,
-              name: docData.name,
-              teacher_name: docData.teacher_name
-            };
-          });
-
-        setCourses(fullCourses);
+        const data = await res.json();
+        setCourses(data);
       } catch (err) {
         console.error("Error al obtener cursos del estudiante:", err);
         setNotFound(true);

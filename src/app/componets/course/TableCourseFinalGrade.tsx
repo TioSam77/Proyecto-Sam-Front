@@ -105,7 +105,7 @@ const TableCourseFinalGrade = () => {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/confirm-grades", {
+            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-grade", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -122,7 +122,6 @@ const TableCourseFinalGrade = () => {
             setLoading(false);
         }
     };
-
 
     return (
         <section className={tables.TableContainer}>
