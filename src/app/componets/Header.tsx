@@ -6,6 +6,7 @@ import Image from "next/image";
 import NavbarCourses from "./course/NavbarCourses";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../../firebase/clientApp";
+import PrivateMessages from "./PrivateMessage";
 
 const Header = () => {
   const [enrroled, setEnrroled] = useState(false)
@@ -54,6 +55,10 @@ const Header = () => {
     setEnrroled(false);
   };
 
+  function setShowChat(arg0: boolean): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <>
       {/* Barra de navegación */}
@@ -66,6 +71,16 @@ const Header = () => {
           </Link>
 
           <div>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offMessages"
+              aria-controls="offcanvasNavbar"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
 
             <button
               className="navbar-toggler"
@@ -164,6 +179,28 @@ const Header = () => {
           </ul>
         </div>
       </div>
+
+      {/* OFFCANVAS de mensajes privados */}
+      <div
+        className="offcanvas offcanvas-end"
+        tabIndex={-1}
+        id="offMessages"
+        aria-labelledby="offMessagesLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="offMessagesLabel">Mensajes Privados</h5>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="offcanvas-body">
+          <PrivateMessages role="admin" onClose={() => setShowChat(false)} />
+        </div>
+      </div>
+
     </>
   );
 };
