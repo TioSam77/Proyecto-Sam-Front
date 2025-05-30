@@ -154,7 +154,7 @@ const TableAttendance = () => {
         try {
             setConfirmedDates((prev) => ({ ...prev, [date]: true }));
 
-            const res = await fetch("/api/confirm-attendance", {
+            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-attendance", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -36,7 +36,7 @@ const TableStudent = () => {
 
             try {
                 setLogin(true);
-                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${courseId}`, {
+                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-courseStudent/${courseId}`, {
                     headers: {
                         // Agrega token de autenticación si usas Firebase Auth y validas en backend
                         // Authorization: `Bearer ${await user.getIdToken()}`,
