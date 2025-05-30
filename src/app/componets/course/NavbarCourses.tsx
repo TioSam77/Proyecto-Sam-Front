@@ -3,17 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import {
-    collection,
-    query,
-    where,
-    getDocs,
-    getDoc,
-    doc,
-} from "firebase/firestore";
-
 import style from "@/app/css/navbarCourses.module.css";
-import { auth, db } from '@/../firebase/clientApp';
+import { auth } from '@/../firebase/clientApp';
 
 interface Course {
     id: string;

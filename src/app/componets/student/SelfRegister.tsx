@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
-import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/../firebase/clientApp";
 import styles from '@/app/css/selfRegister.module.css';
 import stylesLogin from "@/app/css/Login.module.css";
