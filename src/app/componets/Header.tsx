@@ -68,16 +68,16 @@ const Header = () => {
             <h3 className="logo">Interactivo</h3>
           </Link>
             <div className="d-flex gap-2 ms-auto">
+              {/* Burbuja flotante para abrir el chat */}
               <button
-                className="navbar-toggler"
-                type="button"
+                className="chat-bubble"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offMessages"
-                aria-controls="offMessages"
-                aria-label="Toggle mensajes privados">
-                <i className="bi bi-chat-dots-fill fs-4 text-primary"></i>
+                aria-label="Abrir chat privado"
+              >
+                <i className="bi bi-chat-dots-fill fs-4 text-white"></i>
               </button>
-
+              
               <button
                 className="navbar-toggler"
                 type="button"
