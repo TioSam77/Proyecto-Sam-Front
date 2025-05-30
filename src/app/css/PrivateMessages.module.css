@@ -1,0 +1,89 @@
+.container {
+  background-color: #fff;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  margin: auto;
+}
+
+.header {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.conversationHeader {
+  padding: 12px 16px;
+  background-color: #f4f6fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.chatBox {
+  padding: 16px;
+  height: 250px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.incoming, .outgoing {
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.incoming {
+  background-color: #e2e8f0;
+  align-self: flex-start;
+}
+
+.outgoing {
+  background-color: #bee3f8;
+  align-self: flex-end;
+}
+
+.inputArea {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 10px 16px;
+  gap: 8px;
+}
+
+.inputArea input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.inputArea button {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
