@@ -55,9 +55,7 @@ const Header = () => {
     setEnrroled(false);
   };
 
-  function setShowChat(arg0: boolean): void {
-    throw new Error("Function not implemented.");
-  }
+  const [showChat, setShowChat] = useState(true); // Puedes iniciar con false si no quieres mostrarlo desde el principio
 
   return (
     <>
@@ -69,32 +67,28 @@ const Header = () => {
             <Image src="/logo.jpg" alt="Interactivo Logo" height="40" width="40" className="me-2" />
             <h3 className="logo">Interactivo</h3>
           </Link>
+            <div className="d-flex gap-2 ms-auto">
+              <button
+                className="navbar-toggler"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offMessages"
+                aria-controls="offMessages"
+                aria-label="Toggle mensajes privados">
+                <i className="bi bi-chat-dots-fill fs-4 text-primary"></i>
+              </button>
 
-          <div>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offMessages"
-              aria-controls="offcanvasNavbar"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasNavbar"
-              aria-controls="offcanvasNavbar"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
+              <button
+                className="navbar-toggler"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar"
+                aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+            </div>
           </div>
-
-        </div>
       </nav>
 
       {/* NAVBAR lateral */}
@@ -197,7 +191,9 @@ const Header = () => {
           ></button>
         </div>
         <div className="offcanvas-body">
-          <PrivateMessages role="admin" onClose={() => setShowChat(false)} />
+          {showChat && (
+            <PrivateMessages role="admin" onClose={() => setShowChat(false)} />
+          )}
         </div>
       </div>
 
