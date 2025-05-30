@@ -62,14 +62,13 @@ const MapTeacher = () => {
 
         try {
             const res = await fetch(
-                `https://api-uj4mkoe42a-uc.a.run.app/delete-teacher/${selectedTeacher.id}`,
+                `https://api-uj4mkoe42a-uc.a.run.app/delete-employee/${selectedTeacher.id}`,
                 {
                     method: "DELETE",
                 }
             );
 
             const result = await res.json();
-
             if (!res.ok) {
                 alert(result.error || "Error al eliminar al profesor.");
                 return;

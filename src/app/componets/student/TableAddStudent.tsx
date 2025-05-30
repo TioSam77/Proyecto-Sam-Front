@@ -89,7 +89,6 @@ const TableAddStudent = () => {
         return () => unsubscribe();
     };
 
-
     const handleRegister = async (student: Student) => {
         try {
             // Verificar si el curso existe
