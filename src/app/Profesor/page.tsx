@@ -25,24 +25,13 @@ export default function Page() {
 
             try {
                 setLogin(true);
+                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-teacherCourse/${user.uid}`);
+                if (!res.ok) throw new Error("Error al obtener cursos");
 
-                const q = query(
-                    collection(db, "course"),
-                    where("teacher_id", "==", user.uid)
-                );
-                const querySnapshot = await getDocs(q);
+                const courses = await res.json();
 
-                const allData: data[] = querySnapshot.docs.map((doc) => {
-                    const docData = doc.data();
-                    return {
-                        id: doc.id,
-                        name: docData.name,
-                        teacher_name: docData.teacher_name
-                    };
-                });
-
-                setData(allData);
-                setNotFound(allData.length === 0);
+                setData(courses);
+                setNotFound(courses.length === 0);
             } catch (err) {
                 console.error("Error al obtener cursos:", err);
                 setNotFound(true);

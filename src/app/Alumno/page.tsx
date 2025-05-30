@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { auth, db } from '@/../firebase/clientApp';
 
-interface data{
-    id:string
-    name:string
+interface data {
+    id: string
+    name: string
     teacher_name: string
 }
 
@@ -24,33 +24,12 @@ export default function Page() {
             }
 
             setLogin(true);
+
             try {
-                // Paso 1: obtener las relaciones student_course del alumno actual
-                const relQuery = query(
-                    collection(db, "student_course"),
-                    where("student_id", "==", user.uid)
-                );
-                const relSnap = await getDocs(relQuery);
+                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${user.uid}`);
+                if (!res.ok) throw new Error("Error al obtener los cursos");
 
-                const courseIds = relSnap.docs.map((doc) => doc.data().course_id);
-
-                if (courseIds.length === 0) {
-                    setData([]);
-                    setNotFound(true);
-                    return;
-                }
-
-                // Paso 2: obtener los cursos con esos IDs
-                const coursesPromises = courseIds.map(async (id) => {
-                    const courseDoc = await getDoc(doc(db, "course", id));
-                    if (courseDoc.exists()) {
-                        return { id: courseDoc.id, ...courseDoc.data() };
-                    }
-                    return null;
-                });
-
-                const courses = (await Promise.all(coursesPromises)).filter(Boolean) as data[];
-
+                const courses = await res.json();
                 setData(courses);
                 setNotFound(courses.length === 0);
             } catch (err) {

@@ -5,17 +5,20 @@ import { getAuth } from "firebase/auth";
 import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { db } from "@/../firebase/clientApp";
 import styles from '@/app/css/selfRegister.module.css';
+import stylesLogin from "@/app/css/Login.module.css";
 
-interface student{
-    id:string;
-    name?:string;
+interface student {
+    id: string;
+    name?: string;
 }
 
 export default function SelfRegister({ onClose }: { onClose: () => void }) {
     const [code, setCode] = useState("");
     const [student, setStudent] = useState<student>();
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+
+    const [error, setError] = useState<string | null>("");
+    const [alert, setAlert] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         async function fetchStudent() {
@@ -54,38 +57,31 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
             setError("Ingresa un código de grupo.");
             return;
         }
+
         if (!student) {
             setError("No se pudo obtener la información del estudiante.");
             return;
         }
 
         try {
-            // Verificar si el curso existe
-            const courseRef = collection(db, "course");
-            const courseQuery = query(courseRef, where("code", "==", code));
-            const courseSnap = await getDocs(courseQuery);
-
-            if (courseSnap.empty) {
-                setError("El curso no existe.");
-                return;
-            }
-
-            const courseDoc = courseSnap.docs[0];
-            const courseId = courseDoc.id;
-
-            // Registrar relación student_course
-            const customId = `${student.id}_${courseId}`;
-            await setDoc(doc(db, "student_course", customId), {
-                name: `${student.name} `,
-                student_id: student.id,
-                course_id: courseId,
+            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-selfRegister", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ code, student }),
             });
 
-            alert(`Estudiante ${student.name} registrado correctamente en el grupo.`);
+            const result = await res.json();
+
+            if (!res.ok) {
+                setError(result.error || "Error desconocido");
+            }
+
+            setAlert(`Estudiante ${student.name} registrado correctamente en el grupo.`);
             onClose();
-        } catch (err) {
-            console.error(err);
-            setError("Error al registrar el estudiante.");
+        } catch (err: any) {
+            setError(err.message || "Error al registrar el estudiante.");
         }
     };
 
@@ -114,6 +110,12 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
                 <button onClick={handleRegister} className={styles.modalButton}>
                     Unirme
                 </button>
+            </div>
+
+            <div className={stylesLogin.messageContainer}>
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </div>
     );
