@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { collection, addDoc, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/../firebase/clientApp';
 import { isHoliday } from '@/app/hooks/isHoliday';
 import styles from '@/app/css/Schedule.module.css';
 import stylesLogin from "@/app/css/Login.module.css";
@@ -21,10 +19,10 @@ const CreateSchedule = () => {
   const courseId = params?.id as string;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    setLoading(true)
-    setAlert("")
-    setError("")
     e.preventDefault();
+    setLoading(true);
+    setAlert("");
+    setError("");
 
     const feriado = isHoliday(date);
     if (feriado) {
@@ -34,46 +32,31 @@ const CreateSchedule = () => {
     }
 
     try {
-      const courseRef = doc(db, 'course', courseId);
-      const courseSnap = await getDoc(courseRef);
-
-      if (!courseSnap.exists()) {
-        setError('El curso no existe');
-        setLoading(false)
-        return;
-      }
-
-      const subjectName = courseSnap.data()?.subject_name || 'Sin nombre';
-
-      const q = query(
-        collection(db, 'course_schedule'),
-        where('course_id', '==', courseId),
-        where('date', '==', date)
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        setError('Ese día ya ha sido asignado si quieres cambiarle la hora de clase entra en la modificacion de dias');
-        setLoading(false);
-        return;
-      }
-
-      await addDoc(collection(db, 'course_schedule'), {
-        course_id: courseId,
-        date: date,
-        entry_time: startTime,
-        exit_time: endTime,
-        name: subjectName,
+      const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-schedule", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId,
+          date,
+          entry_time: startTime,
+          exit_time: endTime,
+        }),
       });
 
-      setAlert('Horario creado correctamente');
-      setDate('');
-      setStartTime('');
-      setEndTime('');
-      setLoading(false)
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Error al crear el horario");
+      } else {
+        setAlert("Horario creado correctamente");
+        setDate('');
+        setStartTime('');
+        setEndTime('');
+      }
     } catch (error) {
       setError(`Error al crear el horario: ${error}`);
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 

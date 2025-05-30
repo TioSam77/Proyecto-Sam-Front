@@ -16,14 +16,13 @@ const DeleteSubjects = () => {
 
   const fetchSubjects = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'subject'));
-      const data = querySnapshot.docs.map(docSnap => ({
-        id: docSnap.id,
-        name: docSnap.data().name || 'Sin nombre',
-      }));
+      const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-subject");
+      if (!res.ok) throw new Error("No se pudieron obtener las materias");
+
+      const data = await res.json();
       setSubjects(data);
     } catch (error) {
-      console.error('Error al obtener las materias:', error);
+      console.error("Error al obtener las materias:", error);
     } finally {
       setLoading(false);
     }
@@ -31,10 +30,17 @@ const DeleteSubjects = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDoc(doc(db, 'subject', id));
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-subject/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("No se pudo eliminar la materia");
+      }
+
       setSubjects(prev => prev.filter(subject => subject.id !== id));
     } catch (error) {
-      console.error('Error al eliminar la materia:', error);
+      console.error("Error al eliminar la materia:", error);
     }
   };
 

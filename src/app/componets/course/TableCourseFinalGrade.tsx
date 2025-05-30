@@ -100,21 +100,26 @@ const TableCourseFinalGrade = () => {
     }, [])
 
     const confirmGrades = async () => {
-        setAlert("")
-        setError("")
-        setLoading(true)
+        setAlert("");
+        setError("");
+        setLoading(true);
+
         try {
-            const updatePromises = students.map(async (student) => {
-                const docRef = doc(db, "student_course", student.id);
-                await setDoc(docRef, { grade: student.grade ?? null }, { merge: true });
+            const res = await fetch("/api/confirm-grades", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ students }),
             });
 
-            await Promise.all(updatePromises);
+            if (!res.ok) throw new Error("Error al confirmar calificaciones");
+
             setAlert("Calificaciones confirmadas correctamente");
-            setLoading(false)
         } catch (error) {
             setError(`Error al confirmar calificaciones: ${error}`);
-            setLoading(false)
+        } finally {
+            setLoading(false);
         }
     };
 
