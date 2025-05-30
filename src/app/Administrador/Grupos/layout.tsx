@@ -54,7 +54,7 @@ export default function RootLayout({
 
     const isGrupoIdRuta = /^\/Administrador\/Grupos\/[^/]+$/.test(pathname);
 
-    const isRutaExcluida = /^\/Administrador\/Grupos\/[^/]+\/(Estudiantes|Temario|Asistencia|Calificaciones|Mensajes|CrearDia|EliminarDia|InscribirEstudiante)$/.test(pathname);
+    const isRutaExcluida = /^\/Administrador\/Grupos\/[^/]+\/(Estudiantes|Temario|Asistencia|Calificaciones|Mensajes|CrearDia|EliminarDia|EditarDia|InscribirEstudiante)$/.test(pathname);
 
     if ((isRegistroRuta || isGrupoIdRuta) || isRutaExcluida) {
         return (

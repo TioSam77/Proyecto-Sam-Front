@@ -157,3 +157,18 @@
     width: 90%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.containerButton{
+    display: flex;
+    gap: 10px;
+}
+
+@media(max-width:530px){
+    .containerButton{
+        flex-direction: column;
+        width: 100%;
+    }
+    .containerButton button{
+        width: 100%;
+    }
+}

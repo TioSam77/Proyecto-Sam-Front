@@ -15,7 +15,6 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from '@/../firebase/clientApp';
-import { doc, updateDoc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import Recommendation from "./Recommendation";
 
@@ -182,9 +181,12 @@ const TableAttendance = () => {
         <section className={tables.TableContainer}>
 
             {!isStudent &&
-                <div style={{ display: "flex", gap: "10px" }}>
+                <div className={tables.containerButton}>
                     <Link href={`CrearDia`}>
                         <button className='bluebutton'>Agregar dia de clases</button>
+                    </Link>
+                    <Link href={`EditarDia`}>
+                        <button className='bluebutton'>Editar dia de clases</button>
                     </Link>
                     <Link href={`EliminarDia`}>
                         <button className='bluebutton'>Eliminar dia de clases</button>
