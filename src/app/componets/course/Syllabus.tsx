@@ -22,6 +22,7 @@ const Syllabus = () => {
   const [syllabusList, setSyllabusList] = useState<SyllabusItem[]>([])
   const [isFormVisible, setFormVisible] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
+  const [selectedEntry, setSelectedEntry] = useState<SyllabusItem | null>(null);
 
   const [form, setForm] = useState({
     day: "",
@@ -147,8 +148,8 @@ const Syllabus = () => {
             <tr>
               <th>Día</th>
               <th>Tema</th>
-              <th>Objetivos</th>
-              <th>Materiales</th>
+              <th>Detalles</th>
+              <th></th>
               {!isStudent &&
                 <th>Acción</th>
               }
@@ -166,8 +167,14 @@ const Syllabus = () => {
                 <tr key={item.id}>
                   <td>{item.day}</td>
                   <td>{item.topic}</td>
-                  <td>{item.objectives}</td>
-                  <td>{item.materials}</td>
+                  <td colSpan={2}>
+                    <button
+                      className={styles.blueButton}
+                      onClick={() => setSelectedEntry(item)}
+                    >
+                      Ver más
+                    </button>
+                  </td>
                   {!isStudent &&
                     <td style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
                       <button className={styles.blueButton} onClick={() => handleEdit(item)}>Modificar</button>
@@ -230,6 +237,20 @@ const Syllabus = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {selectedEntry && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalCard}>
+            <h3>Detalle del Tema</h3>
+            <p><strong>Fecha:</strong> {selectedEntry.day}</p>
+            <p><strong>Tema:</strong> {selectedEntry.topic}</p>
+            <p><strong>Objetivos:</strong> {selectedEntry.objectives}</p>
+            <p><strong>Materiales:</strong> {selectedEntry.materials}</p>
+            <button onClick={() => setSelectedEntry(null)} className={styles.tableButton}>
+              Cerrar
+            </button>
           </div>
         </div>
       )}
