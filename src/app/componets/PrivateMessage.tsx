@@ -13,7 +13,7 @@ interface Message {
 
 interface Props {
   role: 'admin' | 'teacher' | 'student'
-  onClose: () => void // Para cerrar modal
+  onClose: () => void
 }
 
 export default function PrivateMessages({ role, onClose }: Props) {
@@ -40,14 +40,6 @@ export default function PrivateMessages({ role, onClose }: Props) {
     'Grupo B': ['Carlos'],
     'Grupo C': ['Elena'],
   }
-
-  /*
-  // ⚠️ Solo útil si el scroll automático es necesario
-  useEffect(() => {
-    const chat = document.getElementById('chatBox')
-    if (chat) chat.scrollTop = chat.scrollHeight
-  }, [messages])
-  */
 
   const handleSend = () => {
     if (!newMessage.trim() || !selectedUser) return

@@ -6,11 +6,11 @@ import Image from "next/image";
 import NavbarCourses from "./course/NavbarCourses";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../../firebase/clientApp";
-import PrivateMessages from "./PrivateMessage";
+import MessagePanel from "./MessagePanel";
 
 const Header = () => {
   const [enrroled, setEnrroled] = useState(false)
-
+  const [showChat, setShowChat] = useState(false)
   const [userRole, setUserRole] = useState<"superAdmin" | "admin" | "teacher" | "student" | null>(null);
 
   useEffect(() => {
@@ -55,8 +55,6 @@ const Header = () => {
     setEnrroled(false);
   };
 
-  const [showChat, setShowChat] = useState(true); // Puedes iniciar con false si no quieres mostrarlo desde el principio
-
   return (
     <>
       {/* Barra de navegación */}
@@ -67,28 +65,28 @@ const Header = () => {
             <Image src="/logo.jpg" alt="Interactivo Logo" height="40" width="40" className="me-2" />
             <h3 className="logo">Interactivo</h3>
           </Link>
-            <div className="d-flex gap-2 ms-auto">
-              {/* Burbuja flotante para abrir el chat */}
-              <button
-                className="chat-bubble"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offMessages"
-                aria-label="Abrir chat privado"
-              >
-                <i className="bi bi-chat-dots-fill fs-4 text-white"></i>
-              </button>
-              
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar"
-                aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-              </button>
-            </div>
+          <div className="d-flex gap-2 ms-auto">
+            {/* Burbuja flotante para abrir el chat */}
+            <button
+              className="chat-bubble"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offMessages"
+              aria-label="Abrir chat privado"
+            >
+              <i className="bi bi-chat-dots-fill fs-4 text-white"></i>
+            </button>
+
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasNavbar"
+              aria-controls="offcanvasNavbar"
+              aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
           </div>
+        </div>
       </nav>
 
       {/* NAVBAR lateral */}
@@ -182,7 +180,9 @@ const Header = () => {
         aria-labelledby="offMessagesLabel"
       >
         <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offMessagesLabel">Mensajes Privados</h5>
+          <h5 className="offcanvas-title" id="offMessagesLabel">
+            Mensajes Privados
+          </h5>
           <button
             type="button"
             className="btn-close"
@@ -191,9 +191,7 @@ const Header = () => {
           ></button>
         </div>
         <div className="offcanvas-body">
-          {showChat && (
-            <PrivateMessages role="admin" onClose={() => setShowChat(false)} />
-          )}
+          <MessagePanel setShowChat={setShowChat} />
         </div>
       </div>
 

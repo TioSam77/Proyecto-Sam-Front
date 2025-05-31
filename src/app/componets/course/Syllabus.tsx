@@ -149,7 +149,6 @@ const Syllabus = () => {
               <th>Día</th>
               <th>Tema</th>
               <th>Detalles</th>
-              <th></th>
               {!isStudent &&
                 <th>Acción</th>
               }
@@ -167,7 +166,7 @@ const Syllabus = () => {
                 <tr key={item.id}>
                   <td>{item.day}</td>
                   <td>{item.topic}</td>
-                  <td colSpan={2}>
+                  <td>
                     <button
                       className={styles.blueButton}
                       onClick={() => setSelectedEntry(item)}
