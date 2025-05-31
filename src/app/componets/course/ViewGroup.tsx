@@ -89,9 +89,15 @@ const ViewGroup = () => {
                             <Link href={`/${user}/${courseId}/Mensajes`}>
                                 <button className='bluebutton'><i className="bi bi-chat-left-text"></i></button>
                             </Link>
-                            <Link href={`/${user}/${courseId}/`}>
-                                <button className='bluebutton'>Bitacora</button>
-                            </Link>
+                            {!isTeacher ?
+                                <Link href={`/${user}/${courseId}/`}>
+                                    <button className='bluebutton'><i className="bi bi-calendar"></i></button>
+                                </Link>
+                                :
+                                <Link href={`/${user}/${courseId}/`}>
+                                    <button className='bluebutton'>Bitacora</button>
+                                </Link>
+                            }
                             <Link href={`/${user}/${courseId}/Temario`}>
                                 <button className='bluebutton'>Temario</button>
                             </Link>
@@ -105,7 +111,7 @@ const ViewGroup = () => {
                                 <button className='bluebutton'>Bitacora</button>
                             </Link>
                             <Link href={`/Administrador/Grupos/${courseId}/Temario`}>
-                                <button className='bluebutton'>Agregar Temario</button>
+                                <button className='bluebutton'>Temario</button>
                             </Link>
                         </div>
                     }

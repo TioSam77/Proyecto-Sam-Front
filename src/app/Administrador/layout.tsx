@@ -73,7 +73,7 @@ export default function RootLayout({
       <Header />
       <section className={course.center}>
         <div className={card.containerCard}>
-          <LinkCard name="Alumnos" url="/Administrador/Alumnos" icon="bi bi-person-check" />
+          <LinkCard name="Alumnos" url="/Administrador/Alumnos" icon="bi bi-mortarboard" />
           <LinkCard name="Grupos" url="/Administrador/Grupos" icon="bi bi-people-fill" />
           <LinkCard name="Empleados" url="/Administrador/Profesores" icon="bi bi-easel2-fill" />
           {isSuperAdmin &&

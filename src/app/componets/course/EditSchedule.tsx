@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/EditSchedule.module.css';
+import { useParams } from 'next/navigation';
 
 interface Schedule {
   id: string;
-  datetime: string;   // '2025-05-27'
+  date: string;   // '2025-05-27'
   entry_time: string; // '09:00'
   exit_time: string;  // '11:00'
 }
@@ -13,25 +14,43 @@ interface Schedule {
 const EditSchedule = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
-  const [newDate, setNewDate] = useState('');        // para editar fecha
-  const [newEntryTime, setNewEntryTime] = useState('');  // para editar hora entrada
-  const [newExitTime, setNewExitTime] = useState('');    // para editar hora salida
+  const [newDate, setNewDate] = useState('');
+  const [newEntryTime, setNewEntryTime] = useState('');
+  const [newExitTime, setNewExitTime] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const params = useParams();
+  const courseId = params?.id as string;
+
   useEffect(() => {
-    // Datos simulados con fecha y hora
-    const fakeData: Schedule[] = [
-      { id: '1', datetime: '2025-05-27', entry_time: '09:00', exit_time: '11:00' },
-      { id: '2', datetime: '2025-05-28', entry_time: '09:00', exit_time: '11:00' },
-      { id: '3', datetime: '2025-05-29', entry_time: '09:00', exit_time: '11:00' },
-    ];
-    setSchedules(fakeData);
-    setLoading(false);
-  }, []);
+    const fetchSchedules = async () => {
+      try {
+        const response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-schedule/${courseId}`);
+        const data = await response.json();
+
+        const transformed = data.schedules.map((s: any) => ({
+          id: s.id,
+          date: s.date,            // '2025-05-28'
+          entry_time: s.entry_time,    // '09:00'
+          exit_time: s.exit_time,      // '11:00'
+        }));
+
+        setSchedules(transformed);
+      } catch (error) {
+        setLoading(false);
+        console.error('Error al cargar horarios:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (courseId) fetchSchedules();
+  }, [courseId]);
+
 
   const handleEditClick = (schedule: Schedule) => {
     setEditId(schedule.id);
-    setNewDate(schedule.datetime);
+    setNewDate(schedule.date);
     setNewEntryTime(schedule.entry_time);
     setNewExitTime(schedule.exit_time);
   };
@@ -52,7 +71,7 @@ const EditSchedule = () => {
   };
 
   const formatReadable = (schedule: Schedule) => {
-    return `${schedule.datetime} ${schedule.entry_time} - ${schedule.exit_time}`;
+    return `${schedule.date} ${schedule.entry_time} - ${schedule.exit_time}`;
   };
 
   return (
