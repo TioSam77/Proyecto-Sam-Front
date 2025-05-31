@@ -32,9 +32,9 @@ interface Student {
 interface scheduleData {
     date: string
 }
-interface date{
-    date:string,
-    confirmed:boolean
+interface date {
+    date: string,
+    confirmed: boolean
 }
 
 const attendanceOptions: Attendance[] = ["P", "PL", "N", "A", null];
@@ -47,6 +47,8 @@ const TableAttendance = () => {
     const [students, setStudents] = useState<Student[]>([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
     const [loadingStudents, setLoadingStudents] = useState(true);
+    const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+
 
     const [showModal, setShowModal] = useState(false)
 
@@ -177,9 +179,11 @@ const TableAttendance = () => {
         }
     };
 
-    const handleRecommendation = () => {
-        setShowModal(true)
-    }
+    const handleRecommendation = (id: string) => {
+        setSelectedStudentId(id);
+        setShowModal(true);
+    };
+
 
     return (
         <section className={tables.TableContainer}>
@@ -226,7 +230,9 @@ const TableAttendance = () => {
                 <table>
                     <thead>
                         <tr className={tables.fixedRow}>
-                            <th>Recomendacion</th>
+                            {!isStudent &&
+                                <th>Recomendacion</th>
+                            }
                             <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             {scheduleData.map((s) => {
@@ -273,12 +279,16 @@ const TableAttendance = () => {
                                     key={student.id}
                                     className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}
                                 >
-                                    <td>
-                                        <button
-                                            className="bluebutton"
-                                            onClick={handleRecommendation}
-                                        >Revisar</button>
-                                    </td>
+                                    {!isStudent &&
+                                        <td>
+                                            <button
+                                                className="bluebutton"
+                                                onClick={() => handleRecommendation(student.id)}
+                                            >
+                                                Revisar
+                                            </button>
+                                        </td>
+                                    }
                                     <td>
                                         {student.surname} {student.surname2}
                                     </td>
@@ -350,17 +360,20 @@ const TableAttendance = () => {
                 </table>
             </div>
 
-            {showModal && (//arregal esto
+            {showModal && selectedStudentId && (
                 <div className={stylesR.overlay}>
                     <div className={stylesR.modal}>
                         <button
-                            onClick={() => setShowModal(false)}
+                            onClick={() => {
+                                setShowModal(false);
+                                setSelectedStudentId(null);
+                            }}
                             className={stylesR.closeButton}
                             aria-label="Cerrar modal"
                         >
                             &times;
                         </button>
-                        <Recommendation student_id="id" />
+                        <Recommendation student_id={selectedStudentId} />
                     </div>
                 </div>
             )}

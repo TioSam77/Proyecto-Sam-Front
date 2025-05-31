@@ -52,6 +52,7 @@ const CreateCourse = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [courseName, setCourseName] = useState("");
+    const [type, setType] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
     const [selectedTeacher, setSelectedTeacher] = useState("");
     const [data, setData] = useState<data[]>([]);
@@ -177,7 +178,8 @@ const CreateCourse = () => {
                 start_date: startDate,
                 end_date: endDate,
                 availability,
-                code: courseCode, // código generado aquí y enviado al backend
+                code: courseCode,
+                type: type
             };
 
             const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/register-course", {
@@ -236,6 +238,20 @@ const CreateCourse = () => {
                                     name="materia"
                                     value={courseName}
                                     onChange={(e) => setCourseName(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div className={create.separator}>
+                                <label htmlFor="nombre">Tipo de grupo</label>
+                                <input
+                                    className={create.input}
+                                    placeholder="El tipo de grupo"
+                                    type="text"
+                                    id="materia"
+                                    name="type"
+                                    value={type}
+                                    onChange={(e) => setType(e.target.value)}
                                     required
                                 />
                             </div>

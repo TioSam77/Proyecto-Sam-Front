@@ -66,7 +66,7 @@ export default function RootLayout({
     return (
         <>
             {children}
-            <MapCourse data={data} login={login} notFound={notFound} />
+            <MapCourse data={data} login={login} notFound={notFound} show={true}/>
 
         </>
     )

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import table from "@/app/css/Table.module.css"
 import styles from "@/app/css/Syllabus.module.css" // Usa Binnacle o tu nuevo CSS
-import { useParams } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 
 interface SyllabusItem {
   id: string;
@@ -15,6 +15,9 @@ interface SyllabusItem {
 const Syllabus = () => {
   const params = useParams()
   const courseId = params?.id as string
+
+  const pathname = usePathname();
+  const isStudent = pathname.includes("/Alumno");
 
   const [syllabusList, setSyllabusList] = useState<SyllabusItem[]>([])
   const [isFormVisible, setFormVisible] = useState(false)
@@ -127,14 +130,15 @@ const Syllabus = () => {
 
   return (
     <section className={table.TableContainer}>
-
-      <button className='bluebutton' onClick={() => {
-        setFormVisible(true)
-        setEditId(null)
-        setForm({ day: "", topic: "", objectives: "", materials: "" })
-      }}>
-        Agregar Tema del dia
-      </button>
+      {!isStudent &&
+        <button className='bluebutton' onClick={() => {
+          setFormVisible(true)
+          setEditId(null)
+          setForm({ day: "", topic: "", objectives: "", materials: "" })
+        }}>
+          Agregar Tema del dia
+        </button>
+      }
 
       <h2 className="welcomeText">Lista de Temario</h2>
       <div className={table.box}>
@@ -145,7 +149,9 @@ const Syllabus = () => {
               <th>Tema</th>
               <th>Objetivos</th>
               <th>Materiales</th>
-              <th>Acción</th>
+              {!isStudent &&
+                <th>Acción</th>
+              }
             </tr>
           </thead>
           <tbody>
@@ -162,10 +168,12 @@ const Syllabus = () => {
                   <td>{item.topic}</td>
                   <td>{item.objectives}</td>
                   <td>{item.materials}</td>
-                  <td style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
-                    <button className={styles.blueButton} onClick={() => handleEdit(item)}>Modificar</button>
-                    <button className={styles.redButton} onClick={() => deleteSyllabus(item.id)}>Eliminar</button>
-                  </td>
+                  {!isStudent &&
+                    <td style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
+                      <button className={styles.blueButton} onClick={() => handleEdit(item)}>Modificar</button>
+                      <button className={styles.redButton} onClick={() => deleteSyllabus(item.id)}>Eliminar</button>
+                    </td>
+                  }
                 </tr>
               ))
             )}

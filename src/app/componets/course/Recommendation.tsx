@@ -12,6 +12,7 @@ import {
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../../../../firebase/clientApp';
 import styles from '@/app/css/Recommendation.module.css';
+import { usePathname } from 'next/navigation';
 
 type RecommendationProps = {
   student_id: string;
@@ -30,6 +31,9 @@ export default function Recommendation({ student_id }: RecommendationProps) {
   const [newRecommendation, setNewRecommendation] = useState('');
   const [user, setUser] = useState<{ uid: string; displayName: string } | null>(null);
 
+  const pathname = usePathname();
+  const isTeacher = pathname.includes("/Profesor")
+
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -46,6 +50,9 @@ export default function Recommendation({ student_id }: RecommendationProps) {
         id: doc.id,
         ...doc.data(),
       })) as RecommendationType[];
+
+      data.sort((a, b) => b.date.localeCompare(a.date));
+
       setRecommendations(data);
     });
 
@@ -85,25 +92,28 @@ export default function Recommendation({ student_id }: RecommendationProps) {
         ))}
       </div>
 
-      <div className={styles.form}>
-        <h3 className={styles.formTitle}>Nueva recomendación</h3>
-        <input
-          type="text"
-          placeholder="Día (ej. lunes)"
-          value={newDate}
-          onChange={(e) => setNewDate(e.target.value)}
-          className={styles.input}
-        />
-        <textarea
-          placeholder="Escribe la recomendación"
-          value={newRecommendation}
-          onChange={(e) => setNewRecommendation(e.target.value)}
-          className={styles.textarea}
-        />
-        <button onClick={handleAddRecommendation} className={styles.button}>
-          Agregar recomendación
-        </button>
-      </div>
+      {isTeacher &&
+        <div className={styles.form}>
+          <h3 className={styles.formTitle}>Nueva recomendación</h3>
+          <input
+            type="date"
+            placeholder="Día (ej. lunes)"
+            value={newDate}
+            onChange={(e) => setNewDate(e.target.value)}
+            className={styles.input}
+          />
+          <textarea
+            placeholder="Escribe la recomendación"
+            value={newRecommendation}
+            onChange={(e) => setNewRecommendation(e.target.value)}
+            className={styles.textarea}
+          />
+          <button onClick={handleAddRecommendation} className={styles.button}>
+            Agregar recomendación
+          </button>
+        </div>
+      }
+
     </div>
   );
 }

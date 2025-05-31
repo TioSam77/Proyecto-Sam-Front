@@ -13,6 +13,7 @@ interface MapCourseProps {
     data: course[];
     login: boolean;
     notFound: boolean;
+    show: boolean;
 }
 
 interface course {
@@ -21,7 +22,7 @@ interface course {
     teacher_name: string
 }
 
-const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
+const MapCourse = ({ data, login, notFound, show }: MapCourseProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<{ id: string; name: string } | null>(null);
@@ -71,7 +72,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
 
     return (
         <section className={styleUser.center}>
-            {isAdmin &&
+            {isAdmin && show && (
                 <div style={{ display: 'flex', gap: '10px' }}>
                     <Link href={`/Administrador/Grupos/Registro`}>
                         <button className={styleUser.button}>Nuevo Grupo</button>
@@ -80,7 +81,7 @@ const MapCourse = ({ data, login, notFound }: MapCourseProps) => {
                         <button className={styleUser.button}>Carga masiva de Grupos</button>
                     </Link>
                 </div>
-            }
+            )}
             <div
                 style={{
                     display: "flex",

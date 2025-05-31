@@ -93,7 +93,7 @@ const RegisterTeacher = () => {
                 setRol(3);
             }
         } catch (err) {
-            setError(`Error de red o servidor.${err}`);
+            setError(`Error de red o servidor. ${err}`);
         } finally {
             setLoading(false);
         }

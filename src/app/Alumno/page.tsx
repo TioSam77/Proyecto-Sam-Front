@@ -42,5 +42,5 @@ export default function Page() {
         return () => unsubscribe();
     }, []);
 
-    return <MapCourse data={data} login={login} notFound={notFound} />;
+    return <MapCourse data={data} login={login} notFound={notFound} show={false} />;
 }

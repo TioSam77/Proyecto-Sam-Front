@@ -5,7 +5,7 @@ import {
     deleteDoc,
     doc,
 } from 'firebase/firestore';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import tables from "@/app/css/Table.module.css";
 import styles from '@/app/css/Binnacle.module.css';
 import { db } from '@/../firebase/clientApp';
@@ -31,6 +31,9 @@ interface Data {
 export default function Binnacle() {
     const params = useParams();
     const courseId = params?.id as string;
+
+    const pathname = usePathname();
+    const isTeacher = pathname.includes("/Profesor");
 
     const [selectedEntry, setSelectedEntry] = useState<BinnacleEntry | null>(null);
     const [entries, setEntries] = useState<BinnacleEntry[]>([]);
@@ -68,7 +71,7 @@ export default function Binnacle() {
     };
 
     const createEntry = async (data: Data) => {
-        const res = await fetch("/api/binnacle", {
+        const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/register-binnacle", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -79,7 +82,7 @@ export default function Binnacle() {
     };
 
     const editEntry = async (id: string, data: Data) => {
-        const res = await fetch(`/api/binnacle/${id}`, {
+        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-binnacle/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -129,20 +132,22 @@ export default function Binnacle() {
 
     return (
         <div className={tables.TableContainer}>
-            <div className={tables.selectAndButton}>
-                <button
-                    onClick={() => {
-                        if (!isFormVisible) {
-                            setForm({ date: '', topic: '', activities: '', observations: '', id_course: courseId });
-                            setEditId(null);
-                        }
-                        setFormVisible(!isFormVisible);
-                    }}
-                    className='bluebutton'
-                >
-                    {isFormVisible ? 'Cancelar' : 'Registrar Bitácora'}
-                </button>
-            </div>
+            {isTeacher &&
+                <div className={tables.selectAndButton}>
+                    <button
+                        onClick={() => {
+                            if (!isFormVisible) {
+                                setForm({ date: '', topic: '', activities: '', observations: '', id_course: courseId });
+                                setEditId(null);
+                            }
+                            setFormVisible(!isFormVisible);
+                        }}
+                        className='bluebutton'
+                    >
+                        {isFormVisible ? 'Cancelar' : 'Registrar Bitácora'}
+                    </button>
+                </div>
+            }
 
             <h2 className='welcomeText'>Bitácora de Clase</h2>
 
@@ -211,7 +216,9 @@ export default function Binnacle() {
                             <th className={tables.fixedColRow}>Fecha</th>
                             <th>Tema</th>
                             <th>Detalles</th>
-                            <th>Acciones</th>
+                            {isTeacher &&
+                                <th>Acciones</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -237,23 +244,25 @@ export default function Binnacle() {
                                             Revisar
                                         </button>
                                     </td>
+                                    {isTeacher &&
+                                        <td>
+                                            <button
+                                                onClick={() => handleEdit(entry)}
+                                                className={styles.tableButton}
+                                                style={{ marginRight: '5px', backgroundColor: '#f0ad4e' }}
+                                            >
+                                                Modificar
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(entry.id!)}
+                                                className={styles.tableButton}
+                                                style={{ backgroundColor: '#d9534f' }}
+                                            >
+                                                Borrar
+                                            </button>
+                                        </td>
+                                    }
 
-                                    <td>
-                                        <button
-                                            onClick={() => handleEdit(entry)}
-                                            className={styles.tableButton}
-                                            style={{ marginRight: '5px', backgroundColor: '#f0ad4e' }}
-                                        >
-                                            Modificar
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(entry.id!)}
-                                            className={styles.tableButton}
-                                            style={{ backgroundColor: '#d9534f' }}
-                                        >
-                                            Borrar
-                                        </button>
-                                    </td>
                                 </tr>
                             ))
                         )}

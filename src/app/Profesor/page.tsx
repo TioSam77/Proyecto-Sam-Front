@@ -43,7 +43,7 @@ export default function Page() {
     }, []);
 
     return (
-        <MapCourse data={data} login={login} notFound={notFound} />
+        <MapCourse data={data} login={login} notFound={notFound} show={true}/>
     );
 
 }

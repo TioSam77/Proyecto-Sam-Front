@@ -121,7 +121,7 @@ const ViewTeacher = () => {
         Cursos asignados {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
       </h3>
       {showCourses && (
-        <MapCourse data={data} login={loadingCourses} notFound={notFound} />
+        <MapCourse data={data} login={loadingCourses} notFound={notFound} show={false}/>
       )}
     </div>
   );
