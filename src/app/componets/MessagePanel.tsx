@@ -5,10 +5,6 @@ import React, { useState } from 'react'
 import styles from '@/app/css/PrivateMessages.module.css'
 import PrivateMessages from './PrivateMessage'
 
-interface Props {
-  setShowChat: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 export default function MessagePanel() {
     const [tab, setTab] = useState<'professors' | 'students'>('professors')
     const [query, setQuery] = useState('')
@@ -82,7 +78,6 @@ export default function MessagePanel() {
 
             {showChat && selectedUser && (
                 <PrivateMessages
-                    role="admin"
                     onClose={() => {
                         setShowChat(false)
                         setSelectedUser(null)

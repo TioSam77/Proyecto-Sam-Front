@@ -10,7 +10,6 @@ import MessagePanel from "./MessagePanel";
 
 const Header = () => {
   const [enrroled, setEnrroled] = useState(false)
-  const [showChat, setShowChat] = useState(false)
   const [userRole, setUserRole] = useState<"superAdmin" | "admin" | "teacher" | "student" | null>(null);
 
   useEffect(() => {
@@ -191,7 +190,7 @@ const Header = () => {
           ></button>
         </div>
         <div className="offcanvas-body">
-          <MessagePanel setShowChat={setShowChat} />
+          <MessagePanel />
         </div>
       </div>
 

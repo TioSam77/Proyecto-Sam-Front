@@ -4,56 +4,43 @@ import React, { useState /*, useEffect*/ } from 'react'
 import styles from '@/app/css/PrivateMessages.module.css'
 import { BsChatDotsFill } from 'react-icons/bs'
 
-interface Message {
-  from: string
-  to: string
-  content: string
-  timestamp: string
-}
+// interface Message {
+//   from: string
+//   to: string
+//   content: string
+//   timestamp: string
+// }
 
 interface Props {
-  role: 'admin' | 'teacher' | 'student'
   onClose: () => void
 }
 
-export default function PrivateMessages({ role, onClose }: Props) {
-  const [messages, setMessages] = useState<Message[]>([
-    { from: 'Tú', to: '', content: 'Hola, ¿todo bien?', timestamp: '' },
-    { from: 'Juan', to: '', content: 'Sí, ¿y tú?', timestamp: '' },
-    { from: 'Tú', to: '', content: 'Listo para probar el diseño 😎', timestamp: '' },
-  ])
+export default function PrivateMessages({ onClose }: Props) {
+  // const [messages, setMessages] = useState<Message[]>([
+  //   { from: 'Tú', to: '', content: 'Hola, ¿todo bien?', timestamp: '' },
+  //   { from: 'Juan', to: '', content: 'Sí, ¿y tú?', timestamp: '' },
+  //   { from: 'Tú', to: '', content: 'Listo para probar el diseño 😎', timestamp: '' },
+  // ])
   const [newMessage, setNewMessage] = useState('')
 
   // Filtros seleccionados
-  const [selectedProfessor, setSelectedProfessor] = useState('')
-  const [selectedGroup, setSelectedGroup] = useState('')
-  const [selectedUser, setSelectedUser] = useState('Juan') // ⚠️ Forzado para ver diseño
-
-  // 🔧 Data Fake simulada (para Firebase futura)
-  const professors = ['Prof. Juan', 'Prof. Ana']
-  const groups = {
-    'Prof. Juan': ['Grupo A', 'Grupo B'],
-    'Prof. Ana': ['Grupo C'],
-  }
-  const students = {
-    'Grupo A': ['Luis', 'María'],
-    'Grupo B': ['Carlos'],
-    'Grupo C': ['Elena'],
-  }
+  // const [selectedProfessor, setSelectedProfessor] = useState('')
+  // const [selectedGroup, setSelectedGroup] = useState('')
+  // const [selectedUser, setSelectedUser] = useState('Juan') // ⚠️ Forzado para ver diseño
 
   const handleSend = () => {
-    if (!newMessage.trim() || !selectedUser) return
+    // if (!newMessage.trim() || !selectedUser) return
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        from: 'Tú',
-        to: selectedUser,
-        content: newMessage,
-        timestamp: new Date().toLocaleTimeString(),
-      },
-    ])
-    setNewMessage('')
+    // setMessages((prev) => [
+    //   ...prev,
+    //   {
+    //     from: 'Tú',
+    //     to: selectedUser,
+    //     content: newMessage,
+    //     timestamp: new Date().toLocaleTimeString(),
+    //   },
+    // ])
+    // setNewMessage('')
   }
 
   return (
@@ -106,17 +93,17 @@ export default function PrivateMessages({ role, onClose }: Props) {
 
       {/* 👇 Simulación directa del chat visible siempre */}
       <div className={styles.conversationHeader}>
-        Conversación con <strong>{selectedUser || 'Usuario'}</strong>
+        {/* Conversación con <strong>{selectedUser || 'Usuario'}</strong> */}
       </div>
 
       <div id="chatBox" className={styles.chatBox}>
-        {messages.map((msg, idx) => (
+        {/* {messages.map((msg, idx) => (
           <div key={idx} className={msg.from === 'Tú' ? styles.outgoing : styles.incoming}>
             <span>
               <strong>{msg.from}:</strong> {msg.content}
             </span>
           </div>
-        ))}
+        ))} */}
       </div>
 
       <div className={styles.inputArea}>

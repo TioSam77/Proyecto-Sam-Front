@@ -114,7 +114,7 @@ const ViewStudent = () => {
         Cursos inscritos {showCourses ? <i className="bi bi-caret-up-fill"></i> : <i className="bi bi-caret-down-fill"></i>}
       </h3>
       {showCourses && (
-        <MapCourse data={courses} login={loadingCourses} notFound={notFound} />
+        <MapCourse data={courses} login={loadingCourses} notFound={notFound} show={false}/>
       )}
     </div>
 

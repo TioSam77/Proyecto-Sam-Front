@@ -28,7 +28,7 @@ const EditSchedule = () => {
         const response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-schedule/${courseId}`);
         const data = await response.json();
 
-        const transformed = data.schedules.map((s: any) => ({
+        const transformed = data.schedules.map((s: Schedule) => ({
           id: s.id,
           date: s.date,            // '2025-05-28'
           entry_time: s.entry_time,    // '09:00'

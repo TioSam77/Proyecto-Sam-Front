@@ -1,11 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
 import styles from '@/app/css/EditProfile.module.css';
-import { db } from '@/../firebase/clientApp';
 
 interface UserData {
   name: string;
@@ -22,8 +18,6 @@ interface Props {
 }
 
 const EditProfile = ({ role }: Props) => {
-  const params = useParams();
-  const userId = params?.id as string;
 
   const [userData, setUserData] = useState<UserData>({
     name: 'Sam',
@@ -37,9 +31,8 @@ const EditProfile = ({ role }: Props) => {
 
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [notFound, setNotFound] = useState(false);
-  const [isSelf, setIsSelf] = useState(true); // activado para pruebas con fake data
+  // const [loading, setLoading] = useState(false);
+  // const [notFound, setNotFound] = useState(false);
 
   const handleEdit = (field: keyof UserData) => {
     setEditingField(field);
@@ -79,14 +72,14 @@ const EditProfile = ({ role }: Props) => {
       setUserData(updated);
       alert('Cambios guardados (fake mode). Firebase no conectado aún.');
     } catch (error) {
-      alert('Error al guardar los cambios.');
+      alert(`Error al guardar los cambios.${error}`);
     } finally {
       setEditingField(null);
     }
   };
 
-  if (loading) return <p>Cargando...</p>;
-  if (notFound) return <p>No se encontró el perfil.</p>;
+  // if (loading) return <p>Cargando...</p>;
+  // if (notFound) return <p>No se encontró el perfil.</p>;
 
   const fieldsByRole: Record<string, [keyof UserData, string][]> = {
     student: [

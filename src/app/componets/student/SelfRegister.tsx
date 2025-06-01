@@ -80,8 +80,9 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
 
             setAlert(`Estudiante ${student.name} registrado correctamente en el grupo.`);
             onClose();
-        } catch (err: any) {
-            setError(err.message || "Error al registrar el estudiante.");
+        } catch (err) {
+
+            setError( `Error al registrar el estudiante.${err}`);
         }
     };
 
