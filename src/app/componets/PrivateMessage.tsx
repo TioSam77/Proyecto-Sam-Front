@@ -19,7 +19,6 @@ interface Message {
   from: string;
   to: string;
   content: string;
-  timestamp: any;
 }
 
 interface Props {
@@ -68,7 +67,6 @@ export default function PrivateMessages({
       from: currentUserUid,
       to: selectedUserUid,
       content: newMessage.trim(),
-      timestamp: serverTimestamp(),
     };
     const conversationRef = doc(db, "private-messages", conversationId);
 

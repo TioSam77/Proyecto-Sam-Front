@@ -9,8 +9,6 @@ import {
   limit,
   query,
   where,
-  or,
-  documentId,
 } from "firebase/firestore";
 import { db } from "../../../firebase/clientApp";
 import { getAuth } from "firebase/auth";
@@ -166,7 +164,7 @@ export default function MessagePanel() {
           </div>
         ))}
       </div>
-      
+
       {previousChats.length > 0 && (
         <div className={styles.previousChats}>
           <p>Chats recientes:</p>
