@@ -1,109 +1,113 @@
-'use client'
+"use client";
 
-import React, { useState /*, useEffect*/ } from 'react'
-import styles from '@/app/css/PrivateMessages.module.css'
-import { BsChatDotsFill } from 'react-icons/bs'
+import React, { useEffect, useRef, useState } from "react";
+import styles from "@/app/css/PrivateMessages.module.css";
+import { BsChatDotsFill } from "react-icons/bs";
+import {
+  addDoc,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp,
+  doc,
+  setDoc,
+} from "firebase/firestore";
+import { db } from "../../../firebase/clientApp";
 
-// interface Message {
-//   from: string
-//   to: string
-//   content: string
-//   timestamp: string
-// }
-
-interface Props {
-  onClose: () => void
+interface Message {
+  from: string;
+  to: string;
+  content: string;
+  timestamp: any;
 }
 
-export default function PrivateMessages({ onClose }: Props) {
-  // const [messages, setMessages] = useState<Message[]>([
-  //   { from: 'Tú', to: '', content: 'Hola, ¿todo bien?', timestamp: '' },
-  //   { from: 'Juan', to: '', content: 'Sí, ¿y tú?', timestamp: '' },
-  //   { from: 'Tú', to: '', content: 'Listo para probar el diseño 😎', timestamp: '' },
-  // ])
-  const [newMessage, setNewMessage] = useState('')
+interface Props {
+  onClose: () => void;
+  currentUserUid: string;
+  selectedUserUid: string;
+  selectedUserName: string;
+}
 
-  // Filtros seleccionados
-  // const [selectedProfessor, setSelectedProfessor] = useState('')
-  // const [selectedGroup, setSelectedGroup] = useState('')
-  // const [selectedUser, setSelectedUser] = useState('Juan') // ⚠️ Forzado para ver diseño
+export default function PrivateMessages({
+  onClose,
+  currentUserUid,
+  selectedUserUid,
+  selectedUserName,
+}: Props) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const chatBoxRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
-    // if (!newMessage.trim() || !selectedUser) return
+  const conversationId = [currentUserUid, selectedUserUid].sort().join("_");
 
-    // setMessages((prev) => [
-    //   ...prev,
-    //   {
-    //     from: 'Tú',
-    //     to: selectedUser,
-    //     content: newMessage,
-    //     timestamp: new Date().toLocaleTimeString(),
-    //   },
-    // ])
-    // setNewMessage('')
-  }
+  useEffect(() => {
+    const q = query(
+      collection(db, "private-messages", conversationId, "messages"),
+      orderBy("timestamp", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedMessages = snapshot.docs.map((doc) => doc.data() as Message);
+      setMessages(fetchedMessages);
+    });
+
+    return () => unsubscribe();
+  }, [conversationId]);
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!newMessage.trim()) return;
+
+    const msg = {
+      from: currentUserUid,
+      to: selectedUserUid,
+      content: newMessage.trim(),
+      timestamp: serverTimestamp(),
+    };
+    const conversationRef = doc(db, "private-messages", conversationId);
+
+    // Crea el documento principal si no existe, con el arreglo "users"
+    await setDoc(
+      conversationRef,
+      {
+        users: [currentUserUid, selectedUserUid],
+        lastUpdated: serverTimestamp(), // opcional si luego quieres ordenar por último mensaje
+      },
+      { merge: true }
+    );
+
+    await addDoc(collection(conversationRef, "messages"), msg);
+
+    setNewMessage("");
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <BsChatDotsFill className={styles.icon} />
-        <h3>Mensajes Privados</h3>
+        <h3>{selectedUserName}</h3>
         <button className={styles.closeBtn} onClick={onClose}>
           ✕
         </button>
       </div>
 
-      {/* 
-      🔒 Filtros desactivados temporalmente para visualizar estilo sin condicionales
-
-      <div className={styles.filters}>
-        {role === 'admin' && (
-          <select value={selectedProfessor} onChange={e => {
-            setSelectedProfessor(e.target.value)
-            setSelectedGroup('')
-            setSelectedUser('')
-          }}>
-            <option value="">Selecciona un profesor</option>
-            {professors.map(p => <option key={p} value={p}>{p}</option>)}
-          </select>
-        )}
-
-        {(role === 'admin' || role === 'teacher') && selectedProfessor && (
-          <select value={selectedGroup} onChange={e => {
-            setSelectedGroup(e.target.value)
-            setSelectedUser('')
-          }}>
-            <option value="">Selecciona un grupo</option>
-            {groups[selectedProfessor]?.map(g => (
-              <option key={g} value={g}>{g}</option>
-            ))}
-          </select>
-        )}
-
-        {(role !== 'student' || selectedGroup) && (
-          <select value={selectedUser} onChange={e => setSelectedUser(e.target.value)}>
-            <option value="">Selecciona un usuario</option>
-            {role === 'student'
-              ? professors.map(p => <option key={p} value={p}>{p}</option>)
-              : students[selectedGroup || '']?.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        )}
-      </div>
-      */}
-
-      {/* 👇 Simulación directa del chat visible siempre */}
-      <div className={styles.conversationHeader}>
-        {/* Conversación con <strong>{selectedUser || 'Usuario'}</strong> */}
-      </div>
-
-      <div id="chatBox" className={styles.chatBox}>
-        {/* {messages.map((msg, idx) => (
-          <div key={idx} className={msg.from === 'Tú' ? styles.outgoing : styles.incoming}>
-            <span>
-              <strong>{msg.from}:</strong> {msg.content}
-            </span>
+      <div ref={chatBoxRef} id="chatBox" className={styles.chatBox}>
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={
+              msg.from === currentUserUid ? styles.outgoing : styles.incoming
+            }
+          >
+            <span>{msg.content}</span>
           </div>
-        ))} */}
+        ))}
       </div>
 
       <div className={styles.inputArea}>
@@ -112,9 +116,12 @@ export default function PrivateMessages({ onClose }: Props) {
           placeholder="Escribe un mensaje..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSend();
+          }}
         />
         <button onClick={handleSend}>Enviar</button>
       </div>
     </div>
-  )
+  );
 }
