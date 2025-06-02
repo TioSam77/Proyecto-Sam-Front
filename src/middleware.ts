@@ -8,7 +8,7 @@ function decodeJwt(token: string) {
     const decoded = JSON.parse(Buffer.from(payload, 'base64').toString('utf-8'));
     return decoded;
   } catch (error) {
-    return null;
+    return error;
   }
 }
 

@@ -6,7 +6,6 @@ import PrivateMessages from "./PrivateMessage";
 import {
   collection,
   getDocs,
-  limit,
   query,
   where,
 } from "firebase/firestore";
