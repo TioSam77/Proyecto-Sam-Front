@@ -67,6 +67,7 @@ export default function PrivateMessages({
       from: currentUserUid,
       to: selectedUserUid,
       content: newMessage.trim(),
+      timestamp: serverTimestamp(),
     };
     const conversationRef = doc(db, "private-messages", conversationId);
 

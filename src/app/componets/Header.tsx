@@ -66,14 +66,16 @@ const Header = () => {
           </Link>
           <div className="d-flex gap-2 ms-auto">
             {/* Burbuja flotante para abrir el chat */}
-            <button
-              className="chat-bubble"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offMessages"
-              aria-label="Abrir chat privado"
-            >
-              <i className="bi bi-chat-dots-fill fs-4 text-white"></i>
-            </button>
+            {enrroled &&
+              <button
+                className="chat-bubble"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offMessages"
+                aria-label="Abrir chat privado"
+              >
+                <i className="bi bi-chat-dots-fill fs-4 text-white"></i>
+              </button>
+            }
 
             <button
               className="navbar-toggler"

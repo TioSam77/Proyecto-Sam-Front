@@ -19,7 +19,7 @@ interface Student {
     attendance: {
         [date: string]: Attendance;
     };
-    grade: number;
+    grade: string;
 }
 
 const TableCourseFinalGrade = () => {
@@ -40,7 +40,12 @@ const TableCourseFinalGrade = () => {
 
     const isStudent = pathname.includes('/Alumno')
 
-    const handleGradeChange = (id: string, value: number) => {
+    const handleGradeChange = (id: string, value: string) => {
+        if (!/^\d{0,3}(\.\d{0,2})?$/.test(value) && value !== "") return;
+
+        const numericValue = parseFloat(value);
+        if (numericValue > 100) return;
+
         setStudents((prevData) =>
             prevData.map((student) =>
                 student.id === id
@@ -96,7 +101,8 @@ const TableCourseFinalGrade = () => {
     };
 
     useEffect(() => {
-        handleSearch();
+        const cleanup = handleSearch();
+        return cleanup;
     }, [])
 
     const confirmGrades = async () => {
@@ -104,13 +110,19 @@ const TableCourseFinalGrade = () => {
         setError("");
         setLoading(true);
 
+        const sanitizedStudents = students.map(s => ({
+            ...s,
+            grade: parseFloat(s.grade)
+        }));
+
+
         try {
             const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-grade", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ students }),
+                body: JSON.stringify({ students: sanitizedStudents }),
             });
 
             if (!res.ok) throw new Error("Error al confirmar calificaciones");
@@ -174,80 +186,54 @@ const TableCourseFinalGrade = () => {
                                 <td colSpan={3}>Estudiantes no Encontrados</td>
                             </tr>
                         ) : (
-                            students.map((row, index) => (
-                                <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
-                                    <td>
-                                        {row.surname} {row.surname2}
-                                    </td>
-                                    <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
-                                        {row.name} {row.name2}
-                                    </td>
-                                    <td style={{
-                                        display: 'flex',
-                                        justifyContent: 'center'
-                                    }}>
-                                        {isStudent ?
-                                            <div
-                                                className={tables.select}
-                                                style={{
-                                                    textAlign: "center",
-                                                    backgroundColor:
-                                                        !isNaN(row.grade) ? (
-                                                            row.grade >= 90 ? "lightgreen" :
-                                                                row.grade >= 80 ? "lightblue" :
-                                                                    row.grade >= 70 ? "#CBC3E3" :
-                                                                        row.grade >= 60 ? "lightyellow" :
-                                                                            row.grade >= 50 ? "orange" :
-                                                                                "lightcoral"
-                                                        ) : "",
-                                                }}
-                                            >
-                                                {(!isNaN(row.grade) && row.grade !== null) ? row.grade : "-"}
-                                            </div>
+                            students.map((row, index) => {
+                                const gradeNum = parseFloat(row.grade);
 
-                                            :
+                                const backgroundColor = !isNaN(gradeNum)
+                                    ? gradeNum >= 90 ? "lightgreen"
+                                        : gradeNum >= 80 ? "lightblue"
+                                            : gradeNum >= 70 ? "#CBC3E3"
+                                                : gradeNum >= 60 ? "lightyellow"
+                                                    : gradeNum >= 50 ? "orange"
+                                                        : "lightcoral"
+                                    : "";
 
-                                            <input
-                                                type="text"
-                                                inputMode="decimal" // <-- ayuda a dispositivos móviles
-                                                className={tables.select}
-                                                value={row.grade !== null && !isNaN(row.grade) ? String(row.grade) : ""}
-                                                onChange={(e) => {
-                                                    const value = e.target.value;
-
-                                                    // Permitir campo vacío
-                                                    if (value === "") {
-                                                        handleGradeChange(row.id, NaN);
-                                                        return;
-                                                    }
-
-                                                    // Permitir decimales válidos (punto como separador)
-                                                    const numericValue = parseFloat(value);
-                                                    if (!isNaN(numericValue) && numericValue >= 0 && numericValue <= 100) {
-                                                        handleGradeChange(row.id, numericValue);
-                                                    }
-                                                }}
-                                                style={{
-                                                    width: "50px",
-                                                    textAlign: "center",
-                                                    backgroundColor:
-                                                        !isNaN(row.grade) ? (
-                                                            row.grade >= 90 ? "lightgreen" :
-                                                                row.grade >= 80 ? "lightblue" :
-                                                                    row.grade >= 70 ? "#CBC3E3" :
-                                                                        row.grade >= 60 ? "lightyellow" :
-                                                                            row.grade >= 50 ? "orange" :
-                                                                                "lightcoral"
-                                                        ) : "",
-                                                }}
-                                                placeholder="-"
-                                            />
-
-                                        }
-
-                                    </td>
-                                </tr>
-                            ))
+                                return (
+                                    <tr key={row.id} className={index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}>
+                                        <td>{row.surname} {row.surname2}</td>
+                                        <td className={`${tables.fixedCol} ${index % 2 === 0 ? tables["row-even"] : tables["row-odd"]}`}>
+                                            {row.name} {row.name2}
+                                        </td>
+                                        <td style={{ display: "flex", justifyContent: "center" }}>
+                                            {isStudent ? (
+                                                <div
+                                                    className={tables.select}
+                                                    style={{
+                                                        textAlign: "center",
+                                                        backgroundColor,
+                                                    }}
+                                                >
+                                                    {!isNaN(gradeNum) ? gradeNum : "-"}
+                                                </div>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    inputMode="decimal"
+                                                    className={tables.select}
+                                                    value={row.grade}
+                                                    onChange={(e) => handleGradeChange(row.id, e.target.value)}
+                                                    style={{
+                                                        width: "50px",
+                                                        textAlign: "center",
+                                                        backgroundColor,
+                                                    }}
+                                                    placeholder="-"
+                                                />
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })
                         )}
                     </tbody>
                 </table>

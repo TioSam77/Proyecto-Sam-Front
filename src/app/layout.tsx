@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@/app/css/global.css";
 import Footer from "../app/componets/Footer";
 import BootstrapClient from "./componets/bootstrap-client";
+import AuthRedirectWrapper from "./componets/AuthRedirectWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +34,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <main className="container ">
           <section style={{ display: 'flex', flexDirection: 'column', alignItems: "center", width: "100%" }}>
-
+            <AuthRedirectWrapper>
               {children}
-
+            </AuthRedirectWrapper>
           </section>
           <Footer />
         </main>

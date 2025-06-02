@@ -138,3 +138,15 @@
     color: #cc0000;
     font-weight: 500;
 }
+
+.previousChats{
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.previousChats p {
+  text-align: center;
+  font-weight: bold;
+  padding: 1rem;
+  margin: 0;
+}

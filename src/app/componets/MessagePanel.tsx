@@ -47,7 +47,7 @@ export default function MessagePanel() {
           if (otherUid) userUids.add(otherUid);
         });
 
-        const uidsArray = Array.from(userUids).slice(0, 20); // Limite de 20
+        const uidsArray = Array.from(userUids).slice(0, 20);
         const professorsSnap = await getDocs(collection(db, "teacher"));
         const studentsSnap = await getDocs(collection(db, "student"));
         const allUsers = [...professorsSnap.docs, ...studentsSnap.docs];
@@ -80,26 +80,17 @@ export default function MessagePanel() {
       return;
     }
 
-    const collectionName = tab === "professors" ? "teacher" : "student";
-    const q = query(
-      collection(db, collectionName),
-      where("name", ">=", data),
-      where("name", "<=", data + "\uf8ff"),
-      limit(20)
-    );
-
     try {
-      const querySnapshot = await getDocs(q);
-      const users: { uid: string; name: string }[] = [];
+      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/search?tab=${tab}&searchTerm=${encodeURIComponent(data.trim())}`);
+      const json = await res.json();
 
-      querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-        const fullName = `${userData.surname || ""} ${userData.surname2 || ""} ${userData.name || ""} ${userData.name2 || ""}`.trim();
-        users.push({ uid: doc.id, name: fullName });
-      });
+      if (!res.ok) {
+        throw new Error(json.error || "Error al buscar usuarios");
+      }
 
-      setResults(users);
-      if (users.length === 0) {
+      setResults(json.users);
+
+      if (json.users.length === 0) {
         setMessage("No se encontraron usuarios con ese nombre");
       }
     } catch (error) {
@@ -165,20 +156,21 @@ export default function MessagePanel() {
         ))}
       </div>
 
-      {previousChats.length > 0 && (
-        <div className={styles.previousChats}>
-          <p>Chats recientes:</p>
-          {previousChats.map((user) => (
-            <div
-              key={user.uid}
-              className={styles.resultItem}
-              onClick={() => handleSelectUser(user)}
-            >
-              {user.name}
-            </div>
-          ))}
-        </div>
-      )}
+      {!showChat &&
+        previousChats.length > 0 && (
+          <div className={styles.previousChats}>
+            <p>Chats recientes:</p>
+            {previousChats.map((user) => (
+              <div
+                key={user.uid}
+                className={styles.resultItem}
+                onClick={() => handleSelectUser(user)}
+              >
+                {user.name}
+              </div>
+            ))}
+          </div>
+        )}
 
 
       {showChat && selectedUser && (
