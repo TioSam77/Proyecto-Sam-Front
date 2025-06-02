@@ -131,7 +131,7 @@ const Header = () => {
                   </Link>
                 </li>
 
-                <NavbarCourses />
+                <NavbarCourses role="teacher" />
               </>
             )}
 
@@ -143,7 +143,7 @@ const Header = () => {
                   </Link>
                 </li>
 
-                <NavbarCourses />
+                <NavbarCourses role="student" />
               </>
             )}
 
@@ -151,9 +151,52 @@ const Header = () => {
               <>
                 <li className="nav-item">
                   <Link className="nav-link" href="/Administrador">
-                    <i className="bi bi-mortarboard-fill me-2 text-dark"></i>Administrador
+                    <i className="bi bi-person-gear me-2 text-dark"></i>Administrador
                   </Link>
                 </li>
+
+                <div style={{border:"1px solid #cfcfcf", borderRadius:"4px", marginBottom:"5px"}}>
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/Administrador/Alumnos/Registro">
+                      <i className="bi bi-mortarboard me-2 text-dark"></i>Nuevo Alumno
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/Administrador/Alumnos/Carga">
+                      <i className="bi bi-mortarboard m-2 text-dark"></i>Carga masiva de Alumnos
+                    </Link>
+                  </li>
+                </div>
+
+                <div style={{border:"1px solid #cfcfcf", borderRadius:"4px", marginBottom:"5px"}}>
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/Administrador/Grupos/Registro">
+                      <i className="bi bi-people-fill me-2"></i>Nuevo Grupo
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/Administrador/Grupos/Carga">
+                      <i className="bi bi-people-fill m-2"></i>Carga masiva de Grupos
+                    </Link>
+                  </li>
+                </div>
+
+                <div style={{border:"1px solid #cfcfcf", borderRadius:"4px"}}>
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/Administrador/Profesores/Registro">
+                      <i className="bi bi-easel2-fill me-2 text-dark"></i>Nuevo Empleado
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link className="nav-link" href="/Administrador/Profesores/Carga">
+                      <i className="bi bi-easel2-fill m-2 text-dark"></i>Carga masiva de Empleados
+                    </Link>
+                  </li>
+                </div>
+
               </>
             )}
 

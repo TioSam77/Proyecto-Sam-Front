@@ -119,7 +119,7 @@ export default function PrivateMessages({
             if (e.key === "Enter") handleSend();
           }}
         />
-        <button onClick={handleSend}>Enviar</button>
+        <button className='bluebutton' onClick={handleSend}>Enviar</button>
       </div>
     </div>
   );

@@ -2,8 +2,7 @@
   width: 100%;
   max-width: 800px;
   margin: auto;
-  padding: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem 0;
 }
 
 .newPost {

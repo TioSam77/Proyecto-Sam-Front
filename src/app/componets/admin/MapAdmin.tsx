@@ -12,8 +12,11 @@ import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 interface Admin {
   id: string;
-  name: string;
-  phoneNumber: string;
+  name: string,
+  name2: string,
+  surname: string,
+  surname2: string,
+  phoneNumber: string
 }
 
 const MapAdmin = () => {
@@ -98,10 +101,13 @@ const MapAdmin = () => {
           <li key={admin.id} className={styleUser.users}>
             <Link href={`/Administrador/Admins/${admin.id}`}>
               <div className={styleUser.header}>
-                <h2 className={styleUser.textHeader}>{admin.name}</h2>
+                <h2 className={styleUser.textHeader}>{admin.surname} {admin.surname2}</h2>
+              </div>
+              <div className={styleUser.header}>
+                <h2 className={styleUser.textHeader}>{admin.name} {admin.name2}</h2>
               </div>
               <div className={styleUser.body}>
-                <h5>{admin.phoneNumber}</h5>
+                <p>{admin.phoneNumber}</p>
               </div>
             </Link>
 

@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import style from "@/app/css/navbarCourses.module.css";
 import { auth } from '@/../firebase/clientApp';
@@ -11,31 +10,32 @@ interface Course {
     name: string;
 }
 
-interface user {
-    id: string
+interface User {
+    id: string;
 }
 
-const NavbarCourses = () => {
+interface NavbarCoursesProps {
+    role?: "teacher" | "student"; // <-- Prop opcional
+}
+
+const NavbarCourses = ({ role }: NavbarCoursesProps) => {
     const [data, setData] = useState<Course[]>([]);
     const [notFound, setNotFound] = useState(false);
     const [login, setLogin] = useState(false);
     const [showGroups, setShowGroups] = useState(false);
-    const currentPath = usePathname();
 
-    const isAdmin = currentPath.includes("/Administrador");
-    const isStudent = currentPath.includes("/Alumno");
-
-    const basePath = isAdmin
-        ? "/Administrador/Grupos"
-        : isStudent
+    // Calcular basePath según role
+    const basePath = role === "teacher"
+        ? "/Profesor"
+        : role === "student"
             ? "/Alumno"
-            : "/Profesor";
+            : "/Administrador/Grupos";
 
-    const fetchCourses = async (user: user) => {
+    const fetchCourses = async (user: User) => {
         setLogin(true);
         try {
             let response;
-            if (isStudent) {
+            if (role === "student") {
                 response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${user.id}`);
             } else {
                 response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-teacherCourse/${user.id}`);

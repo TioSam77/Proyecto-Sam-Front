@@ -103,6 +103,44 @@ const TableStudent = () => {
         return () => unsubscribe();
     };
 
+    const togglePayment = async (studentId: string, currentStatus: boolean) => {
+        try {
+            await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    studentId,
+                    newStatus: !currentStatus,
+                }),
+            });
+
+            // Actualiza localmente para no recargar
+            setData(prev =>
+                prev.map(s => s.id === studentId ? { ...s, montlyPayment: !currentStatus } : s)
+            );
+        } catch (err) {
+            console.error("Error al actualizar estado de pago:", err);
+        }
+    };
+
+    const toggleActive = async (studentId: string, current: boolean) => {
+        try {
+            await fetch("https://api-uj4mkoe42a-uc.a.run.app/studentActive", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ studentId, newStatus: !current }),
+            });
+
+            setData((prev) =>
+                prev.map((s) =>
+                    s.id === studentId ? { ...s, active: !current } : s
+                )
+            );
+        } catch (err) {
+            console.error("Error al cambiar estado activo:", err);
+        }
+    };
+
     return (
         <section className={tables.TableContainer}>
             <Link href={`InscribirEstudiante`}>
@@ -129,6 +167,7 @@ const TableStudent = () => {
                             <th>Apellido</th>
                             <th className={tables.fixedColRow}>Nombre</th>
                             <th>Mensualidad</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,7 +192,21 @@ const TableStudent = () => {
                                         {row.name} {row.name2}
                                     </td>
                                     <td>
-                                        {!row.montlyPayment && "No pagada"}
+                                        <button
+                                            className={row.montlyPayment ? "bluebutton" : "redbutton"}
+                                            onClick={() => togglePayment(row.id, row.montlyPayment)}
+                                        >
+                                            {row.montlyPayment ? "Pagada" : "No pagada"}
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="bluebutton"
+                                            style={{ marginRight: "10px" }}
+                                            onClick={() => toggleActive(row.id, row.active)}
+                                        >
+                                            {row.active ? "Desactivar" : "Activar"}
+                                        </button>
                                     </td>
                                 </tr>
                             ))

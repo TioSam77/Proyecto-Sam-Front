@@ -74,7 +74,7 @@ const Login: React.FC<LoginProps> = ({
           roleCollection = "student";
           redirectPath = "/Alumno";
           break;
-        case "Profesor":
+        case "Empleado":
           roleCollection = "teacher";
           redirectPath = "/Profesor";
           break;
@@ -141,11 +141,11 @@ const Login: React.FC<LoginProps> = ({
           <h2>Iniciar Sesión</h2>
 
           {/* Switch de usuario */}
-          <ul className="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-4 shadow-sm">
-            {["Alumno", "Profesor", "Administrador"].map((role) => (
+          <ul className="nav nav-pills nav-fill gap-2 p-1 small bg-primary shadow-sm">
+            {["Alumno", "Empleado", "Administrador"].map((role) => (
               <li className="nav-item" key={role}>
                 <button
-                  className={`nav-link rounded-4 ${userType === role ? "active" : ""}`}
+                  className={`nav-link ${userType === role ? "active" : ""}`}
                   onClick={() => setUserType(role)}
                 >
                   {role}
