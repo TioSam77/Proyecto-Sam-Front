@@ -5,6 +5,7 @@ import styles from "@/app/css/RecoverPassword.module.css";
 import { auth } from "../../../../firebase/clientApp";
 import Link from "next/link";
 import { fetchSignInMethodsForEmail, sendPasswordResetEmail } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 const RecoverPassword = () => {
   const [email, setEmail] = useState("");
@@ -32,14 +33,20 @@ const RecoverPassword = () => {
 
       await sendPasswordResetEmail(auth, email);
       setMessage(`Se ha enviado un correo para restablecer la contraseña a ${email}. Revisa tu bandeja de entrada.`);
-    } catch (err: any) {
-      console.error(err);
-      if (err.code === "auth/invalid-email") {
-        setError("Correo inválido.");
-      } else if (err.code === "auth/user-not-found") {
-        setError("No hay ninguna cuenta con este correo.");
+    }  catch (err) {
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case "auth/invalid-email":
+            setError("Correo inválido.");
+            break;
+          case "auth/user-not-found":
+            setError("No hay ninguna cuenta con este correo.");
+            break;
+          default:
+            setError("Error al enviar el correo. Intenta nuevamente.");
+        }
       } else {
-        setError("Error al enviar el correo. Intenta nuevamente.");
+        setError("Error inesperado. Intenta nuevamente.");
       }
     }
   };

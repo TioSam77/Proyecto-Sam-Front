@@ -15,7 +15,7 @@ export default function EmailVerificationChecker() {
             await sendEmailVerification(user);
             setMessage("Tu correo no está verificado. Se ha enviado un correo de verificación.");
           } catch (error) {
-            setMessage("Error al enviar el correo de verificación.");
+            setMessage(`Error al enviar el correo de verificación. ${error}`);
           }
         }
       }
