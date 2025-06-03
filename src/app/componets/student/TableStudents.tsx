@@ -125,7 +125,7 @@ const TableStudent = () => {
 
     const toggleActive = async (studentId: string, current: boolean) => {
         try {
-            await fetch("https://api-uj4mkoe42a-uc.a.run.app/studentActive", {
+            await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-studentActive", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ studentId, newStatus: !current }),
