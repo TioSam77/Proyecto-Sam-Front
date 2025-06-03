@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import styles from "@/app/css/RecoverPassword.module.css";
-import { auth } from "../../../../firebase/clientApp";
+
 import Link from "next/link";
+import { auth } from "../../../../firebase/clientApp";
 import { fetchSignInMethodsForEmail, sendPasswordResetEmail } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
@@ -17,36 +18,26 @@ const RecoverPassword = () => {
     setMessage("");
     setError("");
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const cleanedEmail = email.trim();
+
+    if (!cleanedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanedEmail)) {
       setError("Por favor, ingresa un correo electrónico válido.");
       return;
     }
 
     try {
-      const methods = await fetchSignInMethodsForEmail(auth, email);
+      const methods = await fetchSignInMethodsForEmail(auth, cleanedEmail);
       console.log("Métodos de inicio de sesión:", methods);
 
-      if (!methods || methods.length === 0) {
-        setError("Este correo no está registrado.");
-        return;
-      }
-
-      await sendPasswordResetEmail(auth, email);
-      setMessage(`Se ha enviado un correo para restablecer la contraseña a ${email}. Revisa tu bandeja de entrada.`);
-    }  catch (err) {
+      await sendPasswordResetEmail(auth, cleanedEmail);
+      setMessage(`Se ha enviado un correo para restablecer la contraseña a ${cleanedEmail}.`);
+    } catch (err) {
       if (err instanceof FirebaseError) {
-        switch (err.code) {
-          case "auth/invalid-email":
-            setError("Correo inválido.");
-            break;
-          case "auth/user-not-found":
-            setError("No hay ninguna cuenta con este correo.");
-            break;
-          default:
-            setError("Error al enviar el correo. Intenta nuevamente.");
+        if (err.code === "auth/user-not-found") {
+          setError("No hay ninguna cuenta con este correo.");
+        } else {
+          setError("Error al enviar el correo. Intenta nuevamente.");
         }
-      } else {
-        setError("Error inesperado. Intenta nuevamente.");
       }
     }
   };
