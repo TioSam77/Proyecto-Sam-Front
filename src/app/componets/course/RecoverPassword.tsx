@@ -5,7 +5,7 @@ import styles from "@/app/css/RecoverPassword.module.css";
 
 import Link from "next/link";
 import { auth } from "../../../../firebase/clientApp";
-import { fetchSignInMethodsForEmail, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 const RecoverPassword = () => {

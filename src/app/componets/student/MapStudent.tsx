@@ -16,6 +16,11 @@ interface data {
     phoneNumber: string;
 }
 
+interface SearchedUser {
+    uid: string;
+    name: string;
+}
+
 const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const currentPath = usePathname();
@@ -95,7 +100,7 @@ const MapStudent = () => {
 
             if (!res.ok) throw new Error(json.error || "Error al buscar estudiantes");
 
-            const results = json.users.map((user: any) => {
+            const results = json.users.map((user: SearchedUser) => {
                 const [surname = "", surname2 = "", name = "", name2 = ""] = user.name.split(" ");
                 return {
                     id: user.uid,
