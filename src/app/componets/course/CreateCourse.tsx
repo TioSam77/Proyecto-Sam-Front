@@ -36,6 +36,8 @@ const initialAvailability: Availability = {
 interface data {
     id: string,
     surname?: string,
+    surname2?: string,
+    name2?: string
     name?: string
 }
 
@@ -162,7 +164,7 @@ const CreateCourse = () => {
             const selectedTeacherObj = data.find((t) => t.id === selectedTeacher);
 
             if (!selectedSubjectObj || !selectedTeacherObj) {
-                setError("Error: no se pudo encontrar el profesor o la materia seleccionada.");
+                setError("Error: no se pudo encontrar el empleado o la materia seleccionada.");
                 setLogin(false);
                 return;
             }
@@ -286,7 +288,7 @@ const CreateCourse = () => {
                                     <option value="">Selecciona un profesor</option>
                                     {data.map((prof) => (
                                         <option key={prof.id} value={prof.id}>
-                                            {prof.name}
+                                            {prof.surname} {prof.surname2} {prof.name} {prof.name2}
                                         </option>
                                     ))}
                                 </select>

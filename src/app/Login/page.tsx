@@ -8,11 +8,9 @@ export default function Page() {
 
 
   return (
-    <section>
-      <Login
-        userType={userType}
-        setUserType={setUserType}
-      />
-    </section>
+    <Login
+      userType={userType}
+      setUserType={setUserType}
+    />
   );
 }

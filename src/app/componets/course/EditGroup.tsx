@@ -145,7 +145,7 @@ const EditGroup = () => {
                 value={tempValue}
                 onChange={(e) => setTempValue(e.target.value)}
               >
-                <option value="">Selecciona un profesor</option>
+                <option value="">Selecciona un Empleado</option>
                 {teachers.map(t => (
                   <option key={t.id} value={t.id}>
                     {t.surname} {t.surname2} {t.name} {t.name2}

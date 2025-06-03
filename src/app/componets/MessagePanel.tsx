@@ -13,7 +13,7 @@ import { db } from "../../../firebase/clientApp";
 import { getAuth } from "firebase/auth";
 
 export default function MessagePanel() {
-  const [tab, setTab] = useState<"professors" | "students">("professors");
+  const [tab, setTab] = useState<"teacher" | "students">("teacher");
   const [results, setResults] = useState<{ uid: string; name: string }[]>([]);
   const [previousChats, setPreviousChats] = useState<{ uid: string; name: string }[]>([]);
   const [selectedUser, setSelectedUser] = useState<{
@@ -108,14 +108,14 @@ export default function MessagePanel() {
     <div className={styles.container}>
       <div className={styles.tabContainer}>
         <button
-          className={tab === "professors" ? styles.activeTab : ""}
+          className={tab === "teacher" ? styles.activeTab : ""}
           onClick={() => {
-            setTab("professors");
+            setTab("teacher");
             setResults([]);
             setShowChat(false);
           }}
         >
-          Profesores
+          Empleados
         </button>
         <button
           className={tab === "students" ? styles.activeTab : ""}
@@ -132,7 +132,7 @@ export default function MessagePanel() {
       <div className={styles.searchSection}>
         <input
           type="text"
-          placeholder={`Buscar ${tab === "professors" ? "profesor" : "estudiante"}...`}
+          placeholder={`Buscar ${tab === "teacher" ? "empleados" : "estudiante"}...`}
           value={data}
           onChange={(e) => setData(e.target.value)}
         />

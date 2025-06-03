@@ -15,8 +15,7 @@ interface student {
 export default function SelfRegister({ onClose }: { onClose: () => void }) {
     const [code, setCode] = useState("");
     const [student, setStudent] = useState<student>();
-
-    const [error, setError] = useState<string | null>("");
+    const [error, setError] = useState<string>("");
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,6 +23,7 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
         async function fetchStudent() {
             const auth = getAuth();
             const currentUser = auth.currentUser;
+
             if (!currentUser?.email) {
                 setError("No hay usuario autenticado.");
                 setLoading(false);
@@ -53,22 +53,26 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
     }
 
     const handleRegister = async () => {
+        setError('');
+        setAlert('');
+        setLoading(true);
+
         if (!code) {
             setError("Ingresa un código de grupo.");
+            setLoading(false);
             return;
         }
 
         if (!student) {
             setError("No se pudo obtener la información del estudiante.");
+            setLoading(false);
             return;
         }
 
         try {
             const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-selfRegister", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code, student }),
             });
 
@@ -76,17 +80,18 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
 
             if (!res.ok) {
                 setError(result.error || "Error desconocido");
+                setLoading(false);
+                return;
             }
 
             setAlert(`Estudiante ${student.name} registrado correctamente en el grupo.`);
-            onClose();
+            setCode("");
         } catch (err) {
-
-            setError( `Error al registrar el estudiante.${err}`);
+            setError(`Error al registrar el estudiante. ${err}`);
+        } finally {
+            setLoading(false);
         }
     };
-
-    if (loading) return <div>Cargando...</div>;
 
     return (
         <div className={styles.modalOverlay}>
@@ -99,8 +104,8 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
                     &times;
                 </button>
                 <h2 className={styles.modalTitle}>Código de la clase</h2>
-                <p>Pidele a tu profesor el codigo de la clase y luego,ingresalo aqui</p>
-                {error && <p className={styles.modalError}>{error}</p>}
+                <p>Pídele a tu profesor el código de la clase y luego, ingrésalo aquí:</p>
+
                 <input
                     type="text"
                     placeholder="Código de la clase"
@@ -111,12 +116,11 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
                 <button onClick={handleRegister} className={styles.modalButton}>
                     Unirme
                 </button>
-            </div>
 
-            <div className={stylesLogin.messageContainer}>
-                {error && <div className={stylesLogin.errorBox}>{error}</div>}
-                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
-                {loading && <div className={stylesLogin.loading}>loading</div>}
+
+                    {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                    {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                    {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </div>
     );

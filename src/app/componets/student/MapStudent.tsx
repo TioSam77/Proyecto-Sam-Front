@@ -8,20 +8,24 @@ import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "../DeleteConfirm";
 
 interface data {
-    id: string,
-    name: string,
-    name2: string,
-    surname: string,
-    surname2: string,
-    phoneNumber: string
+    id: string;
+    name: string;
+    name2: string;
+    surname: string;
+    surname2: string;
+    phoneNumber: string;
 }
+
 const MapStudent = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const currentPath = usePathname();
     const [data, setData] = useState<data[]>([]);
-    const [login, setLogin] = useState<boolean>(false)
+    const [login, setLogin] = useState<boolean>(false);
     const [showModal, setShowModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
+    const [message, setMessage] = useState<string>("");
+
+    const isAdmin = currentPath.includes("/Administrador");
 
     useEffect(() => {
         setLogin(true);
@@ -49,13 +53,7 @@ const MapStudent = () => {
         return () => unsubscribe();
     }, []);
 
-    const isAdmin = currentPath.includes('/Administrador')
-
-    const filteredUsers = data.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const handleDeleteClick = (user: { id: string, name: string }) => {
+    const handleDeleteClick = (user: { id: string; name: string }) => {
         setSelectedStudent(user);
         setShowModal(true);
     };
@@ -73,7 +71,6 @@ const MapStudent = () => {
                 throw new Error(errorData.error || "Error eliminando estudiante");
             }
 
-            // Actualizar estado local
             setData(prev => prev.filter(user => user.id !== selectedStudent.id));
         } catch (err) {
             console.error("Error al eliminar:", err);
@@ -83,9 +80,48 @@ const MapStudent = () => {
         }
     };
 
+    const handleSearch = async () => {
+        if (!searchTerm.trim()) {
+            setMessage("Escribe un nombre para buscar");
+            return;
+        }
+
+        setLogin(true);
+        setMessage("");
+
+        try {
+            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/search?tab=students&searchTerm=${encodeURIComponent(searchTerm)}`);
+            const json = await res.json();
+
+            if (!res.ok) throw new Error(json.error || "Error al buscar estudiantes");
+
+            const results = json.users.map((user: any) => {
+                const [surname = "", surname2 = "", name = "", name2 = ""] = user.name.split(" ");
+                return {
+                    id: user.uid,
+                    name,
+                    name2,
+                    surname,
+                    surname2,
+                    phoneNumber: "", // no viene en la búsqueda, se deja vacío
+                };
+            });
+
+            setData(results);
+
+            if (results.length === 0) {
+                setMessage("No se encontraron estudiantes con ese nombre");
+            }
+        } catch (error) {
+            console.error("Error en búsqueda:", error);
+            setMessage("Ocurrió un error al buscar");
+        } finally {
+            setLogin(false);
+        }
+    };
+
     return (
         <section className={styleUser.center}>
-
             <div style={{ display: "flex", gap: "10px" }}>
                 <Link href={`/Administrador/Alumnos/Registro`}>
                     <button className={styleUser.button}>Nuevo Alumno</button>
@@ -95,23 +131,22 @@ const MapStudent = () => {
                 </Link>
             </div>
 
-            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
+            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center", marginTop: "1rem" }}>
                 <input
                     type="text"
-                    placeholder="Buscar usuario..."
+                    placeholder="Buscar estudiante..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <button className="bluebutton">Buscar</button>
+                <button className="bluebutton" onClick={handleSearch}>Buscar</button>
             </div>
 
-            {login && (
-                <div>Cargando</div>
-            )}
+            {login && <div>Cargando...</div>}
+            {message && <p>{message}</p>}
 
             <ol className={styleUser.containerUsers}>
-                {filteredUsers.map((user) => (
+                {data.map((user) => (
                     <li key={user.id} className={styleUser.users}>
                         <Link href={`/Administrador/Alumnos/${user.id}`}>
                             <div className={styleUser.header}>
@@ -130,7 +165,9 @@ const MapStudent = () => {
                                 <Link href={`/Administrador/Alumnos/${user.id}/Editar`}>
                                     <button className="bluebutton">Editar</button>
                                 </Link>
-                                <button className="redbutton" onClick={() => handleDeleteClick(user)}><i className="bi bi-trash-fill"></i></button>
+                                <button className="redbutton" onClick={() => handleDeleteClick(user)}>
+                                    <i className="bi bi-trash-fill"></i>
+                                </button>
                             </div>
                         )}
                     </li>

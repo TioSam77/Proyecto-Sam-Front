@@ -40,12 +40,12 @@ const ViewTeacher = () => {
       try {
         setLoading(true);
         const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/teacher/${teacherId}`);
-        if (!res.ok) throw new Error("No se pudo obtener el profesor");
+        if (!res.ok) throw new Error("No se pudo obtener el empleado");
 
         const data = await res.json();
         setTeacherData(data);
       } catch (err) {
-        console.error("Error al obtener datos del profesor:", err);
+        console.error("Error al obtener datos del empleado:", err);
         setNotFound(true);
       } finally {
         setLoading(false);
@@ -103,7 +103,7 @@ const ViewTeacher = () => {
         <h3 className={styleTeacher.teacherName}>
           {(teacherData?.surname && teacherData?.name)
             ? `${teacherData.surname} ${teacherData.surname2} ${teacherData.name} ${teacherData.name2}`
-            : 'Nombre del profesor'}
+            : 'Nombre del empleado'}
         </h3>
         <Link href={`/Administrador/Profesores/${teacherId}/Editar`}>
           <button className="bluebutton">Editar</button>

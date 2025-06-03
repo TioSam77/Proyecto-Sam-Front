@@ -7,20 +7,23 @@ import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 interface data {
-    id: string,
-    name: string,
-    name2: string,
-    surname: string,
-    surname2: string,
-    phoneNumber: string
+    id: string;
+    name: string;
+    name2: string;
+    surname: string;
+    surname2: string;
+    phoneNumber: string;
 }
 
 const MapTeacher = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [data, setData] = useState<data[]>([]);
-    const [login, setLogin] = useState<boolean>(false)
+    const [login, setLogin] = useState<boolean>(false);
     const [showModal, setShowModal] = useState(false);
-    const [selectedTeacher, setSelectedTeacher] = useState<{ id: string; name: string } | null>(null);
+    const [selectedTeacher, setSelectedTeacher] = useState<{
+        id: string;
+        name: string;
+    } | null>(null);
 
     useEffect(() => {
         setLogin(true);
@@ -48,11 +51,7 @@ const MapTeacher = () => {
         return () => unsubscribe();
     }, []);
 
-    const filteredUsers = data.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const handleDeleteClick = (user: { id: string, name: string }) => {
+    const handleDeleteClick = (user: { id: string; name: string }) => {
         setSelectedTeacher(user);
         setShowModal(true);
     };
@@ -70,11 +69,11 @@ const MapTeacher = () => {
 
             const result = await res.json();
             if (!res.ok) {
-                alert(result.error || "Error al eliminar al profesor.");
+                alert(result.error || "Error al eliminar al empleado.");
                 return;
             }
 
-            setData(prev => prev.filter(user => user.id !== selectedTeacher.id));
+            setData((prev) => prev.filter((user) => user.id !== selectedTeacher.id));
         } catch (err) {
             console.error("Error al eliminar:", err);
         } finally {
@@ -83,10 +82,32 @@ const MapTeacher = () => {
         }
     };
 
+    const handleSearch = async () => {
+        if (searchTerm.trim() === "") {
+            alert("Por favor ingresa un nombre para buscar.");
+            return;
+        }
+
+        setLogin(true);
+        try {
+            const res = await fetch(
+                `https://api-uj4mkoe42a-uc.a.run.app/search?tab=teacher&searchTerm=${encodeURIComponent(searchTerm)}`
+            );
+
+            const json = await res.json();
+            if (!res.ok) throw new Error(json.error || "Error al buscar empleados");
+
+            setData(json.users || []);
+        } catch (error) {
+            console.error("Error en la búsqueda:", error);
+            alert("Error al buscar empleados.");
+        } finally {
+            setLogin(false);
+        }
+    };
 
     return (
         <section className={styleUser.center}>
-
             <div style={{ display: "flex", gap: "10px" }}>
                 <Link href={`/Administrador/Profesores/Registro`}>
                     <button className={styleUser.button}>Nuevo Empleado</button>
@@ -96,7 +117,14 @@ const MapTeacher = () => {
                 </Link>
             </div>
 
-            <div style={{ display: "flex", gap: "10px", width: "100%", justifyContent: "center" }}>
+            <div
+                style={{
+                    display: "flex",
+                    gap: "10px",
+                    width: "100%",
+                    justifyContent: "center",
+                }}
+            >
                 <input
                     type="text"
                     placeholder="Buscar empleado..."
@@ -104,22 +132,26 @@ const MapTeacher = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="searchBox"
                 />
-                <button className="bluebutton">Buscar</button>
+                <button className="bluebutton" onClick={handleSearch}>
+                    Buscar
+                </button>
             </div>
 
-            {login && (
-                <div>Cargando</div>
-            )}
+            {login && <div>Cargando</div>}
 
             <ol className={styleUser.containerUsers}>
-                {filteredUsers.map((user) => (
+                {data.map((user) => (
                     <li key={user.id} className={styleUser.users}>
                         <Link href={`/Administrador/Profesores/${user.id}`}>
                             <div className={styleUser.header}>
-                                <h2 className={styleUser.textHeader}>{user.surname} {user.surname2}</h2>
+                                <h2 className={styleUser.textHeader}>
+                                    {user.surname} {user.surname2}
+                                </h2>
                             </div>
                             <div className={styleUser.header}>
-                                <h2 className={styleUser.textHeader}>{user.name} {user.name2}</h2>
+                                <h2 className={styleUser.textHeader}>
+                                    {user.name} {user.name2}
+                                </h2>
                             </div>
                             <div className={styleUser.body}>
                                 <p>{user.phoneNumber}</p>
@@ -130,7 +162,12 @@ const MapTeacher = () => {
                             <Link href={`/Administrador/Profesores/${user.id}/Editar`}>
                                 <button className="bluebutton">Editar</button>
                             </Link>
-                            <button className="redbutton" onClick={() => handleDeleteClick(user)}><i className="bi bi-trash-fill"></i></button>
+                            <button
+                                className="redbutton"
+                                onClick={() => handleDeleteClick(user)}
+                            >
+                                <i className="bi bi-trash-fill"></i>
+                            </button>
                         </div>
                     </li>
                 ))}
@@ -146,7 +183,6 @@ const MapTeacher = () => {
                     }}
                 />
             )}
-
         </section>
     );
 };

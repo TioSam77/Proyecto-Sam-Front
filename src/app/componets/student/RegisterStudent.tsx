@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "@/app/data/countries.json";
 import Image from "next/image";
-import { sendEmailVerification } from "firebase/auth";
 
 const RegisterStudent = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -84,9 +83,6 @@ const RegisterStudent = () => {
             if (!response.ok) {
                 setError(data.error || "Error al registrar el alumno.");
             }
-
-            console.log(data)
-            await sendEmailVerification(data.uid);
 
             setAlert("Usuario creado, revisa tu correo para verificar la cuenta.");
             setEmail("");

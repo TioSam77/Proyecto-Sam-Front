@@ -38,7 +38,7 @@ const DeleteConfirm = ({ name, onConfirm, onCancel }: Props) => {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Nombre del profesor"
+                    placeholder="Nombre del empleado"
                     style={{ width: "100%", padding: "0.5rem", marginTop: "1rem" }}
                 />
                 <div style={{ marginTop: "1.5rem", display: "flex", justifyContent: "space-between" }}>

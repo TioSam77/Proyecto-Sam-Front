@@ -24,6 +24,8 @@ const Login: React.FC<LoginProps> = ({
   const [error, setError] = useState("");
   const [alert, setAlert] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const [
     signInWithEmailAndPassword,
     firebaseAuthUser,
@@ -162,14 +164,24 @@ const Login: React.FC<LoginProps> = ({
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Contraseña"
-            className={styles.inputField}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
+          
+          <div className={styles.passwordWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Contraseña"
+              className={styles.inputField}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(prev => !prev)}
+              className={styles.showPasswordButton}
+            >
+              {showPassword ? <i className="bi bi-eye-slash-fill"></i> : <i className="bi bi-eye-fill"></i>}
+            </button>
+          </div>
 
           <button
             className={styles.blueButton}

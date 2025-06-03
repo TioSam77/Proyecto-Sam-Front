@@ -26,9 +26,6 @@ const RecoverPassword = () => {
     }
 
     try {
-      const methods = await fetchSignInMethodsForEmail(auth, cleanedEmail);
-      console.log("Métodos de inicio de sesión:", methods);
-
       await sendPasswordResetEmail(auth, cleanedEmail);
       setMessage(`Se ha enviado un correo para restablecer la contraseña a ${cleanedEmail}.`);
     } catch (err) {

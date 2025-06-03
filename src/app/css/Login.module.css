@@ -222,9 +222,27 @@
   background-color: #e7e7e7;
   color: #000000;
 }
-.gap{
+
+.gap {
   display: flex;
   gap: 10px;
+}
+
+.passwordWrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.showPasswordButton {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 @keyframes fadeOut {
