@@ -141,7 +141,7 @@ const Login: React.FC<LoginProps> = ({
           <h2>Iniciar Sesión</h2>
 
           {/* Switch de usuario */}
-          <ul className="nav nav-pills nav-fill gap-2 p-1 small bg-primary shadow-sm">
+          <ul className="nav nav-pills nav-fill gap-2 p-1 small bg-primary shadow-sm rounded-2">
             {["Alumno", "Empleado", "Administrador"].map((role) => (
               <li className="nav-item" key={role}>
                 <button

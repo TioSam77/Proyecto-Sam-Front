@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from "react";
-import { sendPasswordResetEmail, fetchSignInMethodsForEmail } from "firebase/auth";
 import styles from "@/app/css/RecoverPassword.module.css";
 import { auth } from "../../../../firebase/clientApp";
 import Link from "next/link";
+import { fetchSignInMethodsForEmail, sendPasswordResetEmail } from "firebase/auth";
 
 const RecoverPassword = () => {
   const [email, setEmail] = useState("");
@@ -16,23 +16,31 @@ const RecoverPassword = () => {
     setMessage("");
     setError("");
 
-    if (!email) {
-      setError("Por favor, ingresa un correo válido.");
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Por favor, ingresa un correo electrónico válido.");
       return;
     }
 
     try {
       const methods = await fetchSignInMethodsForEmail(auth, email);
-      if (methods.length === 0) {
-        setError("Este correo no está registrado o no ha sido verificado.");
+      console.log("Métodos de inicio de sesión:", methods);
+
+      if (!methods || methods.length === 0) {
+        setError("Este correo no está registrado.");
         return;
       }
 
       await sendPasswordResetEmail(auth, email);
-      setMessage(`Se ha enviado un correo para restablecer la contraseña a ${email}. Verifica tu bandeja de entrada.`);
-    } catch (err) {
-      setError("Error al enviar el correo. Verifica que el correo sea correcto.");
+      setMessage(`Se ha enviado un correo para restablecer la contraseña a ${email}. Revisa tu bandeja de entrada.`);
+    } catch (err: any) {
       console.error(err);
+      if (err.code === "auth/invalid-email") {
+        setError("Correo inválido.");
+      } else if (err.code === "auth/user-not-found") {
+        setError("No hay ninguna cuenta con este correo.");
+      } else {
+        setError("Error al enviar el correo. Intenta nuevamente.");
+      }
     }
   };
 
@@ -66,7 +74,6 @@ const RecoverPassword = () => {
         </Link>
       </div>
 
-      <footer className={styles.footer}>© 2025 Interactivo</footer>
     </div>
   );
 };

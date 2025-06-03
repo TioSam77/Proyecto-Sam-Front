@@ -9,6 +9,7 @@ import Header from "../componets/Header";
 import { usePathname } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebase/clientApp";
+import EmailVerificationChecker from "../componets/EmailVerification";
 
 export default function RootLayout({
   children,
@@ -61,6 +62,7 @@ export default function RootLayout({
   if (isAdminSubroute && !isRegistroRuta) {
     return (
       <section className="containerSection">
+        <EmailVerificationChecker />
         <Header />
         {children}
       </section>
@@ -69,6 +71,7 @@ export default function RootLayout({
 
   return (
     <section className="containerSection">
+      <EmailVerificationChecker />
       <ReturnButton />
       <Header />
       <section className={course.center}>

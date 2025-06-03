@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "@/app/data/countries.json";
 import Image from "next/image";
+import { sendEmailVerification } from "firebase/auth";
 
 const RegisterStudent = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -42,6 +43,9 @@ const RegisterStudent = () => {
         setPhoneNumber(cleanedInput);
     };
 
+    const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);
+    const countryCode = selectedCountryData ? `+${selectedCountryData.phoneCode}` : "";
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -78,10 +82,13 @@ const RegisterStudent = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || "Error al registrar el alumno.");
+                setError(data.error || "Error al registrar el alumno.");
             }
 
-            setAlert("Alumno registrado exitosamente.");
+            console.log(data)
+            await sendEmailVerification(data.uid);
+
+            setAlert("Usuario creado, revisa tu correo para verificar la cuenta.");
             setEmail("");
             setName("");
             setSurname("");
@@ -100,10 +107,6 @@ const RegisterStudent = () => {
             setLoading(false);
         }
     };
-
-    // Buscar el código de país seleccionado
-    const selectedCountryData = countryList.find(country => country.iso2 === selectedCountry);
-    const countryCode = selectedCountryData ? `+${selectedCountryData.phoneCode}` : "";
 
     return (
         <section className={styles.loginContainer}>
