@@ -51,7 +51,7 @@ const Syllabus = () => {
 
   const handleCreateSyllabus = async () => {
     try {
-      const res = await fetch('`${api}/post-syllabus', {
+      const res = await fetch(`${api}/post-syllabus`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

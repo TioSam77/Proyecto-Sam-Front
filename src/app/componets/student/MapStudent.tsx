@@ -45,7 +45,7 @@ const MapStudent = () => {
             }
 
             try {
-                const res = await fetch("`${api}/get-student");
+                const res = await fetch(`${api}/get-student`);
                 if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
                 const allData: data[] = await res.json();

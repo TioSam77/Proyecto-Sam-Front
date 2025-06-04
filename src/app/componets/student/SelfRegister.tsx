@@ -6,6 +6,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/../firebase/clientApp";
 import styles from '@/app/css/selfRegister.module.css';
 import stylesLogin from "@/app/css/Login.module.css";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface student {
     id: string;
@@ -18,6 +19,7 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
     const [error, setError] = useState<string>("");
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const { api } = envCredentials();
 
     useEffect(() => {
         async function fetchStudent() {
@@ -70,7 +72,7 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
         }
 
         try {
-            const res = await fetch("`${api}/post-selfRegister", {
+            const res = await fetch(`${api}/post-selfRegister`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code, student }),
@@ -118,9 +120,9 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
                 </button>
 
 
-                    {error && <div className={stylesLogin.errorBox}>{error}</div>}
-                    {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
-                    {loading && <div className={stylesLogin.loading}>loading</div>}
+                {error && <div className={stylesLogin.errorBox}>{error}</div>}
+                {alert && <div className={stylesLogin.alertBox}>{alert}</div>}
+                {loading && <div className={stylesLogin.loading}>loading</div>}
             </div>
         </div>
     );
