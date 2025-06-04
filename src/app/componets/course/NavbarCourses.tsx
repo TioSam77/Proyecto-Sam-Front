@@ -38,7 +38,7 @@ const NavbarCourses = ({ role }: NavbarCoursesProps) => {
         try {
             let response;
             if (role === "student") {
-                response = await fetch(`${ api } / get - studentCourse / ${ user.id }`);
+                response = await fetch(`${api}/get-studentCourse/${user.id}`);
             } else {
                 response = await fetch(`${api}/get-teacherCourse/${user.id}`);
             }

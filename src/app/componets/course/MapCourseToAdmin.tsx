@@ -49,7 +49,7 @@ const MapCourseToAdmin = ({ data, login, notFound }: MapCourseProps) => {
         if (!selectedCourse) return;
 
         try {
-            const res = await fetch(`${ api } / delete -course / ${ selectedCourse.id }`, {
+            const res = await fetch(`${api}/delete-course/${selectedCourse.id}`, {
                 method: "DELETE"
             });
 
@@ -59,7 +59,7 @@ const MapCourseToAdmin = ({ data, login, notFound }: MapCourseProps) => {
             }
 
         } catch (err) {
-            setError(`Error al eliminar: ${ err }`);
+            setError(`Error al eliminar: ${err}`);
         } finally {
             setShowModal(false);
             setSelectedCourse(null);
@@ -76,11 +76,11 @@ const MapCourseToAdmin = ({ data, login, notFound }: MapCourseProps) => {
                 ) : (
                     data.map((course) => (
                         <li key={course.id} className={styleCourse.subjects}>
-                            <Link href={`${ basePath } / ${ course.id }`} className={styleCourse.header}>
+                            <Link href={`${basePath}/${course.id}`} className={styleCourse.header}>
                                 <div className={styleCourse.image}></div>
                                 <h2 className={styleCourse.textHeader}>{course.name}</h2>
                             </Link>
-                            <Link href={`${ basePath } / ${ course.id }`} className={styleCourse.body}>
+                            <Link href={`${basePath}/${course.id}`} className={styleCourse.body}>
                                 <h5><b>Profesor:</b></h5>
                                 <h5>{course.teacher_name}</h5>
                             </Link>
@@ -89,17 +89,17 @@ const MapCourseToAdmin = ({ data, login, notFound }: MapCourseProps) => {
                                 <div className={styleCourse.containerButton}>
                                     {isAdmin ? (
                                         <>
-                                            <Link href={`${ basePath } / ${ course.id } / Editar`}>
+                                            <Link href={`${basePath}/${course.id}/Editar`}>
                                                 <button className="bluebutton">Editar</button>
                                             </Link>
                                             <button className="redbutton" onClick={() => handleDeleteClick(course)}><i className="bi bi-trash-fill"></i></button>
                                         </>
                                     ) : (
                                         <>
-                                            <Link href={`${ basePath } / ${ course.id } / Mensajes`}>
+                                            <Link href={`${basePath}/${course.id}/Mensajes`}>
                                                 <button className='bluebutton'><i className="bi bi-chat-left-text"></i></button>
                                             </Link>
-                                            <Link href={`${ basePath } / ${ course.id } / Temario`}>
+                                            <Link href={`${basePath}/${course.id}/Temario`}>
                                                 <button className='bluebutton'>Temario</button>
                                             </Link>
                                         </>

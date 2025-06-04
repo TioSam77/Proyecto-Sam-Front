@@ -49,8 +49,8 @@ export default function RootLayout({
 
         try {
             setLogin(true);
-            const res = await fetch(`${ api } / searchCourse ? name = ${ encodeURIComponent(searchTerm.trim())
-        }`);
+            const res = await fetch(`${api}/searchCourse?name=${encodeURIComponent(searchTerm.trim())
+                }`);
             if (!res.ok) throw new Error("Error en búsqueda");
             const filtered: data[] = await res.json();
             setData(filtered);
@@ -91,10 +91,10 @@ export default function RootLayout({
         <>
             {children}
             <div style={{ display: 'flex', gap: '10px' }}>
-                <Link href={`/ Administrador / Grupos / Registro`}>
+                <Link href={`/Administrador/Grupos/Registro`}>
                     <button className={styleUser.button}>Nuevo Grupo</button>
                 </Link>
-                <Link href={`/ Administrador / Grupos / Carga`}>
+                <Link href={`/Administrador/Grupos/Carga`}>
                     <button className={styleUser.button}>Carga masiva de Grupos</button>
                 </Link>
             </div>

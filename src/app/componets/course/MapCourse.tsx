@@ -55,7 +55,7 @@ const MapCourse = ({ data, login, notFound, show }: MapCourseProps) => {
         if (!selectedCourse) return;
 
         try {
-            const res = await fetch(`${ api } / delete -course / ${ selectedCourse.id }`, {
+            const res = await fetch(`${api}/delete-course/${selectedCourse.id}`, {
                 method: "DELETE"
             });
 
@@ -65,7 +65,7 @@ const MapCourse = ({ data, login, notFound, show }: MapCourseProps) => {
             }
 
         } catch (err) {
-            setError(`Error al eliminar: ${ err }`);
+            setError(`Error al eliminar: ${err}`);
         } finally {
             setShowModal(false);
             setSelectedCourse(null);
@@ -76,10 +76,10 @@ const MapCourse = ({ data, login, notFound, show }: MapCourseProps) => {
         <section className={styleUser.center}>
             {isAdmin && show && (
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <Link href={`/ Administrador / Grupos / Registro`}>
+                    <Link href={`/Administrador/Grupos/Registro`}>
                         <button className={styleUser.button}>Nuevo Grupo</button>
                     </Link>
-                    <Link href={`/ Administrador / Grupos / Carga`}>
+                    <Link href={`/Administrador/Grupos/Carga`}>
                         <button className={styleUser.button}>Carga masiva de Grupos</button>
                     </Link>
                 </div>
@@ -118,11 +118,11 @@ const MapCourse = ({ data, login, notFound, show }: MapCourseProps) => {
                 ) : (
                     filteredCourses.map((course) => (
                         <li key={course.id} className={styleCourse.subjects}>
-                            <Link href={`${ basePath } / ${ course.id }`} className={styleCourse.header}>
+                            <Link href={`${basePath}/${course.id}`} className={styleCourse.header}>
                                 <div className={styleCourse.image}></div>
                                 <h2 className={styleCourse.textHeader}>{course.name}</h2>
                             </Link>
-                            <Link href={`${ basePath } / ${ course.id }`} className={styleCourse.body}>
+                            <Link href={`${basePath}/${course.id}`} className={styleCourse.body}>
                                 <h5><b>Profesor:</b></h5>
                                 <h5>{course.teacher_name}</h5>
                             </Link>
@@ -131,17 +131,17 @@ const MapCourse = ({ data, login, notFound, show }: MapCourseProps) => {
                                 <div className={styleCourse.containerButton}>
                                     {isAdmin ? (
                                         <>
-                                            <Link href={`${ basePath } / ${ course.id } / Editar`}>
+                                            <Link href={`${basePath}/${course.id}/Editar`}>
                                                 <button className="bluebutton">Editar</button>
                                             </Link>
                                             <button className="redbutton" onClick={() => handleDeleteClick(course)}><i className="bi bi-trash-fill"></i></button>
                                         </>
                                     ) : (
                                         <>
-                                            <Link href={`${ basePath } / ${ course.id } / Mensajes`}>
+                                            <Link href={`${basePath}/${course.id}/Mensajes`}>
                                                 <button className='bluebutton'><i className="bi bi-chat-left-text"></i></button>
                                             </Link>
-                                            <Link href={`${ basePath } / ${ course.id } / Temario`}>
+                                            <Link href={`${basePath}/${course.id}/Temario`}>
                                                 <button className='bluebutton'>Temario</button>
                                             </Link>
                                         </>
