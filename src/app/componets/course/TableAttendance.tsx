@@ -64,7 +64,7 @@ const TableAttendance = () => {
                 setLoadingSchedule(true);
                 setLogin(true);
 
-                const res = await fetch(`${api} / course - schedule / ${courseId}`);
+                const res = await fetch(`${api}/course-schedule/${courseId}`);
                 const result = await res.json();
 
                 if (!res.ok) {

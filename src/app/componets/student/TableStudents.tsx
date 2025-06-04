@@ -7,6 +7,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "@/../firebase/clientApp";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface Student {
     id: string;
@@ -23,6 +24,7 @@ const TableStudent = () => {
     const [data, setData] = useState<Student[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
+    const { api } = envCredentials();
 
     const params = useParams();
     const courseId = params?.id as string;
