@@ -3,11 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "@/../firebase/clientApp";
-import {
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
+import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
 
 interface Admin {
@@ -24,7 +20,10 @@ const MapAdmin = () => {
   const [data, setData] = useState<Admin[]>([]);
   const [login, setLogin] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
+  const [selectedAdmin, setSelectedAdmin] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   useEffect(() => {
     setLogin(true);
@@ -59,7 +58,7 @@ const MapAdmin = () => {
     admin.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDeleteClick = (admin: Admin) => {
+  const handleDeleteClick = (admin: { id: string; name: string }) => {
     setSelectedAdmin(admin);
     setShowModal(true);
   };
@@ -68,10 +67,29 @@ const MapAdmin = () => {
     if (!selectedAdmin) return;
 
     try {
-      await deleteDoc(doc(db, "admin", selectedAdmin.id));
+      console.log("Intentando eliminar:", selectedAdmin.id);
+
+      const response = await fetch(
+        `https://api-uj4mkoe42a-uc.a.run.app/delete-employee/${selectedAdmin.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || "No se pudo eliminar el administrador");
+        return;
+      }
+
       setData(prev => prev.filter(admin => admin.id !== selectedAdmin.id));
+      console.log("Administrador eliminado correctamente.");
     } catch (err) {
       console.error("Error al eliminar administrador:", err);
+      alert("Error del servidor al intentar eliminar al administrador.");
     } finally {
       setShowModal(false);
       setSelectedAdmin(null);

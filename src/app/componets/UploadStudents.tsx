@@ -23,7 +23,7 @@ const UploadStudents = () => {
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      const res = await fetch("http://localhost:4000/bulk", {
+      const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/bulk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
