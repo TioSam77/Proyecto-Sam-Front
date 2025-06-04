@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import table from "@/app/css/Table.module.css"
 import styles from "@/app/css/Syllabus.module.css" // Usa Binnacle o tu nuevo CSS
 import { useParams, usePathname } from "next/navigation"
+import { envCredentials } from "../../../../firebase/envConfigurations"
 
 interface SyllabusItem {
   id: string;
@@ -23,6 +24,7 @@ const Syllabus = () => {
   const [isFormVisible, setFormVisible] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
   const [selectedEntry, setSelectedEntry] = useState<SyllabusItem | null>(null);
+  const { api } = envCredentials();
 
   const [form, setForm] = useState({
     day: "",
@@ -33,7 +35,7 @@ const Syllabus = () => {
 
   const fetchSyllabus = async () => {
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-syllabus/${courseId}`);
+      const res = await fetch(`${api}/get-syllabus/${courseId}`);
       if (!res.ok) throw new Error("Error al obtener el syllabus");
 
       const data: SyllabusItem[] = await res.json();
@@ -49,7 +51,7 @@ const Syllabus = () => {
 
   const handleCreateSyllabus = async () => {
     try {
-      const res = await fetch('https://api-uj4mkoe42a-uc.a.run.app/post-syllabus', {
+      const res = await fetch('`${api}/post-syllabus', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +72,7 @@ const Syllabus = () => {
 
   const handleEditSyllabus = async () => {
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-syllabus/${editId}`, {
+      const res = await fetch(`${api}/put-syllabus/${editId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +113,7 @@ const Syllabus = () => {
 
   const deleteSyllabus = async (id: string) => {
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-syllabus/${id}`, {
+      const res = await fetch(`${api}/delete-syllabus/${id}`, {
         method: "DELETE",
       });
 

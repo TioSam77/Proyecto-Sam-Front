@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import styles from '@/app/css/EditTeacher.module.css';
 import { getAuth } from 'firebase/auth';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 type Teacher = {
   name: string;
@@ -25,11 +26,12 @@ const EditTeacher = () => {
   const [loading, setLoading] = useState(true);
   const [isSelf, setIsSelf] = useState(false);
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
+  const { api } = envCredentials();
 
   useEffect(() => {
     const fetchTeacher = async () => {
       try {
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/teacher/${id}`);
+        const res = await fetch(`${api}/teacher/${id}`);
         if (!res.ok) {
           console.error("No se encontró el empleado");
           return;
@@ -80,7 +82,7 @@ const EditTeacher = () => {
     if (!editingField || !teacherData) return;
 
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-teacher/${id}`, {
+      const res = await fetch(`${api}/put-teacher/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

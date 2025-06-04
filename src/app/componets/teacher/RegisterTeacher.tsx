@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/css/Login.module.css";
 import countryList from "@/app/data/countries.json";
 import Image from "next/image";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 const RegisterTeacher = () => {
     const [selectedCountry, setSelectedCountry] = useState("CR"); // CR es el código de Costa Rica
@@ -20,6 +21,8 @@ const RegisterTeacher = () => {
     const [error, setError] = useState<string>("");
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const { api } = envCredentials();
+
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(e.target.value);
@@ -60,7 +63,7 @@ const RegisterTeacher = () => {
         try {
             const countryCode = countryList.find(c => c.iso2 === selectedCountry)?.phoneCode || "";
 
-            const res = await fetch('https://api-uj4mkoe42a-uc.a.run.app/register-employee', {
+            const res = await fetch(`${api}/register-employee`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

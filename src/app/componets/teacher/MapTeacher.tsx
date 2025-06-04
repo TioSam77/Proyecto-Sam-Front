@@ -5,6 +5,7 @@ import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "@/app/componets/DeleteConfirm";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface data {
     id: string;
@@ -24,6 +25,7 @@ const MapTeacher = () => {
         id: string;
         name: string;
     } | null>(null);
+  const { api } = envCredentials();
 
     useEffect(() => {
         setLogin(true);
@@ -36,7 +38,7 @@ const MapTeacher = () => {
             }
 
             try {
-                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-employee");
+                const res = await fetch(`${api}/get-employee`);
                 if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
                 const allData: data[] = await res.json();
@@ -61,7 +63,7 @@ const MapTeacher = () => {
 
         try {
             const res = await fetch(
-                `https://api-uj4mkoe42a-uc.a.run.app/delete-employee/${selectedTeacher.id}`,
+                `${api}/delete-employee/${selectedTeacher.id}`,
                 {
                     method: "DELETE",
                 }
@@ -91,7 +93,7 @@ const MapTeacher = () => {
         setLogin(true);
         try {
             const res = await fetch(
-                `https://api-uj4mkoe42a-uc.a.run.app/search?tab=teacher&searchTerm=${encodeURIComponent(searchTerm)}`
+                `${api}/search?tab=teacher&searchTerm=${encodeURIComponent(searchTerm)}`
             );
 
             const json = await res.json();

@@ -6,6 +6,7 @@ import styleUser from "@/app/css/User.module.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/../firebase/clientApp";
 import DeleteConfirm from "../DeleteConfirm";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface data {
     id: string;
@@ -29,6 +30,7 @@ const MapStudent = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null);
     const [message, setMessage] = useState<string>("");
+    const { api } = envCredentials();
 
     const isAdmin = currentPath.includes("/Administrador");
 
@@ -43,7 +45,7 @@ const MapStudent = () => {
             }
 
             try {
-                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-student");
+                const res = await fetch("`${api}/get-student");
                 if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
                 const allData: data[] = await res.json();
@@ -67,7 +69,7 @@ const MapStudent = () => {
         if (!selectedStudent) return;
 
         try {
-            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-student/${selectedStudent.id}`, {
+            const res = await fetch(`${api}/delete-student/${selectedStudent.id}`, {
                 method: "DELETE",
             });
 
@@ -95,7 +97,7 @@ const MapStudent = () => {
         setMessage("");
 
         try {
-            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/search?tab=students&searchTerm=${encodeURIComponent(searchTerm)}`);
+            const res = await fetch(`${api}/search?tab=students&searchTerm=${encodeURIComponent(searchTerm)}`);
             const json = await res.json();
 
             if (!res.ok) throw new Error(json.error || "Error al buscar estudiantes");

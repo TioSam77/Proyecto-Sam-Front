@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../firebase/clientApp";
 import { getAuth } from "firebase/auth";
+import { envCredentials } from "../../../firebase/envConfigurations";
 
 export default function MessagePanel() {
   const [tab, setTab] = useState<"teacher" | "students">("teacher");
@@ -23,6 +24,8 @@ export default function MessagePanel() {
   const [showChat, setShowChat] = useState(false);
   const [data, setData] = useState("");
   const [message, setMessage] = useState("");
+  const { api } = envCredentials();
+
 
   const auth = getAuth();
   const currentUserUid = auth.currentUser?.uid || "";
@@ -80,7 +83,7 @@ export default function MessagePanel() {
     }
 
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/search?tab=${tab}&searchTerm=${encodeURIComponent(data.trim())}`);
+      const res = await fetch(`${api}/search?tab=${tab}&searchTerm=${encodeURIComponent(data.trim())}`);
       const json = await res.json();
 
       if (!res.ok) {

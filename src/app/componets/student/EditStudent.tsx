@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/EditStudent.module.css';
 import { useParams } from 'next/navigation';
 import { getAuth } from 'firebase/auth';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 interface StudentData {
   name: string;
@@ -35,7 +36,8 @@ const EditStudent = () => {
   const [tempValue, setTempValue] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [isSelf, setIsSelf] = useState(false); // ← para verificar si el usuario autenticado es el mismo
+  const [isSelf, setIsSelf] = useState(false);
+  const { api } = envCredentials();
 
   const combineNames = (name: string, name2: string) => [name, name2].filter(Boolean).join(' ');
 
@@ -44,7 +46,7 @@ const EditStudent = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://api-uj4mkoe42a-uc.a.run.app/student/${studentId}`
+          `${api}/student/${studentId}`
         );
 
         if (!res.ok) {
@@ -93,7 +95,7 @@ const EditStudent = () => {
     if (!editingField) return;
 
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-student/${studentId}`, {
+      const res = await fetch(`${api}/put-student/${studentId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

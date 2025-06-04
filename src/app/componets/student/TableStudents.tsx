@@ -36,7 +36,7 @@ const TableStudent = () => {
 
             try {
                 setLogin(true);
-                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-courseStudent/${courseId}`, {
+                const res = await fetch(`${api}/get-courseStudent/${courseId}`, {
                     headers: {
                         // Agrega token de autenticación si usas Firebase Auth y validas en backend
                         // Authorization: `Bearer ${await user.getIdToken()}`,
@@ -105,7 +105,7 @@ const TableStudent = () => {
 
     const togglePayment = async (studentId: string, currentStatus: boolean) => {
         try {
-            await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-payment", {
+            await fetch(`${api}/post-payment`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -125,7 +125,7 @@ const TableStudent = () => {
 
     const toggleActive = async (studentId: string, current: boolean) => {
         try {
-            await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-studentActive", {
+            await fetch(`${api}/post-studentActive`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ studentId, newStatus: !current }),

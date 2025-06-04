@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import styles from '@/app/css/uploadStudents.module.css';
+import { envCredentials } from "../../../firebase/envConfigurations";
 
 interface CourseData {
   name: string;
@@ -14,6 +15,8 @@ interface CourseData {
 const UploadCourses = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const { api } = envCredentials();
+
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,7 +46,7 @@ const UploadCourses = () => {
         code: generateCode(),
       }));
 
-      const response = await fetch("https://api-uj4mkoe42a-uc.a.run.app/bulkCourse", {
+      const response = await fetch(`${api}/bulkCourse`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

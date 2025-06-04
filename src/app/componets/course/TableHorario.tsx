@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import tables from "@/app/css/Table.module.css";
 import { useParams } from "next/navigation";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface horario {
   dia: string,
@@ -13,6 +14,8 @@ interface horario {
 const TableHorario = () => {
   const [diasSemana, setDiasSemana] = useState<string[]>([]);
   const [horario, setHorario] = useState<horario[]>([]);
+  const { api } = envCredentials();
+
 
   const params = useParams();
   const courseId = params?.id as string;
@@ -20,7 +23,7 @@ const TableHorario = () => {
   useEffect(() => {
     const obtenerFechas = async () => {
       try {
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-courseSchedule/${courseId}`);
+        const res = await fetch(`${api}/get-courseSchedule/${courseId}`);
         if (!res.ok) throw new Error("Error al obtener horarios");
 
         const datos = await res.json();

@@ -4,6 +4,7 @@ import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 export interface StudentData {
   id: string;
@@ -33,6 +34,7 @@ const ViewStudent = () => {
   const [loading, setLoading] = useState(true);
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const { api } = envCredentials();
 
   const params = useParams();
   const studentId = params?.id as string;
@@ -42,7 +44,7 @@ const ViewStudent = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://api-uj4mkoe42a-uc.a.run.app/student/${studentId}`
+          `${api}/student/${studentId}`
         );
 
         if (!res.ok) {
@@ -70,7 +72,7 @@ const ViewStudent = () => {
       try {
         setLoadingCourses(true);
 
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${studentId}`);
+        const res = await fetch(`${api}/get-studentCourse/${studentId}`);
         if (!res.ok) throw new Error("No se pudieron obtener los cursos");
 
         const data = await res.json();

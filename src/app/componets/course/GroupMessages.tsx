@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '@/../firebase/clientApp';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 interface Response {
   author: string;
@@ -33,6 +34,7 @@ const GroupMessages = () => {
   const [newMessage, setNewMessage] = useState('');
   const [responseInputs, setResponseInputs] = useState<{ [id: string]: string }>({});
   const [activeResponseBox, setActiveResponseBox] = useState<string | null>(null);
+  const { api } = envCredentials();
 
   const auth = getAuth();
 
@@ -41,7 +43,7 @@ const GroupMessages = () => {
 
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-messages/${courseId}`);
+        const res = await fetch(`${api}/get-messages/${courseId}`);
         if (!res.ok) throw new Error("No se pudieron obtener los mensajes");
 
         const json = await res.json();

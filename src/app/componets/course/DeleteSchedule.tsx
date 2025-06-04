@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import styles from '@/app/css/DeleteSchedule.module.css';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 interface Schedule {
     id: string;
@@ -15,10 +16,11 @@ const DeleteSchedule = () => {
 
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [loading, setLoading] = useState(true);
+    const { api } = envCredentials();
 
     const fetchSchedules = async () => {
         try {
-            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-schedule/${courseId}`);
+            const res = await fetch(`${api}/get-schedule/${courseId}`);
             if (!res.ok) throw new Error("No se pudo obtener el horario");
 
             const json = await res.json();
@@ -39,7 +41,7 @@ const DeleteSchedule = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-schedule/${id}`, {
+            const res = await fetch(`${api}/delete-schedule/${id}`, {
                 method: "DELETE",
             });
 

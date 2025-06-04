@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/app/css/EditGroup.module.css';
 import { useParams } from 'next/navigation';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 type GroupData = {
   name: string;
@@ -57,6 +58,7 @@ const EditGroup = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { api } = envCredentials();
 
   // Cargar datos del grupo + listas de teachers y subjects
   useEffect(() => {
@@ -65,13 +67,13 @@ const EditGroup = () => {
     setLoading(true);
     setError(null);
 
-    const fetchGroupData = fetch(`https://api-uj4mkoe42a-uc.a.run.app/course/${courseId}`)
+    const fetchGroupData = fetch(`${api}/course/${courseId}`)
       .then(res => {
         if (!res.ok) throw new Error("No se pudo obtener grupo");
         return res.json();
       });
 
-    const fetchTeachersSubjects = fetch("https://api-uj4mkoe42a-uc.a.run.app/teachers-subjects")
+    const fetchTeachersSubjects = fetch(`${api}/teachers-subjects`)
       .then(res => {
         if (!res.ok) throw new Error("No se pudo obtener profesores o materias");
         return res.json();
@@ -93,7 +95,7 @@ const EditGroup = () => {
     try {
       setLoading(true);
 
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-course/${courseId}`, {
+      const res = await fetch(`${api}/put-course/${courseId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/DeleteSubjects.module.css';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 interface Subject {
   id: string;
@@ -11,10 +12,11 @@ interface Subject {
 const DeleteSubjects = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
+  const { api } = envCredentials();
 
   const fetchSubjects = async () => {
     try {
-      const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-subject");
+      const res = await fetch(`${api}/get-subject`);
       if (!res.ok) throw new Error("No se pudieron obtener las materias");
 
       const data = await res.json();
@@ -28,7 +30,7 @@ const DeleteSubjects = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/delete-subject/${id}`, {
+      const res = await fetch(`${api}/delete-subject/${id}`, {
         method: "DELETE",
       });
 

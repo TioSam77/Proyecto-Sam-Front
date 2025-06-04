@@ -9,6 +9,7 @@ import { useParams, usePathname } from 'next/navigation';
 import tables from "@/app/css/Table.module.css";
 import styles from '@/app/css/Binnacle.module.css';
 import { db } from '@/../firebase/clientApp';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 type BinnacleEntry = {
     id?: string;
@@ -31,6 +32,7 @@ interface Data {
 export default function Binnacle() {
     const params = useParams();
     const courseId = params?.id as string;
+    const { api } = envCredentials();
 
     const pathname = usePathname();
     const isTeacher = pathname.includes("/Profesor");
@@ -50,7 +52,7 @@ export default function Binnacle() {
 
     const fetchEntries = async () => {
         try {
-            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-binnacle/${courseId}`);
+            const res = await fetch(`${api}/get-binnacle/${courseId}`);
             if (!res.ok) throw new Error("No se pudieron obtener las entradas");
 
             const data = await res.json();
@@ -71,7 +73,7 @@ export default function Binnacle() {
     };
 
     const createEntry = async (data: Data) => {
-        const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/register-binnacle", {
+        const res = await fetch(`${api}/register-binnacle`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -82,7 +84,7 @@ export default function Binnacle() {
     };
 
     const editEntry = async (id: string, data: Data) => {
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/put-binnacle/${id}`, {
+        const res = await fetch(`${api}/put-binnacle/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),

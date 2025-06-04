@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import styles from '@/app/css/uploadStudents.module.css';
+import { envCredentials } from "../../../firebase/envConfigurations";
 
 // Interfaz para los datos del Excel
 interface TeacherExcelEntry {
@@ -19,6 +20,7 @@ interface TeacherExcelEntry {
 const UploadEmployee = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const { api } = envCredentials();
 
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files;
@@ -35,7 +37,7 @@ const UploadEmployee = () => {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json<TeacherExcelEntry>(worksheet);
 
-            const response = await fetch('https://api-uj4mkoe42a-uc.a.run.app/bulkEmployee', {
+            const response = await fetch(`${api}/bulkEmployee`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

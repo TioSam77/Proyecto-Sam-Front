@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { isHoliday } from '@/app/hooks/isHoliday';
 import styles from '@/app/css/Schedule.module.css';
 import stylesLogin from "@/app/css/Login.module.css";
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 const CreateSchedule = () => {
   const [date, setDate] = useState('');
@@ -14,6 +15,7 @@ const CreateSchedule = () => {
   const [error, setError] = useState<string | null>("");
   const [alert, setAlert] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const { api } = envCredentials();
 
   const params = useParams();
   const courseId = params?.id as string;
@@ -32,7 +34,7 @@ const CreateSchedule = () => {
     }
 
     try {
-      const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-schedule", {
+      const res = await fetch(`${api}/post-schedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -6,6 +6,7 @@ import { auth } from "../../../../firebase/clientApp";
 import MapCourseToAdmin from "@/app/componets/course/MapCourseToAdmin";
 import styleUser from "@/app/css/User.module.css";
 import Link from "next/link";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface data {
     id: string
@@ -20,13 +21,14 @@ export default function RootLayout({
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const { api } = envCredentials();
 
     const pathname = usePathname();
 
     const fetchCourses = async () => {
         try {
             setLogin(true);
-            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/get-course");
+            const res = await fetch(`${api}/get-course`);
             if (!res.ok) throw new Error("Error en la respuesta del servidor");
             const allData: data[] = await res.json();
             setData(allData);
@@ -47,7 +49,8 @@ export default function RootLayout({
 
         try {
             setLogin(true);
-            const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/searchCourse?name=${encodeURIComponent(searchTerm.trim())}`);
+            const res = await fetch(`${ api } / searchCourse ? name = ${ encodeURIComponent(searchTerm.trim())
+        }`);
             if (!res.ok) throw new Error("Error en búsqueda");
             const filtered: data[] = await res.json();
             setData(filtered);
@@ -88,10 +91,10 @@ export default function RootLayout({
         <>
             {children}
             <div style={{ display: 'flex', gap: '10px' }}>
-                <Link href={`/Administrador/Grupos/Registro`}>
+                <Link href={`/ Administrador / Grupos / Registro`}>
                     <button className={styleUser.button}>Nuevo Grupo</button>
                 </Link>
-                <Link href={`/Administrador/Grupos/Carga`}>
+                <Link href={`/ Administrador / Grupos / Carga`}>
                     <button className={styleUser.button}>Carga masiva de Grupos</button>
                 </Link>
             </div>

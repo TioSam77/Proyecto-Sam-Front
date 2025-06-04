@@ -3,6 +3,7 @@ import MapCourse from "@/app/componets/course/MapCourse";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { auth } from '@/../firebase/clientApp';
+import { envCredentials } from "../../../firebase/envConfigurations";
 
 interface data {
     id: string
@@ -14,6 +15,7 @@ export default function Page() {
     const [data, setData] = useState<data[]>([]);
     const [login, setLogin] = useState<boolean>(false);
     const [notFound, setNotFound] = useState(false);
+    const { api } = envCredentials();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -24,7 +26,7 @@ export default function Page() {
 
             try {
                 setLogin(true);
-                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-teacherCourse/${user.uid}`);
+                const res = await fetch(`${api}/get-teacherCourse/${user.uid}`);
                 if (!res.ok) throw new Error("Error al obtener cursos");
 
                 const courses = await res.json();
@@ -43,7 +45,7 @@ export default function Page() {
     }, []);
 
     return (
-        <MapCourse data={data} login={login} notFound={notFound} show={true}/>
+        <MapCourse data={data} login={login} notFound={notFound} show={true} />
     );
 
 }

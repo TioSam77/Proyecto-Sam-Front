@@ -8,6 +8,7 @@ import { auth } from '@/../firebase/clientApp';
 
 import stylesLogin from "@/app/css/Login.module.css";
 import Link from "next/link";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface courseData {
     id: string,
@@ -22,6 +23,8 @@ const ViewGroup = () => {
 
     const [error, setError] = useState<string | null>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const { api } = envCredentials();
+
 
     const pathname = usePathname();
     const isAdmin = pathname.includes("/Administrador")
@@ -41,7 +44,7 @@ const ViewGroup = () => {
 
                 try {
                     setLoading(true);
-                    const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/course/${courseId}`);
+                    const res = await fetch(`${api}/course/${courseId}`);
                     if (!res.ok) {
                         throw new Error("Curso no encontrado");
                     }

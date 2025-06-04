@@ -9,6 +9,7 @@ import { auth, db } from '@/../firebase/clientApp';
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 type Day =
     | "Lunes"
@@ -63,6 +64,7 @@ const CreateCourse = () => {
     const [error, setError] = useState<string | null>("");
     const [alert, setAlert] = useState("");
     const [login, setLogin] = useState<boolean>(false)
+    const { api } = envCredentials();
 
     const pathname = usePathname();
     const isStudent = pathname.includes("/Alumno");
@@ -79,7 +81,7 @@ const CreateCourse = () => {
             }
 
             try {
-                const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/teachers-subjects");
+                const res = await fetch(`${api}/teachers-subjects`);
                 if (!res.ok) throw new Error("Error en el servidor");
                 const json = await res.json();
                 setData(json.teachers);
@@ -184,7 +186,7 @@ const CreateCourse = () => {
                 type: type
             };
 
-            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/register-course", {
+            const res = await fetch(`${api}/register-course`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),

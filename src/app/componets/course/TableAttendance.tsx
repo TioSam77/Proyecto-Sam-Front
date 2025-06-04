@@ -17,6 +17,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from '@/../firebase/clientApp';
 import Link from "next/link";
 import Recommendation from "./Recommendation";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface Student {
     id: string;
@@ -48,7 +49,7 @@ const TableAttendance = () => {
     const [loadingSchedule, setLoadingSchedule] = useState(true);
     const [loadingStudents, setLoadingStudents] = useState(true);
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
-
+    const { api } = envCredentials();
 
     const [showModal, setShowModal] = useState(false)
 
@@ -63,7 +64,7 @@ const TableAttendance = () => {
                 setLoadingSchedule(true);
                 setLogin(true);
 
-                const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/course-schedule/${courseId}`);
+                const res = await fetch(`${api} / course - schedule / ${courseId}`);
                 const result = await res.json();
 
                 if (!res.ok) {
@@ -159,7 +160,7 @@ const TableAttendance = () => {
         try {
             setConfirmedDates((prev) => ({ ...prev, [date]: true }));
 
-            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-attendance", {
+            const res = await fetch(`${ api } / post - attendance`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

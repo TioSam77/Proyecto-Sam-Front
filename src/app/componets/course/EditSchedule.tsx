@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/css/EditSchedule.module.css';
 import { useParams } from 'next/navigation';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 interface Schedule {
   id: string;
@@ -18,6 +19,7 @@ const EditSchedule = () => {
   const [newEntryTime, setNewEntryTime] = useState('');
   const [newExitTime, setNewExitTime] = useState('');
   const [loading, setLoading] = useState(true);
+  const { api } = envCredentials();
 
   const params = useParams();
   const courseId = params?.id as string;
@@ -25,7 +27,7 @@ const EditSchedule = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-schedule/${courseId}`);
+        const response = await fetch(`${api}/get-schedule/${courseId}`);
         const data = await response.json();
 
         const transformed = data.schedules.map((s: Schedule) => ({

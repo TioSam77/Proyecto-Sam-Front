@@ -70,7 +70,7 @@ export default function SelfRegister({ onClose }: { onClose: () => void }) {
         }
 
         try {
-            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-selfRegister", {
+            const res = await fetch("`${api}/post-selfRegister", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code, student }),

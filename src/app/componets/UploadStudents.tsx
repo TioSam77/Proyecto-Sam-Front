@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import styles from '@/app/css/uploadStudents.module.css';
+import { envCredentials } from "../../../firebase/envConfigurations";
 
 const UploadStudents = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const { api } = envCredentials();
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
@@ -23,7 +25,7 @@ const UploadStudents = () => {
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/bulk", {
+      const res = await fetch(`${api}/bulk`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

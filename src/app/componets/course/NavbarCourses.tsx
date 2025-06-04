@@ -4,6 +4,7 @@ import Link from "next/link";
 import { onAuthStateChanged } from "firebase/auth";
 import style from "@/app/css/navbarCourses.module.css";
 import { auth } from '@/../firebase/clientApp';
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 interface Course {
     id: string;
@@ -23,6 +24,7 @@ const NavbarCourses = ({ role }: NavbarCoursesProps) => {
     const [notFound, setNotFound] = useState(false);
     const [login, setLogin] = useState(false);
     const [showGroups, setShowGroups] = useState(false);
+    const { api } = envCredentials();
 
     // Calcular basePath según role
     const basePath = role === "teacher"
@@ -36,9 +38,9 @@ const NavbarCourses = ({ role }: NavbarCoursesProps) => {
         try {
             let response;
             if (role === "student") {
-                response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-studentCourse/${user.id}`);
+                response = await fetch(`${ api } / get - studentCourse / ${ user.id }`);
             } else {
-                response = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-teacherCourse/${user.id}`);
+                response = await fetch(`${api}/get-teacherCourse/${user.id}`);
             }
 
             if (!response.ok) throw new Error("Error al obtener los cursos");

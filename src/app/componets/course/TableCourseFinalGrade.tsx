@@ -8,6 +8,7 @@ import { Attendance } from "../../data/student";
 import { onAuthStateChanged } from "firebase/auth";
 import style from "@/app/css/Login.module.css"
 import stylesLogin from "@/app/css/Login.module.css";
+import { envCredentials } from "../../../../firebase/envConfigurations";
 
 
 interface Student {
@@ -31,7 +32,7 @@ const TableCourseFinalGrade = () => {
     const [error, setError] = useState<string | null>("");
     const [alert, setAlert] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-
+    const { api } = envCredentials();
 
     const pathname = usePathname();
     const params = useParams();
@@ -117,7 +118,7 @@ const TableCourseFinalGrade = () => {
 
 
         try {
-            const res = await fetch("https://api-uj4mkoe42a-uc.a.run.app/post-grade", {
+            const res = await fetch(`${api}/post-grade`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

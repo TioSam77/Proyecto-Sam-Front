@@ -4,6 +4,7 @@ import styleTeacher from "@/app/css/viewTeacher.module.css";
 import MapCourse from '../course/MapCourse';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { envCredentials } from '../../../../firebase/envConfigurations';
 
 interface data {
   id: string
@@ -30,6 +31,7 @@ const ViewTeacher = () => {
   const [loading, setLoading] = useState(true);
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const { api } = envCredentials();
 
   const pathname = usePathname();
   const segments = pathname.split('/');
@@ -39,7 +41,7 @@ const ViewTeacher = () => {
     const fetchTeacherData = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/teacher/${teacherId}`);
+        const res = await fetch(`${api}/teacher/${teacherId}`);
         if (!res.ok) throw new Error("No se pudo obtener el empleado");
 
         const data = await res.json();
@@ -65,7 +67,7 @@ const ViewTeacher = () => {
 
       try {
         setLoadingCourses(true);
-        const res = await fetch(`https://api-uj4mkoe42a-uc.a.run.app/get-teacherCourse/${teacherId}`);
+        const res = await fetch(`${api}/get-teacherCourse/${teacherId}`);
         if (!res.ok) throw new Error("No se pudieron obtener los cursos");
 
         const courses = await res.json();
