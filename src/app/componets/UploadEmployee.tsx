@@ -2,17 +2,6 @@
 
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-import {
-    collection,
-    doc,
-    setDoc,
-} from "firebase/firestore";
-import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    updateProfile,
-} from "firebase/auth";
-import { db } from "../../../firebase/clientApp";
 import styles from '@/app/css/uploadStudents.module.css';
 
 // Interfaz para los datos del Excel
@@ -39,8 +28,6 @@ const UploadEmployee = () => {
         setLoading(true);
         setMessage("");
 
-        const auth = getAuth();
-
         try {
             const data = await file.arrayBuffer();
             const workbook = XLSX.read(data);
@@ -59,7 +46,7 @@ const UploadEmployee = () => {
             const result = await response.json();
             setMessage(result.message || "Finalizado.");
         } catch (error) {
-            setMessage(" Error al subir los datos.");
+            setMessage(`Error al subir los datos.${error}`);
         } finally {
             setLoading(false);
         }

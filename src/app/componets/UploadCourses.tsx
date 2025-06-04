@@ -4,6 +4,13 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import styles from '@/app/css/uploadStudents.module.css';
 
+interface CourseData {
+  name: string;
+  teacher: string;
+  startDate: string;
+  endDate: string;
+}
+
 const UploadCourses = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -20,7 +27,7 @@ const UploadCourses = () => {
       const workbook = XLSX.read(data);
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet);
+      const jsonData: CourseData[] = XLSX.utils.sheet_to_json<CourseData>(worksheet);
 
       const generateCode = () => {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -41,7 +48,7 @@ const UploadCourses = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ courses: processedCourses }), // <--- aquí usamos processedCourses
+        body: JSON.stringify({ courses: processedCourses }),
       });
 
       const result = await response.json();
@@ -51,7 +58,7 @@ const UploadCourses = () => {
       }
 
       setMessage(result.message || "Cursos subidos correctamente.");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error:", error);
       setMessage("Error al subir los datos.");
     } finally {
